@@ -37,11 +37,21 @@ public class Population{
 
     int mean_fitness;
 
+<<<<<<< HEAD
     Population(int sizeOfPopulation, int numberOFNodes, float existenceRate, int[][] graph, OneGenome parentGraph){
+=======
+    /*Population(int sizeOfPopulation, int numberOFNodes, float existenceRate, int[][] graph, OneGenome parentGraph){
+>>>>>>> 7f7850c (init commit -m "easier to change now")
         population = new Genome[sizeOfPopulation];
         Thread[] threads = new Thread[sizeOfPopulation];
         //generation number will be updated in Selection in order to reuse the sorted population
         //Generates Genomes
+<<<<<<< HEAD
+=======
+
+        //comment out and change loop to start at 0 if parent graph should not be in array
+        //population[0] = parentGraph;
+>>>>>>> 7f7850c (init commit -m "easier to change now")
         for (int i = 0; i < population.length; i++) {
             final int finalI = i;
             threads[finalI] = new Thread(()-> population[finalI] = new Genome(numberOFNodes,existenceRate,graph));
@@ -55,6 +65,33 @@ public class Population{
                 throw new RuntimeException(e);
             }
         }
+<<<<<<< HEAD
+=======
+    }*/
+    //comment out and change loop to start at 0 if parent graph should not be in array
+    Population(int sizeOfPopulation, int numberOFNodes, float existenceRate, int[][] graph, OneGenome parentGraph){
+        population = new Genome[sizeOfPopulation];
+        Thread[] threads = new Thread[sizeOfPopulation];
+        //generation number will be updated in Selection in order to reuse the sorted population
+        //Generates Genomes
+
+        //comment out and change loop to start at 0 if parent graph should not be in array
+        population[0] = parentGraph;
+        for (int i = 1; i < population.length; i++) {
+            final int finalI = i;
+            threads[finalI] = new Thread(()-> population[finalI] = new Genome(numberOFNodes,existenceRate,graph));
+            threads[finalI].start();
+        }
+        for (Thread t:
+                threads) {
+            if (t == null) continue; //happens if parent graph is in array
+            try {
+                t.join();
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }
+>>>>>>> 7f7850c (init commit -m "easier to change now")
     }
 
     //best fitness to worst
@@ -62,4 +99,17 @@ public class Population{
         Arrays.sort(population, Comparator.comparingInt(Genome::getFitness).reversed());
     }
 
+<<<<<<< HEAD
+=======
+    static Population update_Population(Population population, List<Genome> newGenomes){
+        Population p = population;
+        int counter=0;
+        //overwrites the old entries by the amount of newGenomes.size()
+        for (int i = p.population.length-(newGenomes.size()+1);  counter < newGenomes.size() ; counter++,i++) {
+            p.population[i]= newGenomes.get(counter);
+        }
+        p.setGeneration(p.getGeneration()+1);
+        return p;
+    }
+>>>>>>> 7f7850c (init commit -m "easier to change now")
 }

@@ -1,6 +1,10 @@
 import java.util.*;
 //all methods expect a sorted Population
+<<<<<<< HEAD
 public class Selection {
+=======
+public class  Selection {
+>>>>>>> 7f7850c (init commit -m "easier to change now")
 
     public static int getWorstFitness_measured() {
         return worstFitness_measured;
@@ -21,6 +25,7 @@ public class Selection {
         return elits;
     }
 
+<<<<<<< HEAD
     static Population update_Population(Population population, List<Genome> newGenomes){
         Population p = population;
         int counter=0;
@@ -31,6 +36,9 @@ public class Selection {
         p.setGeneration(p.getGeneration()+1);
         return p;
     }
+=======
+
+>>>>>>> 7f7850c (init commit -m "easier to change now")
     void update_worstFitness_measured(Population p){
         int worstFitnessofToday = p.population[p.population.length-1].getFitness();
         int worstFitnessinHistory = getWorstFitness_measured();
@@ -60,9 +68,24 @@ public class Selection {
         //recombine Parents: Number of parents = POPULATION_SIZE/numberOfContestantsPerRound
         for (int i = 0,j = 1; j < nextGenParents.size(); i=i+2,j= j+2) {
             int[][] geneticCodesOfChildrens = Recombinations.onePointCrossover(nextGenParents.get(i).getGenome(),nextGenParents.get(j).getGenome());
+<<<<<<< HEAD
             Genome ab = new Genome(numberOfNodes,geneticCodesOfChildrens[0],graph,mutationrate);
             Genome ba = new Genome(numberOfNodes,geneticCodesOfChildrens[1],graph,mutationrate);
 
+=======
+            Genome ba = new Genome(numberOfNodes,geneticCodesOfChildrens[1],graph);
+            Genome ab = new Genome(numberOfNodes,geneticCodesOfChildrens[0],graph);
+
+            //Mutation
+            Mutations.mutation(mutationrate,ba);
+            Mutations.mutation(mutationrate,ab);
+
+            //calculate degrees
+            Genome.calculateDegrees(graph,ba);
+            Genome.calculateDegrees(graph,ab);
+
+            //calculate fitness
+>>>>>>> 7f7850c (init commit -m "easier to change now")
             ab.setFitness(FitnessFunctions.calculateFitness(ab,parentGraph));
             ba.setFitness(FitnessFunctions.calculateFitness(ba,parentGraph));
 
@@ -72,7 +95,11 @@ public class Selection {
 
         //Elites of the previous gen stay in the next generation
         //Number of Elites = POPULATION_SIZE - (POPULATION_SIZE/numberOfContestantsPerRound)
+<<<<<<< HEAD
         return update_Population(p,nextGenChildren);
+=======
+        return Population.update_Population(p,nextGenChildren);
+>>>>>>> 7f7850c (init commit -m "easier to change now")
     }
 
     static Population tournamentSelectionElimination_ProababilityIntersection(Population p, int numberOfContestantsPerRound, int[][] graph, int numberOfNodes, Genome parentGraph, float mutationrate, float proabibility,int newChildsPerParents){
@@ -94,7 +121,19 @@ public class Selection {
         for (int i = 0,j = 1; j < nextGenParents.size(); i=i+2,j= j+2) {
             int[][] geneticCodesOfChildrens = Recombinations.intersection_with_proabability(nextGenParents.get(i).getGenome(),nextGenParents.get(j).getGenome(),proabibility,newChildsPerParents);
             for (int k = 0; k < geneticCodesOfChildrens.length; k++) {
+<<<<<<< HEAD
                 Genome newChild = new Genome(numberOfNodes,geneticCodesOfChildrens[k],graph,mutationrate);
+=======
+                Genome newChild = new Genome(numberOfNodes,geneticCodesOfChildrens[k],graph);
+
+                //Mutation
+                Mutations.mutation_of_vertices_with_high_degree(newChild);
+
+                //calculate degrees
+                Genome.calculateDegrees(graph,newChild);
+
+                //calculate fitness
+>>>>>>> 7f7850c (init commit -m "easier to change now")
                 newChild.setFitness(FitnessFunctions.calculateFitness(newChild,parentGraph));
                 nextGenChildren.add(newChild);
             }
@@ -102,7 +141,11 @@ public class Selection {
 
         //Elites of the previous gen stay in the next generation
         //Number of Elites = POPULATION_SIZE - (POPULATION_SIZE/numberOfContestantsPerRound)
+<<<<<<< HEAD
         return update_Population(p,nextGenChildren);
+=======
+        return Population.update_Population(p,nextGenChildren);
+>>>>>>> 7f7850c (init commit -m "easier to change now")
     }
 
     static Population tournamentSelectionElimination_ProababilityIntersection_Threaded(Population p, int numberOfContestantsPerRound, int[][] graph, int numberOfNodes, Genome parentGraph, float mutationrate, float proabibility, int newChildsPerParents) {
@@ -127,10 +170,25 @@ public class Selection {
             for (int k = 0; k < geneticCodesOfChildrens.length; k++) {
                 final int finalI = k;
                 threads[finalI] = new Thread(() -> {
+<<<<<<< HEAD
                     Genome newChild = new Genome(numberOfNodes, geneticCodesOfChildrens[finalI], graph, mutationrate);
                     newChild.setFitness(FitnessFunctions.calculateFitness(newChild, parentGraph));
 
                     System.out.println(Objects.isNull(newChild));
+=======
+                    Genome newChild = new Genome(numberOfNodes, geneticCodesOfChildrens[finalI], graph);
+
+                    //Mutation
+                    Mutations.mutation(mutationrate,newChild);
+
+                    //calculate degrees
+                    Genome.calculateDegrees(graph, newChild);
+
+                    //calculate fitness
+                    newChild.setFitness(FitnessFunctions.calculateFitness(newChild, parentGraph));
+
+                   // System.out.println(Objects.isNull(newChild));
+>>>>>>> 7f7850c (init commit -m "easier to change now")
 
                     nextGenChildren.add(newChild);
                 });
@@ -148,7 +206,11 @@ public class Selection {
 
         //Elites of the previous gen stay in the next generation
         //Number of Elites = POPULATION_SIZE - (POPULATION_SIZE/numberOfContestantsPerRound)
+<<<<<<< HEAD
         return update_Population(p, nextGenChildren);
+=======
+        return Population.update_Population(p, nextGenChildren);
+>>>>>>> 7f7850c (init commit -m "easier to change now")
     }
 
     static Population tournamentSelectionElimination_ProababilityIntersection_cFitness(Population p, int numberOfContestantsPerRound, int[][] graph, int numberOfNodes, Genome parentGraph, float mutationrate, float proabibility){
@@ -170,7 +232,11 @@ public class Selection {
         for (int i = 0,j = 1; j < nextGenParents.size(); i=i+2,j= j+2) {
             int[][] geneticCodesOfChildrens = Recombinations.intersection_with_proabability(nextGenParents.get(i).getGenome(),nextGenParents.get(j).getGenome(),proabibility,8);
             for (int k = 0; k < geneticCodesOfChildrens.length; k++) {
+<<<<<<< HEAD
                 Genome newChild = new Genome(numberOfNodes,geneticCodesOfChildrens[k],graph,mutationrate);
+=======
+                Genome newChild = new Genome(numberOfNodes,geneticCodesOfChildrens[k],graph);
+>>>>>>> 7f7850c (init commit -m "easier to change now")
                 newChild.setFitness(FitnessFunctions.cFitness(newChild,parentGraph));
                 nextGenChildren.add(newChild);
             }
@@ -178,7 +244,11 @@ public class Selection {
 
         //Elites of the previous gen stay in the next generation
         //Number of Elites = POPULATION_SIZE - (POPULATION_SIZE/numberOfContestantsPerRound)
+<<<<<<< HEAD
         return update_Population(p,nextGenChildren);
+=======
+        return Population.update_Population(p,nextGenChildren);
+>>>>>>> 7f7850c (init commit -m "easier to change now")
     }
 
     // Implementing Fisher–Yates shuffle

@@ -18,6 +18,7 @@ The following is an example of a generic evolutionary algorithm:
      */
 
     public static final int NUMBER_OF_NODES = 7624;
+<<<<<<< HEAD
     public static final float NODE_EXISTENCE_PROBABILITY = 0.1F;
 
     public static final int POPULATION_SIZE = 4096; //Powers of two are best suited for variable tournament selection, use  factors of two for 1v1
@@ -27,6 +28,17 @@ The following is an example of a generic evolutionary algorithm:
     public static final int NUMBER_OF_CHILDS_PER_PARENT = 16;
     public static final float MUTATION_RATE = 1/NUMBER_OF_NODES;
     public static final int NUMBER_OF_ITERATIONS = 1000;
+=======
+    public static final float NODE_EXISTENCE_PROBABILITY = 0.5F;
+
+    public static final int POPULATION_SIZE = 1024; //Powers of two are best suited for variable tournament selection, use  factors of two for 1v1
+
+    public static final int NUMBER_OF_CONTESTANTS_PER_ROUND = 16;
+
+    public static final int NUMBER_OF_CHILDS_PER_PARENT = 8;
+    public static final float MUTATION_RATE = 1/NUMBER_OF_NODES;
+    public static final int NUMBER_OF_ITERATIONS = 100;
+>>>>>>> 7f7850c (init commit -m "easier to change now")
 
     public static final int BREAK_FITNESS = NUMBER_OF_NODES-2;
 
@@ -43,6 +55,10 @@ The following is an example of a generic evolutionary algorithm:
         Population population = new Population(POPULATION_SIZE, NUMBER_OF_NODES, NODE_EXISTENCE_PROBABILITY, graph, PARENT_GRAPH);
 
         for (int i = 0; i < population.population.length; i++) {
+<<<<<<< HEAD
+=======
+            Genome.calculateDegrees(graph, population.population[i]);
+>>>>>>> 7f7850c (init commit -m "easier to change now")
             population.population[i].setFitness(FitnessFunctions.calculateFitness(population.population[i],PARENT_GRAPH));
         }
 
@@ -68,6 +84,12 @@ The following is an example of a generic evolutionary algorithm:
                     MUTATION_RATE,PROBABILITY,
                     NUMBER_OF_CHILDS_PER_PARENT);
             population.sort_Population_by_fitness_and_size_reversed();
+<<<<<<< HEAD
+=======
+            FitnessFunctions.calculate_Population_fitness(population);
+            System.out.println(population.generation);
+            System.out.println(population.population_fitness);
+>>>>>>> 7f7850c (init commit -m "easier to change now")
         }
 
         //print the top 10 genomes
@@ -99,6 +121,10 @@ The following is an example of a generic evolutionary algorithm:
 
         PARENT_GRAPH = new OneGenome(NUMBER_OF_NODES,graph);
         PARENT_GRAPH.remove_isolated_nodes();
+<<<<<<< HEAD
+=======
+        Genome.calculateDegrees(graph,PARENT_GRAPH);
+>>>>>>> 7f7850c (init commit -m "easier to change now")
 
         geneticAlgorithm(NUMBER_OF_NODES, NODE_EXISTENCE_PROBABILITY,POPULATION_SIZE, NUMBER_OF_ITERATIONS,BREAK_FITNESS, PARENT_GRAPH, graph);
 
