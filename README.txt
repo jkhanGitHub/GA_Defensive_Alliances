@@ -10,3 +10,4 @@ Recombination enthält verschiedenen Recombinationsmethoden
 Selection enthält Selektionsmethoden, welche zurzeit auch Recombination und update der Population und Fitnessfunktion beinhalten.
 
 Der Genetische Algorithmus wird mit den Parametern der Genetic_Algorithm datei ausgeführt.
+Falls der Algorithmus zu viele Threads nutzt, nutze bitte die Methode Selection.tournamentSelectionElimination_ProababilityIntersection statt Selection.tournamentSelectionElimination_ProababilityIntersection_Threaded
