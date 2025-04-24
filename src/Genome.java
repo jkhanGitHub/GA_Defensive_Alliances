@@ -4,12 +4,6 @@ import java.io.IOException;
 import java.util.Arrays;
 
 //Represents Subgraph with graph Ids corresponding to Array entries
-<<<<<<< HEAD
-// All genomes also calcuilate their Fitness on init, but not their fitness
-
-public class Genome {
-
-=======
 // All genomes also calculate their Fitness on init, but not their fitness
 
 public class Genome {
@@ -18,7 +12,6 @@ public class Genome {
         this.genome = genome;
     }
 
->>>>>>> 7f7850c (init commit -m "easier to change now")
     int[] genome;
 
     int[] degrees;
@@ -46,14 +39,15 @@ public class Genome {
     }
 
 
-
     public int getFitness() {
         return fitness;
     }
 
 
-    Genome(){}
-    protected Genome(int numberOfNodes,float existenceRate,int [][] graph){
+    Genome() {
+    }
+
+    protected Genome(int numberOfNodes, float existenceRate, int[][] graph) {
         length = numberOfNodes;
         genome = new int[length];
         degrees = new int[length];
@@ -62,13 +56,9 @@ public class Genome {
         calculateSize();
 
         init_degrees();
-<<<<<<< HEAD
-        calculateDegrees(graph);
-=======
->>>>>>> 7f7850c (init commit -m "easier to change now")
     }
 
-    protected Genome(int numberOfNodes,int[] genetic_data,int [][] graph){
+    protected Genome(int numberOfNodes, int[] genetic_data, int[][] graph) {
         length = numberOfNodes;
         genome = genetic_data;
         degrees = new int[length];
@@ -76,43 +66,14 @@ public class Genome {
         calculateSize();
 
         init_degrees();
-<<<<<<< HEAD
-        calculateDegrees(graph);
-    }
-
-
-    protected Genome(int numberOfNodes,int[] genetic_data,int [][] graph, float mutationrate){
-        length = numberOfNodes;
-        genome = genetic_data;
-        degrees = new int[length];
-
-        calculateSize();
-
-        init_degrees();
-        this.genome = Mutations.mutation(mutationrate,this);
-        calculateDegrees(graph);
     }
 
 
 
-=======
-    }
-
-
->>>>>>> 7f7850c (init commit -m "easier to change now")
     void calculateSize(){
         size =  Arrays.stream(genome).sum();
     }
 
-<<<<<<< HEAD
-    void calculateDegrees(int[][] matrix){
-        for (int i = 0; i < length; i++) {
-            if(genome[i]==1){
-                for (int j = 0; j < length; j++) {
-                    if(genome[j]==1 && matrix[i][j]==1){
-                        degrees[i]++;
-                        degrees[j]++;
-=======
     static void calculateDegrees(int[][] matrix,Genome g){
         for (int i = 0; i < g.length; i++) {
             if(g.genome[i]==1){
@@ -120,7 +81,6 @@ public class Genome {
                     if(g.genome[j]==1 && matrix[i][j]==1){
                         g.degrees[i]++;
                         g.degrees[j]++;
->>>>>>> 7f7850c (init commit -m "easier to change now")
                     }
                 }
             }
