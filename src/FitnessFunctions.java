@@ -44,19 +44,10 @@ public class FitnessFunctions {
                 sum += Math.min(0,(x));
             }
         }
-<<<<<<< HEAD
-        if(sum == 0){
-            sum = 1 * (genome.length- genome.getSize());
-        }
-        else {
-            sum = sum * (genome.length-genome.getSize());
-        }
-=======
 
         if(sum == 0){
             sum = 1 * (genome.length- genome.getSize());
         }
->>>>>>> 7f7850c (init commit -m "easier to change now")
         return sum;
     }
 

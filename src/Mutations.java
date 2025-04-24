@@ -7,8 +7,7 @@ public class Mutations {
         }
         return mutatedGenome.genome;
     }
-<<<<<<< HEAD
-=======
+
 
     protected static int[] mutation_of_vertices_with_high_degree(Genome g){
         Genome mutatedGenome = g;
@@ -17,5 +16,5 @@ public class Mutations {
         }
         return mutatedGenome.genome;
     }
->>>>>>> 7f7850c (init commit -m "easier to change now")
+
 }
