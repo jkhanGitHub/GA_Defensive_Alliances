@@ -2,6 +2,11 @@ import java.util.Random;
 
 public class Recombinations {
 
+
+    //change when implementing new Recombination methods
+    final static int implementedRecombinationMethods = 2;
+
+
     static final float INTERSECTION_PROBABILITY = 0.9f;
     public static int[][] onePointCrossover(int[] a, int[] b) {
         // Validate input arrays

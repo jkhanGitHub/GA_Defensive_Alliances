@@ -2,19 +2,21 @@ public class Mutations {
 
     protected static int[] mutation(float mutationrate, Genome g){
         Genome mutatedGenome = g;
-        for (int i: mutatedGenome.genome) {
-            if (Math.random()<=mutationrate) i=Math.abs(i-1);
+        for (int i=0; i<mutatedGenome.length; i++) {
+            if (Math.random()<=mutationrate) mutatedGenome.genome[i]=Math.abs(mutatedGenome.genome[i]-1);
         }
         return mutatedGenome.genome;
     }
 
 
-    protected static int[] mutation_of_vertices_with_high_degree(Genome g){
+    //degrees of genome must have been calculated before
+    protected static int[] mutation_of_vertices_with_high_degree(float mutationrate, Genome g){
         Genome mutatedGenome = g;
-        for (int i: mutatedGenome.genome) {
-            if (Math.random()<=mutatedGenome.getDegrees()[i]/g.length) i=Math.abs(i-1);
+        for (int i=0; i<mutatedGenome.length; i++) {
+            if (Math.random()<=mutationrate*mutatedGenome.getDegrees()[i]) mutatedGenome.genome[i]=Math.abs(mutatedGenome.genome[i]-1);
         }
         return mutatedGenome.genome;
     }
+
 
 }
