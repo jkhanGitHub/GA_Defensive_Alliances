@@ -1,6 +1,7 @@
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Map;
 
 //Represents whole Graph
@@ -11,6 +12,9 @@ public class OneGenome extends Genome {
     Map<Integer, Integer> getOrderedMapOfHighestDegrees() {
         return orderedMapOfHighestDegrees;
     }
+
+    //worstFitnessPossible is not actually possible but a good supremum
+    static int worstFitnessPossible;
 
     OneGenome(int numberOfNodes,int[][] graph) {
         length = numberOfNodes;
@@ -23,6 +27,10 @@ public class OneGenome extends Genome {
         init_degrees();
         readEdges_off_symmetrical_Matrix(graph);
         orderedMapOfHighestDegrees();
+    }
+
+    void calculateWorstFitnessPossible(){
+        worstFitnessPossible = Arrays.stream(degrees).sum();
     }
 
     void generate_genome() {

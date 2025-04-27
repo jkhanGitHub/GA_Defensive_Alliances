@@ -1,6 +1,3 @@
-import java.util.Arrays;
-import java.util.Comparator;
-
 public class FitnessFunctions {
     /*static int calculateFitness(Genome genome){
         int sum = 0;
@@ -36,7 +33,7 @@ public class FitnessFunctions {
         return (int) fitness;
     }
 
-    static int calculateFitness(Genome genome, Genome PARENT_GRAPH){
+    static int calculateFitnessMIN(Genome genome, Genome PARENT_GRAPH){
         int sum = 0;
         for(int i=0; i<genome.length;i++){
             if(genome.genome[i]==1){
@@ -51,6 +48,28 @@ public class FitnessFunctions {
         return sum;
     }
 
+
+    //hat keinen Sinn im Moment
+    static int calculateFitnessMAX(Genome genome, Genome PARENT_GRAPH){
+        int sum = 0;
+        for(int i=0; i<genome.length;i++){
+            if(genome.genome[i]==1){
+                int x = PARENT_GRAPH.degrees[i]-(2*genome.degrees[i]+1);
+                sum += Math.max(0,(x));
+            }
+        }
+
+        if(sum == 0){
+            sum = (PARENT_GRAPH.getSize() - genome.getSize());
+        }
+        return sum;
+    }
+
+    static int normalizedFitness(Genome genome){
+        int normalizedFitness = OneGenome.worstFitnessPossible + genome.getFitness();
+        return normalizedFitness;
+    }
+
     static public int calculate_Population_fitness(Population population) {
         int sum =  0;
         for (Genome genom:
@@ -61,6 +80,10 @@ public class FitnessFunctions {
     }
 
     static public int calculate_Mean_fitness(Population population){
+        return population.population_fitness/population.population.length;
+    }
+
+    static public int calculate_Mean_fitnessPositive(Population population){
         return population.population_fitness/population.population.length;
     }
 

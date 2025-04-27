@@ -18,6 +18,9 @@ public class Genome {
     public void setGenome(int[] genome) {
         this.genome = genome;
     }
+    //if positiveFitness is OneGenome.worstFitnessPossible, then the  genome is a defensive alliance
+    int positiveFitness; //the higher, the better
+
 
     int[] genome;
 
@@ -28,6 +31,7 @@ public class Genome {
 
     public void setFitness(int fitness) {
         this.fitness = fitness;
+        positiveFitness = OneGenome.worstFitnessPossible + fitness;
     }
 
     int fitness;
@@ -69,8 +73,6 @@ public class Genome {
         length = numberOfNodes;
         genome = genetic_data;
         degrees = new int[length];
-
-        calculateSize();
 
         init_degrees();
     }

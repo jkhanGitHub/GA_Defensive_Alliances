@@ -38,7 +38,7 @@ public class Mutations {
             numberOfVerticesTested--;
         }
 
-        //Experimental from Here ---------------------------------------------------------------------------
+        /*//Experimental from Here ---------------------------------------------------------------------------
         //calculate the degrees of the mutated genome
         Genome.calculateDegrees(Genetic_Algorithm.graph, mutatedGenome);
 
@@ -49,7 +49,7 @@ public class Mutations {
         if (mutatedGenome.getFitness()< g.getFitness()){
             return g;
         }
-        //to Here ---------------------------------------------------------------------------
+        //to Here ---------------------------------------------------------------------------*/
 
         return mutatedGenome;
     }
@@ -75,6 +75,8 @@ public class Mutations {
 
     protected static Genome remove_many_harmful_Nodes(Genome subgraph, OneGenome parent, int numberOfNodesToRemove){
         //remove the node with the highest degree
+        Genome mutatedGenome = subgraph;
+
         Map<Integer, Integer> map = Genome.orderedMapOf_harmfulNodes(parent, subgraph);
         Iterator<Map.Entry<Integer, Integer>> iterator = map.entrySet().iterator();
         for (int i = 0; i < numberOfNodesToRemove; i++) {
@@ -84,11 +86,25 @@ public class Mutations {
 
             if (value > 0) {
                 //remove the node from the subgraph
-                subgraph.getGenome()[key] = 0;
+                mutatedGenome.getGenome()[key] = 0;
             }
-            else return subgraph;
         }
-        return subgraph;
+
+        /*//Experimental from Here ---------------------------------------------------------------------------
+        //calculate the degrees of the mutated genome
+        Genome.calculateDegrees(Genetic_Algorithm.graph, mutatedGenome);
+
+        //calculate the fitness of the mutated genome
+        mutatedGenome.setFitness(FitnessFunctions.calculateFitness(mutatedGenome, parent));
+
+        //reject the mutated genome if it is worse than the original genome
+        if (mutatedGenome.getFitness()< subgraph.getFitness()){
+            return subgraph;
+        }
+        //to Here ---------------------------------------------------------------------------*/
+
+
+        return mutatedGenome;
     }
 
 }

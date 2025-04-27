@@ -4,6 +4,13 @@ import java.util.*;
 public class Population{
     Genome[] population; //Array is used since it is easy to update and we keep its size static
 
+    static Dictionary<Integer,String> dictionary = new Hashtable<Integer,String>();
+    static {
+        dictionary.put(0,"Mutation");
+        dictionary.put(1, "Mutation of vertices with high degree");
+        dictionary.put(2, "try to add Mutation of vertices with high degree");
+        dictionary.put(3, "Remove harmful nodes");
+    }
     public  Genome[] getPopulation() {
         return population;
     }
@@ -12,11 +19,11 @@ public class Population{
         return generation;
     }
 
-    public void setGeneration(int generation) {
-        this.generation = generation;
+    public static void updateGeneration() {
+        generation = generation+1;
     }
 
-    int generation = 0;
+    static int generation = 0;
 
     public int getPopulation_fitness() {
         return population_fitness;
@@ -28,6 +35,8 @@ public class Population{
 
     int population_fitness;
 
+    int population_fitness_positive;
+
     public int getMean_fitness() {
         return mean_fitness;
     }
@@ -37,6 +46,8 @@ public class Population{
     }
 
     int mean_fitness;
+
+    int mean_fitness_positive;
 
     /*Population(int sizeOfPopulation, int numberOFNodes, float existenceRate, int[][] graph, OneGenome parentGraph){
 
@@ -116,8 +127,13 @@ public class Population{
             Genome.calculateDegrees(graph,ab);
 
             //calculate fitness
-            ab.setFitness(FitnessFunctions.calculateFitness(ab,parentGraph));
-            ba.setFitness(FitnessFunctions.calculateFitness(ba,parentGraph));
+            ab.setFitness(FitnessFunctions.calculateFitnessMIN(ab,parentGraph));
+            ba.setFitness(FitnessFunctions.calculateFitnessMIN(ba,parentGraph));
+
+
+            //calculate size
+            ab.calculateSize();
+            ba.calculateSize();
 
             nextGenChildren.add(ab);
             nextGenChildren.add(ba);
@@ -127,6 +143,8 @@ public class Population{
     }
 
     static Population update_Population_OnePointCrossover_Threaded(Population population, int[][] graph, int numberOfNodes, OneGenome parentGraph, float mutationrate, float proabibility, int newChildsPerParents, List<Genome> nextGenParents){
+
+        System.out.println("Recombination Method: OnePointCrossover");
 
         List<Genome> nextGenChildren = Collections.synchronizedList(new LinkedList<>()); // Thread-safe list
 
@@ -156,8 +174,12 @@ public class Population{
                 Genome.calculateDegrees(graph, ab);
 
                 // Calculate fitness
-                ab.setFitness(FitnessFunctions.calculateFitness(ab, parentGraph));
-                ba.setFitness(FitnessFunctions.calculateFitness(ba, parentGraph));
+                ab.setFitness(FitnessFunctions.calculateFitnessMIN(ab, parentGraph));
+                ba.setFitness(FitnessFunctions.calculateFitnessMIN(ba, parentGraph));
+
+                // Calculate size
+                ab.calculateSize();
+                ba.calculateSize();
 
                 // Add to the thread-safe list
                 synchronized (nextGenChildren) {
@@ -200,8 +222,11 @@ public class Population{
                 Genome.calculateDegrees(graph,newChild);
 
                 //calculate fitness
-                newChild.setFitness(FitnessFunctions.calculateFitness(newChild,parentGraph));
+                newChild.setFitness(FitnessFunctions.calculateFitnessMIN(newChild,parentGraph));
                 nextGenChildren.add(newChild);
+
+                //calculate size
+                newChild.calculateSize();
             }
         }
 
@@ -212,6 +237,8 @@ public class Population{
 
 
     static Population update_Population_ProababilityIntersection_Threaded(Population population, int[][] graph, int numberOfNodes, Genome parentGraph, float mutationrate, float proabibility, int newChildsPerParents, List<Genome> nextGenParents) {
+
+        System.out.println("Recombination Method: ProababilityIntersection");
 
         List<Genome> nextGenChildren = Collections.synchronizedList(new LinkedList<>()); // Thread-safe list
 
@@ -232,8 +259,12 @@ public class Population{
                 Genome.calculateDegrees(graph, newChild);
 
                 //calculate fitness
-                newChild.setFitness(FitnessFunctions.calculateFitness(newChild, parentGraph));
+                newChild.setFitness(FitnessFunctions.calculateFitnessMIN(newChild, parentGraph));
 
+                //calculate size
+                newChild.calculateSize();
+
+                //add to the thread-safe list
                 nextGenChildren.add(newChild);
             });
             threads[finalI].start();
@@ -272,6 +303,9 @@ static Population update_Population_RANDOM(Population population, int[][] graph,
 static Population mutate_Population(Population population, int[][] graph, int numberOfNodes, OneGenome parentGraph, float mutationrate, int mutation_identifier, int amountOfMutations){
         List<Genome> nextGenChildren = Collections.synchronizedList(new LinkedList<>()); // Thread-safe list
 
+        System.out.println("Mutation: mutation" + dictionary.get(mutation_identifier) + '\t' +amountOfMutations);
+
+
         for (int i = 0; i < population.population.length; i++) {
             Genome newChild = new Genome(numberOfNodes,population.population[i].getGenome(),graph);
 
@@ -304,8 +338,12 @@ static Population mutate_Population(Population population, int[][] graph, int nu
             Genome.calculateDegrees(graph,newChild);
 
             //calculate fitness
-            newChild.setFitness(FitnessFunctions.calculateFitness(newChild,parentGraph));
+            newChild.setFitness(FitnessFunctions.calculateFitnessMIN(newChild,parentGraph));
             nextGenChildren.add(newChild);
+
+            //calculate size
+            newChild.calculateSize();
+
         }
         return update_Population_without_GenerationIncrease(population,nextGenChildren);
     }
@@ -317,7 +355,7 @@ static Population mutate_Population(Population population, int[][] graph, int nu
         for (int i = p.population.length-(newGenomes.size());  counter < newGenomes.size() ; counter++,i++) {
             p.population[i]= newGenomes.get(counter);
         }
-        p.setGeneration(p.getGeneration()+1);
+        Population.updateGeneration();
         return p;
     }
 
