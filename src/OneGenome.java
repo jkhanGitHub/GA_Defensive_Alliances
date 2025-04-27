@@ -1,9 +1,16 @@
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Map;
 
 //Represents whole Graph
 public class OneGenome extends Genome {
+
+    Map<Integer, Integer> orderedMapOfHighestDegrees = new java.util.HashMap<>();
+
+    Map<Integer, Integer> getOrderedMapOfHighestDegrees() {
+        return orderedMapOfHighestDegrees;
+    }
 
     OneGenome(int numberOfNodes,int[][] graph) {
         length = numberOfNodes;
@@ -15,6 +22,7 @@ public class OneGenome extends Genome {
 
         init_degrees();
         readEdges_off_symmetrical_Matrix(graph);
+        orderedMapOfHighestDegrees();
     }
 
     void generate_genome() {
@@ -30,6 +38,15 @@ public class OneGenome extends Genome {
                 genome[i]=0;
             }
         }
+    }
+
+    //give a map with the highest degrees and where to find them
+    void orderedMapOfHighestDegrees(){
+        for (int i = 0; i < degrees.length; i++) {
+            orderedMapOfHighestDegrees.put(i, degrees[i]);
+        }
+        orderedMapOfHighestDegrees.entrySet().stream()
+                .sorted(Map.Entry.<Integer, Integer>comparingByValue().reversed());
     }
 
     public int[] getDegrees() {

@@ -46,7 +46,7 @@ public class FitnessFunctions {
         }
 
         if(sum == 0){
-            sum = 1 * (genome.length- genome.getSize());
+            sum = (PARENT_GRAPH.getSize() - genome.getSize());
         }
         return sum;
     }

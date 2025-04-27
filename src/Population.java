@@ -71,9 +71,9 @@ public class Population{
         //generation number will be updated in Selection in order to reuse the sorted population
         //Generates Genomes
 
-        //comment out and change loop to start at 0 if parent graph should not be in array
+        //comment out and change loop to start at 0 if parent graph should not be in array makes sense when using OnepointCrossover
         population[0] = parentGraph;
-        for (int i = 1; i < population.length; i++) {
+        for (int i = 0; i < population.length; i++) {
             final int finalI = i;
             threads[finalI] = new Thread(()-> population[finalI] = new Genome(numberOFNodes,existenceRate,graph));
             threads[finalI].start();
@@ -269,15 +269,36 @@ static Population update_Population_RANDOM(Population population, int[][] graph,
         }
 }
 
-static Population mutate_Population(Population population, int[][] graph, int numberOfNodes, OneGenome parentGraph, float mutationrate, float proabibility, int newChildsPerParents){
+static Population mutate_Population(Population population, int[][] graph, int numberOfNodes, OneGenome parentGraph, float mutationrate, int mutation_identifier, int amountOfMutations){
         List<Genome> nextGenChildren = Collections.synchronizedList(new LinkedList<>()); // Thread-safe list
 
         for (int i = 0; i < population.population.length; i++) {
             Genome newChild = new Genome(numberOfNodes,population.population[i].getGenome(),graph);
 
             //Mutation
-            int[] mutated = Mutations.mutation(mutationrate,newChild);
-            newChild.setGenome(mutated);
+            switch (mutation_identifier) {
+                case 0:
+                    //Mutation
+                    int[] mutated = Mutations.mutation(mutationrate,newChild);
+                    newChild.setGenome(mutated);
+                    break;
+                case 1:
+                    //Mutation of vertices with high degree
+                    int[] mutated_high_degree = Mutations.mutation_of_vertices_with_high_degree(mutationrate,newChild);
+                    newChild.setGenome(mutated_high_degree);
+                    break;
+                case 2:
+                    //Mutation of vertices with high degree
+                    newChild = Mutations.test_high_degree_vertices_mutation(population.population[i],amountOfMutations,parentGraph);
+                    break;
+                case 3:
+                    //remove harmful node
+                    Genome.calculateDegrees(graph,newChild);
+                    newChild = Mutations.remove_many_harmful_Nodes(population.population[i],parentGraph,amountOfMutations);
+                    break;
+                default:
+                    throw new IllegalStateException("Unexpected value: " + mutation_identifier);
+            }
 
             //calculate degrees
             Genome.calculateDegrees(graph,newChild);
@@ -286,18 +307,27 @@ static Population mutate_Population(Population population, int[][] graph, int nu
             newChild.setFitness(FitnessFunctions.calculateFitness(newChild,parentGraph));
             nextGenChildren.add(newChild);
         }
-        population.setGeneration(population.getGeneration()-1); //so that the generation wont be changed in update
-        return update_Population(population,nextGenChildren);
+        return update_Population_without_GenerationIncrease(population,nextGenChildren);
     }
 
     static Population update_Population(Population population, List<Genome> newGenomes){
         Population p = population;
         int counter=0;
         //overwrites the old entries by the amount of newGenomes.size()
-        for (int i = p.population.length-(newGenomes.size()+1);  counter < newGenomes.size() ; counter++,i++) {
+        for (int i = p.population.length-(newGenomes.size());  counter < newGenomes.size() ; counter++,i++) {
             p.population[i]= newGenomes.get(counter);
         }
         p.setGeneration(p.getGeneration()+1);
+        return p;
+    }
+
+    static Population update_Population_without_GenerationIncrease(Population population, List<Genome> newGenomes){
+        Population p = population;
+        int counter=0;
+        //overwrites the old entries by the amount of newGenomes.size()
+        for (int i = p.population.length-(newGenomes.size());  counter < newGenomes.size() ; counter++,i++) {
+            p.population[i]= newGenomes.get(counter);
+        }
         return p;
     }
 }

@@ -1,5 +1,9 @@
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class Genetic_Algorithm {
 
@@ -19,16 +23,20 @@ The following is an example of a generic evolutionary algorithm:
      */
 
 
+    public static List<Genome> defensiveAlliances = new ArrayList<>();
+
 
     //Path to the csv file
-    public static final String FILEPATH = "deezer_europe/deezer_europe/deezer_europe_edges.csv";
+    public static final String FILEPATH = "twitch/twitch/FR/musae_FR_edges.csv";
 
     //Number of Nodes of graph
-    public static final int NUMBER_OF_NODES = 28281;
+    public static final int NUMBER_OF_NODES = 6549;
 
     public static final float NODE_EXISTENCE_PROBABILITY = 0.5F;
 
     public static final int POPULATION_SIZE = 1024; //Powers of two are best suited for variable tournament selection, use  factors of two for 1v1
+
+    public static final int MAX_NUMBER_OF_NODES_REMOVED_BY_MUTATION = 10; //maximum number of nodes removed by mutation
 
 
     //recombine Parents: Number of parents = POPULATION_SIZE/numberOfContestantsPerRound
@@ -41,6 +49,7 @@ The following is an example of a generic evolutionary algorithm:
     public static final int NUMBER_OF_CHILDS_PER_PARENT = 8; //
 
 
+    //Explanation of mutation identfieres found in Population.java mutate_Population()
     public static final float MUTATION_RATE = 1/NUMBER_OF_NODES;
     public static final int NUMBER_OF_ITERATIONS = 100; //number of generations
 
@@ -52,6 +61,18 @@ The following is an example of a generic evolutionary algorithm:
 
     public static int[][] graph;
 
+    static Random random = new Random();
+
+    static void addDefensiveAlliance(Population population){
+
+        for (int i = 0; i < POPULATION_SIZE; i++) {
+            while (population.getPopulation()[i].getFitness() == 0){
+                defensiveAlliances.add(population.getPopulation()[i]);
+            }
+        }
+    }
+
+    //when using onepointcrossover the parentgraph should not be included in the population!
     static void geneticAlgorithm(int NUMBER_OF_NODES, float NODE_EXISTENCE_PROBABILITY, int POPULATION_SIZE, int NUMBER_OF_ITERATIONS,int BREAK_FITNESS, OneGenome PARENT_GRAPH, int[][] graph){
         //Generatess first Population and calculates the Fitness of each Genome
         Population population = new Population(POPULATION_SIZE, NUMBER_OF_NODES, NODE_EXISTENCE_PROBABILITY, graph, PARENT_GRAPH);
@@ -80,7 +101,7 @@ The following is an example of a generic evolutionary algorithm:
                     NUMBER_OF_CONTESTANTS_PER_ROUND);
 
             //create new population
-            population = Population.update_Population_RANDOM(
+            population = Population.update_Population_OnePointCrossover_Threaded(
                     population,
                     graph,
                     NUMBER_OF_NODES,
@@ -89,6 +110,17 @@ The following is an example of a generic evolutionary algorithm:
                     PROBABILITY,
                     NUMBER_OF_CHILDS_PER_PARENT,
                     newGenParents);
+
+            //additional Mutations
+            population = Population.mutate_Population(
+                    population,
+                    graph,
+                    NUMBER_OF_NODES,
+                    PARENT_GRAPH,
+                    MUTATION_RATE,
+                    random.nextInt(2,3),
+                    random.nextInt(MAX_NUMBER_OF_NODES_REMOVED_BY_MUTATION)
+                    );
 
             population.sort_Population_by_fitness_and_size_reversed();
             population.setPopulation_fitness(FitnessFunctions.calculate_Population_fitness(population));
@@ -99,7 +131,8 @@ The following is an example of a generic evolutionary algorithm:
             System.out.println("Fitness of Population: "+population.population_fitness);
             System.out.println("Mean Fitness of Population: "+population.mean_fitness);
             System.out.println("Best Fitness in Population: "+population.getPopulation()[0].getFitness()+ "\t Size: "+population.getPopulation()[0].getSize());
-            System.out.println("Second Best Fitness in Population: "+population.getPopulation()[1].getFitness()+"\t Size: "+population.getPopulation()[0].getSize()+"\n");
+            System.out.println("Second Best Fitness in Population: "+population.getPopulation()[1].getFitness()+"\t Size: "+population.getPopulation()[1].getSize());
+            System.out.println("Worst Fitness in Population: "+population.getPopulation()[POPULATION_SIZE-1].getFitness()+"\t Size: "+population.getPopulation()[POPULATION_SIZE-1].getSize()+"\n");
         }
 
         //check if best genomes are the same

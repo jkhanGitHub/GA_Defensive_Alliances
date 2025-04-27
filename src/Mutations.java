@@ -1,3 +1,6 @@
+import java.util.Iterator;
+import java.util.Map;
+
 public class Mutations {
 
     protected static int[] mutation(float mutationrate, Genome g){
@@ -18,5 +21,74 @@ public class Mutations {
         return mutatedGenome.genome;
     }
 
+
+    protected static Genome test_high_degree_vertices_mutation(Genome g, int numberOfVerticesTested, OneGenome parentGraph){
+        Genome mutatedGenome = g;
+        Iterator<Map.Entry<Integer, Integer>> iterator = parentGraph.getOrderedMapOfHighestDegrees().entrySet().iterator();
+
+        while (iterator.hasNext() && numberOfVerticesTested>0) {
+            Map.Entry<Integer, Integer> entry = iterator.next();
+            int index = entry.getKey();
+            if(mutatedGenome.getGenome()[index] == 0){
+               mutatedGenome.getGenome()[index] = 1;
+            }
+            else {
+                continue;
+            }
+            numberOfVerticesTested--;
+        }
+
+        //Experimental from Here ---------------------------------------------------------------------------
+        //calculate the degrees of the mutated genome
+        Genome.calculateDegrees(Genetic_Algorithm.graph, mutatedGenome);
+
+        //calculate the fitness of the mutated genome
+        mutatedGenome.setFitness(FitnessFunctions.calculateFitness(mutatedGenome, parentGraph));
+
+        //reject the mutated genome if it is worse than the original genome
+        if (mutatedGenome.getFitness()< g.getFitness()){
+            return g;
+        }
+        //to Here ---------------------------------------------------------------------------
+
+        return mutatedGenome;
+    }
+
+    //parent.getOrderedMapOfHighestDegrees().entrySet().iterator(); in iterator eintragen
+    protected static Genome remove_harmfulNode(Genome subgraph, OneGenome parent){
+        //remove the node with the highest degree
+        Map<Integer, Integer> map = Genome.orderedMapOf_harmfulNodes(parent, subgraph);
+        Iterator<Map.Entry<Integer, Integer>> iterator = map.entrySet().iterator();
+        //get the first entry
+        Map.Entry<Integer, Integer> entry = iterator.next();
+        int key = entry.getKey(); //index of the node
+        int value = entry.getValue(); //difference in degrees; degree change after Operation
+
+        if (value > 0) {
+            //remove the node from the subgraph
+            subgraph.getGenome()[key] = 0;
+        }
+        else return subgraph;
+
+        return subgraph;
+    }
+
+    protected static Genome remove_many_harmful_Nodes(Genome subgraph, OneGenome parent, int numberOfNodesToRemove){
+        //remove the node with the highest degree
+        Map<Integer, Integer> map = Genome.orderedMapOf_harmfulNodes(parent, subgraph);
+        Iterator<Map.Entry<Integer, Integer>> iterator = map.entrySet().iterator();
+        for (int i = 0; i < numberOfNodesToRemove; i++) {
+            Map.Entry<Integer, Integer> entry = iterator.next();
+            int key = entry.getKey(); //index of the node
+            int value = entry.getValue(); //difference in degrees; degree change after Operation
+
+            if (value > 0) {
+                //remove the node from the subgraph
+                subgraph.getGenome()[key] = 0;
+            }
+            else return subgraph;
+        }
+        return subgraph;
+    }
 
 }
