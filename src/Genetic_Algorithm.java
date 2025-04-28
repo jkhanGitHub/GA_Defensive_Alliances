@@ -168,7 +168,7 @@ The following is an example of a generic evolutionary algorithm:
             addDefensiveAlliance(population);
 
             //Print some stats
-            System.out.println("Generation: " + Population.generation);
+            System.out.println('\n'+ "Generation: " + Population.generation);
             System.out.println("Fitness of Population: " + population.population_fitness);
             System.out.println("Mean Fitness of Population: " + population.mean_fitness);
             System.out.println("Best Fitness in Population: " + population.getPopulation()[0].getFitness() + "\t Size: " + population.getPopulation()[0].getSize());
