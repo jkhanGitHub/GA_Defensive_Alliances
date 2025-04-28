@@ -67,13 +67,11 @@ The following is an example of a generic evolutionary algorithm:
     static Random random = new Random();
 
     static void addDefensiveAlliance(Population population) {
-
-        for (int i = 0; i < POPULATION_SIZE; i++) {
-            while (population.getPopulation()[i].getFitness() == 0) {
+        int i = 0;
+        while (population.getPopulation()[i].getFitness() >= 0) {
                 defensiveAlliances.add(population.getPopulation()[i]);
-                System.out.println("Defensive Alliance added: ");
+                i++;
             }
-        }
     }
 
     //when using onepointcrossover the parentgraph should not be included in the population!

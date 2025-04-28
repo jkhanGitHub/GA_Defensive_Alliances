@@ -54,6 +54,7 @@ public class Selection {
         return rouletteWheelSelection(population, pointers);
     }
 
+    //with protection against duplicates
     static List<Genome> rouletteWheelSelection(Population population, double[] pointers) {
         List<Genome> selectedParents = new ArrayList<>();
         int n = population.population.length;
@@ -66,7 +67,19 @@ public class Selection {
                 i++;
                 i = i % n; //resets the index to 0 if it reaches the end of the population
             }
-            selectedParents.add(population.population[i]);
+            //check if the selected genome is already in the list
+            boolean alreadySelected = false;
+            for (Genome selectedParent : selectedParents) {
+                if (selectedParent == population.population[i]) {
+                    alreadySelected = true;
+                    break;
+                }
+            }
+            //if the genome is not already in the list, add it
+            if (alreadySelected){
+                selectedParents.add(population.population[i]);
+            }
+
         }
 
         return selectedParents;
@@ -118,7 +131,18 @@ public class Selection {
             double p_i = (double) (2 * (n - i + 1)) /(denominator);
             p_i *= multiplier;
             if (p_i > random.nextDouble()) {
-                selectedParents.add(p.population[i]);
+                //check if the selected genome is already in the list
+                boolean alreadySelected = false;
+                for (Genome selectedParent : selectedParents) {
+                    if (selectedParent == p.population[i]) {
+                        alreadySelected = true;
+                        break;
+                    }
+                }
+                //if the genome is not already in the list, add it
+                if (alreadySelected){
+                    selectedParents.add(p.population[i]);
+                }
             }
             i++;
             i = i % p.population.length;
@@ -128,6 +152,7 @@ public class Selection {
     }
 
 
+    //with protection against duplicates
     static List<Genome> rouletteWheelSelection(Population population, int numberOfOffspring) {
         List<Genome> selectedParents = new ArrayList<>();
 
@@ -145,7 +170,18 @@ public class Selection {
             double p_i = population.population[i].positiveFitness / totalFitness;
             double ran = random.nextDouble();
             if (p_i > ran) {
-                selectedParents.add(population.population[i]);
+                //check if the selected genome is already in the list
+                boolean alreadySelected = false;
+                for (Genome selectedParent : selectedParents) {
+                    if (selectedParent == population.population[i]) {
+                        alreadySelected = true;
+                        break;
+                    }
+                }
+                //if the genome is not already in the list, add it
+                if (alreadySelected){
+                    selectedParents.add(population.population[i]);
+                }
             }
             i++;
             i = i % population.population.length;
