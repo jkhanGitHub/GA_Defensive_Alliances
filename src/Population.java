@@ -305,7 +305,7 @@ static Population update_Population_Recombination_Identifier(Population populati
         }
 }
 
-static Population mutate_Population(Population population, int[][] graph, int numberOfNodes, OneGenome parentGraph, float mutationrate, int mutation_identifier, int amountOfMutations){
+static Population mutate_Population(Population population, int[][] graph, int numberOfNodes, OneGenome parentGraph, float mutationrate, int mutation_identifier, int amountOfMutations, int fillerForInterchangeablity) {
         List<Genome> nextGenChildren = Collections.synchronizedList(new LinkedList<>()); // Thread-safe list
 
         System.out.println("Mutation: mutation" + mutationIdentifiers.get(mutation_identifier) + '\t' +amountOfMutations);
@@ -404,7 +404,7 @@ static Population mutate_Population(Population population, int[][] graph, int nu
         return update_Population_without_GenerationIncrease(population,nextGenChildren);
     }
 
-    static Population mutate_Population_RandomAmount_of_RandomlyChoosen(Population population, int[][] graph, int numberOfNodes, OneGenome parentGraph, float mutationrate, int mutation_identifier, int amountOfMutations){
+    static Population mutate_Population_RandomAmount_of_RandomlyChoosen(Population population, int[][] graph, int numberOfNodes, OneGenome parentGraph, float mutationrate, int mutation_identifier, int amountOfMutations, int upperBound){
         List<Genome> nextGenChildren = Collections.synchronizedList(new LinkedList<>()); // Thread-safe list
 
         System.out.println("Mutation: mutation" + mutationIdentifiers.get(mutation_identifier) + '\t' +amountOfMutations);
@@ -412,7 +412,7 @@ static Population mutate_Population(Population population, int[][] graph, int nu
 
         int count = 0;
         Random random = new Random();
-        int amountOfGenomes = random.nextInt(population.population.length); //random number between 0 and population size
+        int amountOfGenomes = random.nextInt(upperBound); //random number between 0 and population size
         System.out.println("amountOfGenomes to be mutated: " + amountOfGenomes);
 
         while(count < amountOfGenomes) {

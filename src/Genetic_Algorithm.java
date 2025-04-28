@@ -59,6 +59,7 @@ The following is an example of a generic evolutionary algorithm:
 
     public static final float PROBABILITY = 0.5f; //probability of intersection, 0.5 means 50% chance of intersection and 50% chance of crossover
 
+    final static int UPPER_BOUND = POPULATION_SIZE/2; //upper bound for ADDITIONAL_amount of genomes to be mutated
     public static int[][] graph;
 
     public static Map<Integer, Genome> bestGenomes = new HashMap<>();
@@ -152,7 +153,8 @@ The following is an example of a generic evolutionary algorithm:
                     MUTATION_RATE,
                     random.nextInt(2) + 2,
                     //random.nextInt(MAX_NUMBER_OF_NODES_REMOVED_BY_MUTATION)+1
-                    random.nextInt(10)
+                    random.nextInt(10),
+                    UPPER_BOUND
             );
 
             population.sort_Population_by_fitness_and_size_reversed();
