@@ -80,11 +80,12 @@ public class FitnessFunctions {
     }
 
     static public int calculate_Mean_fitness(Population population){
-        return population.population_fitness/population.population.length;
+        return (int) population.population_fitness/population.population.length;
     }
 
     static public int calculate_Mean_fitnessPositive(Population population){
-        return population.population_fitness/population.population.length;
+        //TODO: maybe implemtnt it maybe dont not really necessary
+        return 0;
     }
 
 }

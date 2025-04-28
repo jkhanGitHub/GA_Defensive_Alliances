@@ -32,7 +32,7 @@ public class Population{
 
     static int generation = 0;
 
-    public int getPopulation_fitness() {
+    public long getPopulation_fitness() {
         return population_fitness;
     }
 
@@ -40,7 +40,7 @@ public class Population{
         this.population_fitness = population_fitness;
     }
 
-    int population_fitness;
+    long population_fitness;
 
     int population_fitness_positive;
 
@@ -498,5 +498,31 @@ static Population mutate_Population(Population population, int[][] graph, int nu
             p.population[i]= newGenomes.get(counter);
         }
         return p;
+    }
+
+    static Population remove_duplicates(Population population, int numberOFNodes, float existenceRate, int[][] graph, OneGenome parentGraph){
+
+        boolean found = false;
+        for (int i = 0; i < population.population.length-1; i++) {
+            for (int j = i+1; j < population.population_fitness; j++) {
+                int difference = Genome.difference(population.population[i],population.population[j]);
+                if (difference==0){
+                    //remove the duplicate
+                    population.population[i] = new Genome(numberOFNodes,existenceRate,graph);
+
+                    Genome.calculateDegrees(graph,population.population[i]);
+                    population.population[i].setFitness(FitnessFunctions.calculateFitnessMIN(population.population[i],parentGraph));
+                    population.population[i].calculateSize();
+                    found = true;
+                }
+            }
+        }
+        if (found) {
+            System.out.println("Duplicates found and removed");
+        }
+        else {
+            System.out.println("No duplicates found");
+        }
+        return population;
     }
 }

@@ -4,7 +4,6 @@ import java.util.*;
 //Selection methods are used to select parents for the next generation
 public class Selection {
 
-
     static final int IMPLEMENTED_SELECTION_METHODS = 5;
 
     static Dictionary<Integer, String> selectionMethods = new Hashtable<>();
@@ -54,8 +53,11 @@ public class Selection {
         return rouletteWheelSelection(population, pointers);
     }
 
-    //with protection against duplicates
     static List<Genome> rouletteWheelSelection(Population population, double[] pointers) {
+
+        //stores the selected parents positions
+        List<Integer> selectedParentIDs = new ArrayList<>();
+
         List<Genome> selectedParents = new ArrayList<>();
         int n = population.population.length;
 
@@ -67,19 +69,13 @@ public class Selection {
                 i++;
                 i = i % n; //resets the index to 0 if it reaches the end of the population
             }
-            //check if the selected genome is already in the list
-            boolean alreadySelected = false;
-            for (Genome selectedParent : selectedParents) {
-                if (selectedParent == population.population[i]) {
-                    alreadySelected = true;
-                    break;
-                }
+            // Select the next genome that has not been selected yet
+            while(selectedParentIDs.contains(i)) {
+                i++;
+                i = i % n; //resets the index to 0 if it reaches the end of the population
             }
-            //if the genome is not already in the list, add it
-            if (alreadySelected){
-                selectedParents.add(population.population[i]);
-            }
-
+            selectedParentIDs.add(i);
+            selectedParents.add(population.population[i]);
         }
 
         return selectedParents;
@@ -88,6 +84,10 @@ public class Selection {
     //takes in reversed List of fitness values
     //TODO method is wayyy to slow something about these doubles suck ass
     static List<Genome> exponential_rankSelection(Population population) {
+
+        //stores the selected parents positions
+        List<Integer> selectedParentIDs = new ArrayList<>();
+
         List<Genome> selectedParents = new ArrayList<>();
 
         int n = population.population.length;
@@ -106,7 +106,8 @@ public class Selection {
             // Calculate the probability for each genome
             double probability = Math.pow(weight, n - i) / denominator;
             // Select the genome based on the calculated probability
-            if (random.nextDouble() < probability) {
+            if ((random.nextDouble() < probability) && !selectedParentIDs.contains(i)) {
+                selectedParentIDs.add(i);
                 selectedParents.add(population.population[i]);
             }
         }
@@ -115,6 +116,9 @@ public class Selection {
     }
 
     private static List<Genome> linear_rankSelection(Population p, int numberOfOffspring) {
+        //stores the selected parents positions
+        List<Integer> selectedParentIDs = new ArrayList<>();
+
         List<Genome> selectedParents = new ArrayList<>();
 
         int n = p.population.length;
@@ -130,19 +134,10 @@ public class Selection {
         while (selectedParents.size()<numberOfOffspring) {
             double p_i = (double) (2 * (n - i + 1)) /(denominator);
             p_i *= multiplier;
-            if (p_i > random.nextDouble()) {
-                //check if the selected genome is already in the list
-                boolean alreadySelected = false;
-                for (Genome selectedParent : selectedParents) {
-                    if (selectedParent == p.population[i]) {
-                        alreadySelected = true;
-                        break;
-                    }
-                }
-                //if the genome is not already in the list, add it
-                if (alreadySelected){
-                    selectedParents.add(p.population[i]);
-                }
+            if ((p_i > random.nextDouble()) && !selectedParentIDs.contains(i)) {
+                selectedParentIDs.add(i);
+                // Add the genome to the selected parents list
+                selectedParents.add(p.population[i]);
             }
             i++;
             i = i % p.population.length;
@@ -152,8 +147,11 @@ public class Selection {
     }
 
 
-    //with protection against duplicates
     static List<Genome> rouletteWheelSelection(Population population, int numberOfOffspring) {
+
+        //stores the selected parents positions
+        List<Integer> selectedParentIDs = new ArrayList<>();
+
         List<Genome> selectedParents = new ArrayList<>();
 
         // Calculate the total fitness of the population
@@ -169,19 +167,11 @@ public class Selection {
         while (selectedParents.size()<numberOfOffspring) {
             double p_i = population.population[i].positiveFitness / totalFitness;
             double ran = random.nextDouble();
-            if (p_i > ran) {
-                //check if the selected genome is already in the list
-                boolean alreadySelected = false;
-                for (Genome selectedParent : selectedParents) {
-                    if (selectedParent == population.population[i]) {
-                        alreadySelected = true;
-                        break;
-                    }
-                }
-                //if the genome is not already in the list, add it
-                if (alreadySelected){
-                    selectedParents.add(population.population[i]);
-                }
+            // Check if the genome has already been selected
+            if ((p_i > ran) && !selectedParentIDs.contains(i)) {
+                selectedParentIDs.add(i);
+                // Add the genome to the selected parents list
+                selectedParents.add(population.population[i]);
             }
             i++;
             i = i % population.population.length;

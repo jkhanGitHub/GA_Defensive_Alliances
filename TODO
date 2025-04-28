@@ -1,3 +1,5 @@
 difference function in Genome class not working properly
 exponential rankselection proabably works but needs wayyyyyy too much time
 think about solutions to change size in networks it kinda stagnates around Genome_Length * ProabilityOfExistance
+
+add methods for manipulation of found defensiveAlliances

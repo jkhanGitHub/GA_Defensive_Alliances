@@ -21,11 +21,16 @@ The following is an example of a generic evolutionary algorithm:
 
     public static List<Genome> defensiveAlliances = new ArrayList<>();
 
-    //Path to the csv file
-    public static final String FILEPATH = "twitch/twitch/FR/musae_FR_edges.csv";
 
+
+    //Path to the csv file
+    public static final String FILEPATH = "lasftm_asia/lastfm_asia_edges.csv";
     //Number of Nodes of graph
-    public static final int NUMBER_OF_NODES = 6549;
+    public static final int NUMBER_OF_NODES = 7624;
+
+
+
+
 
     public static final float NODE_EXISTENCE_PROBABILITY = 0.5F;
 
@@ -155,6 +160,12 @@ The following is an example of a generic evolutionary algorithm:
                     UPPER_BOUND
             );
 
+
+            //remove duplicates from population and replace them with random generated genomes
+            population = Population.remove_duplicates(population, NUMBER_OF_NODES, NODE_EXISTENCE_PROBABILITY, graph, PARENT_GRAPH);
+
+
+
             population.sort_Population_by_fitness_and_size_reversed();
             population.setPopulation_fitness(FitnessFunctions.calculate_Population_fitness(population));
             population.setMean_fitness(FitnessFunctions.calculate_Mean_fitness(population));
@@ -172,6 +183,9 @@ The following is an example of a generic evolutionary algorithm:
             System.out.println("Best Fitness in Population: " + population.getPopulation()[0].getFitness() + "\t Size: " + population.getPopulation()[0].getSize());
             System.out.println("Second Best Fitness in Population: " + population.getPopulation()[1].getFitness() + "\t Size: " + population.getPopulation()[1].getSize());
             System.out.println("Worst Fitness in Population: " + population.getPopulation()[POPULATION_SIZE - 1].getFitness() + "\t Size: " + population.getPopulation()[POPULATION_SIZE - 1].getSize() + "\n");
+
+            //print difference between best and second best genome
+            System.out.println("Difference between best and second best genome: " + Genome.difference(population.getPopulation()[0], population.getPopulation()[1]));
 
             //Since genetic algorithm have the tendency to get stuck in local optima, we can check if the best genome is the same as the previous one
             bestGenomes.put(counter, population.getPopulation()[0]);
