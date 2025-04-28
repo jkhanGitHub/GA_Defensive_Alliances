@@ -29,9 +29,11 @@ The following is an example of a generic evolutionary algorithm:
 
     public static final float NODE_EXISTENCE_PROBABILITY = 0.5F;
 
-    public static final int POPULATION_SIZE = 2048; //Powers of two are best suited for variable tournament selection, use  factors of two for 1v1
+    public static final int POPULATION_SIZE = 8192; //Powers of two are best suited for variable tournament selection, use  factors of two for 1v1
 
     public static final int MAX_NUMBER_OF_NODES_REMOVED_BY_MUTATION = 5; //maximum number of nodes removed by mutation, smaller numbers will probably have higher impact
+
+    public static final int MAXIMUM_NUMBER_OF_ADDITIONAL_MUTATIONS = POPULATION_SIZE/4; //maximum number of additional mutations, smaller numbers will probably have higher impact
 
 
     //recombine Parents: Number of parents = POPULATION_SIZE/numberOfContestantsPerRound
@@ -39,7 +41,7 @@ The following is an example of a generic evolutionary algorithm:
     //new population will take over the best from last generation + all new children
     //WARNING: IF NUMBER OF PARENTS IS >= Number of children then the whole population will be replaced
     // new nodes in next population is (NUMBER_OF_CONTESTANTS_PER_ROUND/NUMBER_OF_CHILDS_PER_PARENT) in percent
-    public static final int NUMBER_OF_CONTESTANTS_PER_ROUND = 16; // only 1 winner -< lower number ensures more worse parents and probably more diversity
+    public static final int NUMBER_OF_CONTESTANTS_PER_ROUND = 128; // only 1 winner -< lower number ensures more worse parents and probably more diversity
 
     //increase this number to increase the number of children per parent also resulting in bigger population in each generation, only makes sense when making population a list wont be doing that tho xD
     //higher number -< earlier local maximum because of incest
@@ -130,7 +132,7 @@ The following is an example of a generic evolutionary algorithm:
     }
      */
             //create new population
-            population = Population.update_Population_Recombination_Idetifier(
+            population = Population.update_Population_Recombination_Identifier(
                     population,
                     graph,
                     NUMBER_OF_NODES,
@@ -142,7 +144,7 @@ The following is an example of a generic evolutionary algorithm:
                     1);
 
             //additional Mutations
-            population = Population.mutate_Population(
+            population = Population.mutate_Population_RandomAmount_of_RandomlyChoosen(
                     population,
                     graph,
                     NUMBER_OF_NODES,
@@ -150,7 +152,7 @@ The following is an example of a generic evolutionary algorithm:
                     MUTATION_RATE,
                     random.nextInt(2) + 2,
                     //random.nextInt(MAX_NUMBER_OF_NODES_REMOVED_BY_MUTATION)+1
-                    random.nextInt(3)
+                    random.nextInt(10)
             );
 
             population.sort_Population_by_fitness_and_size_reversed();

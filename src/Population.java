@@ -293,7 +293,7 @@ public class Population{
 }
 
 // add new cases when implementing new REcombination methods
-static Population update_Population_Recombination_Idetifier(Population population, int[][] graph, int numberOfNodes, OneGenome parentGraph, float mutationrate, float proabibility, int newChildsPerParents, List<Genome> nextGenParents, int identifier) {
+static Population update_Population_Recombination_Identifier(Population population, int[][] graph, int numberOfNodes, OneGenome parentGraph, float mutationrate, float proabibility, int newChildsPerParents, List<Genome> nextGenParents, int identifier) {
 
         switch (identifier) {
             case 0:
@@ -338,6 +338,112 @@ static Population mutate_Population(Population population, int[][] graph, int nu
                 default:
                     throw new IllegalStateException("Unexpected value: " + mutation_identifier);
             }
+
+            //calculate degrees
+            Genome.calculateDegrees(graph,newChild);
+            //calculate fitness
+            newChild.setFitness(FitnessFunctions.calculateFitnessMIN(newChild,parentGraph));
+            //calculate size
+            newChild.calculateSize();
+
+            nextGenChildren.add(newChild);
+
+        }
+        return update_Population_without_GenerationIncrease(population,nextGenChildren);
+    }
+
+    static Population mutate_Population_fixedAmount_of_RandomlyChoosen(Population population, int[][] graph, int numberOfNodes, OneGenome parentGraph, float mutationrate, int mutation_identifier, int amountOfMutations, int amountOfGenomes){
+        List<Genome> nextGenChildren = Collections.synchronizedList(new LinkedList<>()); // Thread-safe list
+
+        System.out.println("Mutation: mutation" + mutationIdentifiers.get(mutation_identifier) + '\t' +amountOfMutations);
+
+
+        int count = 0;
+        Random random = new Random();
+
+        while(count < amountOfGenomes) {
+            int i = random.nextInt(population.population.length);
+            Genome newChild = new Genome(numberOfNodes,population.population[i].getGenome(),graph);
+
+            //Mutation
+            switch (mutation_identifier) {
+                case 0:
+                    //Mutation
+                    int[] mutated = Mutations.mutation(mutationrate,newChild);
+                    newChild.setGenome(mutated);
+                    break;
+                case 1:
+                    //Mutation of vertices with high degree
+                    int[] mutated_high_degree = Mutations.mutation_of_vertices_with_high_degree(mutationrate,newChild);
+                    newChild.setGenome(mutated_high_degree);
+                    break;
+                case 2:
+                    //Mutation of vertices with high degree
+                    newChild = Mutations.test_high_degree_vertices_mutation(population.population[i],amountOfMutations,parentGraph);
+                    break;
+                case 3:
+                    //remove harmful node
+                    Genome.calculateDegrees(graph,newChild);
+                    newChild = Mutations.remove_many_harmful_Nodes(population.population[i],parentGraph,amountOfMutations);
+                    break;
+                default:
+                    throw new IllegalStateException("Unexpected value: " + mutation_identifier);
+            }
+            count++;
+
+            //calculate degrees
+            Genome.calculateDegrees(graph,newChild);
+            //calculate fitness
+            newChild.setFitness(FitnessFunctions.calculateFitnessMIN(newChild,parentGraph));
+            //calculate size
+            newChild.calculateSize();
+
+            nextGenChildren.add(newChild);
+
+        }
+        return update_Population_without_GenerationIncrease(population,nextGenChildren);
+    }
+
+    static Population mutate_Population_RandomAmount_of_RandomlyChoosen(Population population, int[][] graph, int numberOfNodes, OneGenome parentGraph, float mutationrate, int mutation_identifier, int amountOfMutations){
+        List<Genome> nextGenChildren = Collections.synchronizedList(new LinkedList<>()); // Thread-safe list
+
+        System.out.println("Mutation: mutation" + mutationIdentifiers.get(mutation_identifier) + '\t' +amountOfMutations);
+
+
+        int count = 0;
+        Random random = new Random();
+        int amountOfGenomes = random.nextInt(population.population.length); //random number between 0 and population size
+        System.out.println("amountOfGenomes to be mutated: " + amountOfGenomes);
+
+        while(count < amountOfGenomes) {
+            int i = random.nextInt(population.population.length);
+            Genome newChild = new Genome(numberOfNodes,population.population[i].getGenome(),graph);
+
+            //Mutation
+            switch (mutation_identifier) {
+                case 0:
+                    //Mutation
+                    int[] mutated = Mutations.mutation(mutationrate,newChild);
+                    newChild.setGenome(mutated);
+                    break;
+                case 1:
+                    //Mutation of vertices with high degree
+                    int[] mutated_high_degree = Mutations.mutation_of_vertices_with_high_degree(mutationrate,newChild);
+                    newChild.setGenome(mutated_high_degree);
+                    break;
+                case 2:
+                    //Mutation of vertices with high degree
+                    newChild = Mutations.test_high_degree_vertices_mutation(population.population[i],amountOfMutations,parentGraph);
+                    break;
+                case 3:
+                    //remove harmful node
+                    Genome.calculateDegrees(graph,newChild);
+                    newChild = Mutations.remove_many_harmful_Nodes(population.population[i],parentGraph,amountOfMutations);
+                    break;
+                default:
+                    throw new IllegalStateException("Unexpected value: " + mutation_identifier);
+            }
+            count++;
 
             //calculate degrees
             Genome.calculateDegrees(graph,newChild);
