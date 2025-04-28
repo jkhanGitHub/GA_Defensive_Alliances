@@ -26,30 +26,32 @@ public class Mutations {
         Genome mutatedGenome = g;
         Iterator<Map.Entry<Integer, Integer>> iterator = parentGraph.getOrderedMapOfHighestDegrees().entrySet().iterator();
 
-        while (iterator.hasNext() && numberOfVerticesTested>0) {
+        boolean bool = true;
+        while (iterator.hasNext() && bool && numberOfVerticesTested > 0) {
             Map.Entry<Integer, Integer> entry = iterator.next();
             int index = entry.getKey();
             if(mutatedGenome.getGenome()[index] == 0){
                mutatedGenome.getGenome()[index] = 1;
+
+                //Experimental from Here ---------------------------------------------------------------------------
+                //calculate the degrees of the mutated genome
+                Genome.calculateDegrees(Genetic_Algorithm.graph, mutatedGenome);
+
+                //calculate the fitness of the mutated genome
+                mutatedGenome.setFitness(FitnessFunctions.calculateFitnessMIN(mutatedGenome, parentGraph));
+
+                //reject the mutated genome if it is worse than the original genome
+                if (mutatedGenome.getFitness()< g.getFitness()){
+                    mutatedGenome.getGenome()[index] = 0;
+                }
+                //to Here ---------------------------------------------------------------------------
+
             }
             else {
                 continue;
             }
             numberOfVerticesTested--;
         }
-
-        /*//Experimental from Here ---------------------------------------------------------------------------
-        //calculate the degrees of the mutated genome
-        Genome.calculateDegrees(Genetic_Algorithm.graph, mutatedGenome);
-
-        //calculate the fitness of the mutated genome
-        mutatedGenome.setFitness(FitnessFunctions.calculateFitness(mutatedGenome, parentGraph));
-
-        //reject the mutated genome if it is worse than the original genome
-        if (mutatedGenome.getFitness()< g.getFitness()){
-            return g;
-        }
-        //to Here ---------------------------------------------------------------------------*/
 
         return mutatedGenome;
     }

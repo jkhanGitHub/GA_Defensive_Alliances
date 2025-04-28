@@ -1,0 +1,4 @@
+difference function in Genome class not working properly
+exponential_rankselection and stochastic sampling, roulette wheel selection not working properly
+exponential rankselection proabably works but needs wayyyyyy too much time
+improve the add_nodes_with high_degree function in Mutations since it always gives the same nodes

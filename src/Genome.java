@@ -19,7 +19,7 @@ public class Genome {
         this.genome = genome;
     }
     //if positiveFitness is OneGenome.worstFitnessPossible, then the  genome is a defensive alliance
-    int positiveFitness; //the higher, the better
+    double positiveFitness; //the higher, the better
 
 
     int[] genome;
@@ -208,6 +208,15 @@ public class Genome {
                 ));
     }
 
+    //i feel like java takes a shortcut here and compares object ids
+    //in order to prevent this bullshit we need to copy the arrey?
+    static int difference(Genome a, Genome b){
+        int sum = 0;
+        for (int i = 0; i < a.length; i++) {
+            sum += Math.abs(a.genome[i] - b.genome[i]);
+        }
+        return sum;
+    }
 
 }
 

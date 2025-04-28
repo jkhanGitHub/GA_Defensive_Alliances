@@ -5,15 +5,16 @@ import java.util.*;
 public class Selection {
 
 
-    static final int IMPLEMENTED_SELECTION_METHODS = 4;
+    static final int IMPLEMENTED_SELECTION_METHODS = 5;
 
     static Dictionary<Integer, String> selectionMethods = new Hashtable<>();
     static{
-        selectionMethods.put(0, "elitism");
-        selectionMethods.put(1, "stochasticUniversalSampling");
-        selectionMethods.put(2, "rankSelection");
-        selectionMethods.put(3, "rouletteWheelSelection");
-        selectionMethods.put(4, "tournamentSelectionElimination");
+        selectionMethods.put(0, "Stochastic Universal Sampling");
+        selectionMethods.put(1, "Tournament Selection Elimination");
+        selectionMethods.put(2, "Roulette Wheel Selection");
+        selectionMethods.put(3, "Linear Rank Selection");
+        selectionMethods.put(4, "Exponential Rank Selection");
+        selectionMethods.put(5, "Elitism");
     }
 
     //adds the members with the highest fitness value in population to a list
@@ -25,74 +26,109 @@ public class Selection {
         return elits;
     }
 
-    static List<Genome> stochasticUniversalSampling(Population population) {
+    //can result in more parents than the population size allows
+    static List<Genome> stochasticUniversalSampling(Population population, int numberOfOffspring) {
+        List<Genome> selectedParents = new ArrayList<>();
+        int n = population.population.length;
+
+        // Calculate total fitness
+        double totalFitness = 0.0;
+        for (Genome genome : population.population) {
+            totalFitness += genome.positiveFitness;
+        }
+
+        // Calculate distance between pointers
+        double pointerDistance = totalFitness / numberOfOffspring;
+
+        // Generate starting point
+        Random random = new Random();
+        double start = random.nextDouble() * pointerDistance;
+
+        // Generate pointers
+        double[] pointers = new double[numberOfOffspring];
+        for (int i = 0; i < numberOfOffspring; i++) {
+            pointers[i] = start + (i * pointerDistance);
+        }
+
+        // Use RWS to select individuals
+        return rouletteWheelSelection(population, pointers);
+    }
+
+    static List<Genome> rouletteWheelSelection(Population population, double[] pointers) {
+        List<Genome> selectedParents = new ArrayList<>();
+        int n = population.population.length;
+
+        for (double pointer : pointers) {
+            double cumulativeFitness = 0.0;
+            int i = 0;
+            while (cumulativeFitness < pointer) {
+                cumulativeFitness += population.population[i].positiveFitness;
+                i++;
+                i = i % n; //resets the index to 0 if it reaches the end of the population
+            }
+            selectedParents.add(population.population[i]);
+        }
+
+        return selectedParents;
+    }
+
+    //takes in reversed List of fitness values
+    //TODO method is wayyy to slow something about these doubles suck ass
+    static List<Genome> exponential_rankSelection(Population population) {
         List<Genome> selectedParents = new ArrayList<>();
 
         int n = population.population.length;
 
-        // Calculate mean fitness
-        double meanFitness = 0.0;
-        for (Genome genome : population.population) {
-            meanFitness += genome.positiveFitness;
-        }
-        meanFitness = meanFitness / n;
-
-        // Generate a random starting point in [0, meanFitness)
-        Random random = new Random();
-        double alpha = random.nextDouble() * meanFitness;
-
-        // Initialize pointers
-        double delta = alpha;
-        double cumulativeSum = 0;
-        int j = 0;
-
-        // Perform SUS
-
-        while (delta > cumulativeSum) {
-            cumulativeSum += population.population[j].positiveFitness;
-            if (delta <= cumulativeSum) {
-                selectedParents.add(population.population[j]);
-                delta += meanFitness;
-            } else {
-                j++;
-                if (j >= n) {
-                    j = 0; // Wrap around if necessary
-                }
-            }
-        }
-
-
-        return selectedParents;
-    }
-
-    static List<Genome> rankSelection(Population population) {
-        List<Genome> selectedParents = new ArrayList<>();
-
-        // Calculate the rank-based selection probabilities
-        double[] selectionProbabilities = new double[population.population.length];
-        for (int i = 0; i < population.population.length; i++) {
-            selectionProbabilities[i] = (double) (population.population.length - i) / (population.population.length * (population.population.length + 1) / 2);
-        }
-
         // Perform selection based on the calculated probabilities
         Random random = new Random();
+        double weight = random.nextDouble();
 
-        double rand = random.nextDouble();
-        double cumulativeProbability = 0.0;
-        for (int j = 0; j < population.population.length; j++) {
-            cumulativeProbability += selectionProbabilities[j];
-            if (rand <= cumulativeProbability) {
-                selectedParents.add(population.population[j]);
-                break;
+        // Calculate the denominator (Σ(w^(n-k)))
+        double denominator = 0.0;
+        for (int k = 1; k <= n; k++) {
+            denominator += Math.pow(weight, n - k);
+        }
+
+        for (int i=0; i<n; i++){
+            // Calculate the probability for each genome
+            double probability = Math.pow(weight, n - i) / denominator;
+            // Select the genome based on the calculated probability
+            if (random.nextDouble() < probability) {
+                selectedParents.add(population.population[i]);
             }
         }
 
+        return selectedParents;
+    }
+
+    private static List<Genome> linear_rankSelection(Population p, int numberOfOffspring) {
+        List<Genome> selectedParents = new ArrayList<>();
+
+        int n = p.population.length;
+
+        Random random = new Random();
+        int denominator = n*(n+1)/2;
+
+        //Multiplier so we can have more winners
+        //without multiplier the mean value would be about 1
+        double multiplier = Genetic_Algorithm.MULTIPLIER;
+
+        int i = 0;// Calculate the probabilities for each genome
+        while (selectedParents.size()<numberOfOffspring) {
+            double p_i = (double) (2 * (n - i + 1)) /(denominator);
+            p_i *= multiplier;
+            if (p_i > random.nextDouble()) {
+                selectedParents.add(p.population[i]);
+            }
+            i++;
+            i = i % p.population.length;
+        }
 
         return selectedParents;
     }
 
 
-    static List<Genome> rouletteWheelSelection(Population population) {
+    static List<Genome> rouletteWheelSelection(Population population, int numberOfOffspring) {
         List<Genome> selectedParents = new ArrayList<>();
 
         // Calculate the total fitness of the population
@@ -104,16 +140,16 @@ public class Selection {
         // Perform selection based on the roulette wheel method
         Random random = new Random();
 
-        double rand = random.nextDouble() * totalFitness;
-        double cumulativeFitness = 0.0;
-        for (Genome genome : population.population) {
-            cumulativeFitness += genome.positiveFitness;
-            if (rand <= cumulativeFitness) {
-                selectedParents.add(genome);
-                break;
+        int i =0;
+        while (selectedParents.size()<numberOfOffspring) {
+            double p_i = population.population[i].positiveFitness / totalFitness;
+            double ran = random.nextDouble();
+            if (p_i > ran) {
+                selectedParents.add(population.population[i]);
             }
+            i++;
+            i = i % population.population.length;
         }
-
         return selectedParents;
     }
 
@@ -158,21 +194,27 @@ public class Selection {
         System.out.println("Selection method: " + selectionMethods.get(identifier));
 
         Random random = new Random();
+        int numberOfParents = p.population.length/numberOfContestantsPerRound;
 
         switch (identifier) {
-            case 0 -> selectedParents = elitism(p, random.nextInt(Genetic_Algorithm.POPULATION_SIZE));
-            case 1 -> selectedParents = stochasticUniversalSampling(p);
-            case 2 -> selectedParents = rankSelection(p);
-            case 3 -> selectedParents = rouletteWheelSelection(p);
-            case 4 -> selectedParents = tournamentSelectionElimination(p, numberOfContestantsPerRound);
+            case 0 -> selectedParents = stochasticUniversalSampling(p,numberOfParents);
+            case 1 -> selectedParents = tournamentSelectionElimination(p, numberOfContestantsPerRound);
+            case 2 -> selectedParents = rouletteWheelSelection(p, numberOfParents);
+            case 3 -> selectedParents = linear_rankSelection(p, numberOfParents);
+            case 4 -> selectedParents = exponential_rankSelection(p);
+            case 5 -> selectedParents = elitism(p, random.nextInt(Genetic_Algorithm.POPULATION_SIZE));
             default -> System.out.println("Invalid selection method identifier");
         }
 
         // Shuffle the selected parents to ensure that not only the best ones are selected sequentially
         Collections.shuffle(selectedParents);
 
+        System.out.println("Selected parents: " + selectedParents.size());
+        System.out.println("amount of new children: " + ((selectedParents.size()/2)*Genetic_Algorithm.NUMBER_OF_CHILDS_PER_PARENT));
         return selectedParents;
 
     }
+
+
 
 }

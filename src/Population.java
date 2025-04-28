@@ -4,13 +4,20 @@ import java.util.*;
 public class Population{
     Genome[] population; //Array is used since it is easy to update and we keep its size static
 
-    static Dictionary<Integer,String> dictionary = new Hashtable<Integer,String>();
+    static Dictionary<Integer,String> mutationIdentifiers = new Hashtable<Integer,String>();
     static {
-        dictionary.put(0,"Mutation");
-        dictionary.put(1, "Mutation of vertices with high degree");
-        dictionary.put(2, "try to add Mutation of vertices with high degree");
-        dictionary.put(3, "Remove harmful nodes");
+        mutationIdentifiers.put(0,"Mutation");
+        mutationIdentifiers.put(1, "Mutation of vertices with high degree");
+        mutationIdentifiers.put(2, "try to add Mutation of vertices with high degree");
+        mutationIdentifiers.put(3, "Remove harmful nodes");
     }
+
+    static Dictionary<Integer,String> recombinationIdentifiers = new Hashtable<Integer,String>();
+    static {
+        recombinationIdentifiers.put(0,"OnePointCrossover");
+        recombinationIdentifiers.put(1, "ProababilityIntersection");
+    }
+
     public  Genome[] getPopulation() {
         return population;
     }
@@ -286,24 +293,22 @@ public class Population{
 }
 
 // add new cases when implementing new REcombination methods
-static Population update_Population_RANDOM(Population population, int[][] graph, int numberOfNodes, OneGenome parentGraph, float mutationrate, float proabibility, int newChildsPerParents, List<Genome> nextGenParents){
-        Random random = new Random();
-        int randomIndex = random.nextInt(Recombinations.implementedRecombinationMethods);
+static Population update_Population_Recombination_Idetifier(Population population, int[][] graph, int numberOfNodes, OneGenome parentGraph, float mutationrate, float proabibility, int newChildsPerParents, List<Genome> nextGenParents, int identifier) {
 
-        switch (randomIndex) {
+        switch (identifier) {
             case 0:
                 return update_Population_OnePointCrossover_Threaded(population, graph, numberOfNodes, parentGraph, mutationrate, proabibility, newChildsPerParents, nextGenParents);
             case 1:
                 return update_Population_ProababilityIntersection_Threaded(population, graph, numberOfNodes, parentGraph, mutationrate, proabibility, newChildsPerParents, nextGenParents);
             default:
-                throw new IllegalStateException("Unexpected value: " + randomIndex);
+                throw new IllegalStateException("Unexpected value: " + identifier);
         }
 }
 
 static Population mutate_Population(Population population, int[][] graph, int numberOfNodes, OneGenome parentGraph, float mutationrate, int mutation_identifier, int amountOfMutations){
         List<Genome> nextGenChildren = Collections.synchronizedList(new LinkedList<>()); // Thread-safe list
 
-        System.out.println("Mutation: mutation" + dictionary.get(mutation_identifier) + '\t' +amountOfMutations);
+        System.out.println("Mutation: mutation" + mutationIdentifiers.get(mutation_identifier) + '\t' +amountOfMutations);
 
 
         for (int i = 0; i < population.population.length; i++) {
@@ -336,13 +341,12 @@ static Population mutate_Population(Population population, int[][] graph, int nu
 
             //calculate degrees
             Genome.calculateDegrees(graph,newChild);
-
             //calculate fitness
             newChild.setFitness(FitnessFunctions.calculateFitnessMIN(newChild,parentGraph));
-            nextGenChildren.add(newChild);
-
             //calculate size
             newChild.calculateSize();
+
+            nextGenChildren.add(newChild);
 
         }
         return update_Population_without_GenerationIncrease(population,nextGenChildren);
@@ -351,8 +355,19 @@ static Population mutate_Population(Population population, int[][] graph, int nu
     static Population update_Population(Population population, List<Genome> newGenomes){
         Population p = population;
         int counter=0;
+
+
+        //some selectioons Methods can Result in more new Parents, thus more new children than the size of the population allows
+        int controlDamage = p.population.length - newGenomes.size();
+        if (controlDamage < 0) {
+           controlDamage =p.population.length;
+        }
+        else {
+            controlDamage = newGenomes.size();
+        }
+
         //overwrites the old entries by the amount of newGenomes.size()
-        for (int i = p.population.length-(newGenomes.size());  counter < newGenomes.size() ; counter++,i++) {
+        for (int i = p.population.length-controlDamage;  counter < newGenomes.size() && counter<p.population.length ; counter++,i++) {
             p.population[i]= newGenomes.get(counter);
         }
         Population.updateGeneration();
@@ -362,8 +377,18 @@ static Population mutate_Population(Population population, int[][] graph, int nu
     static Population update_Population_without_GenerationIncrease(Population population, List<Genome> newGenomes){
         Population p = population;
         int counter=0;
+
+        //some selectioons Methods can Result in more new Parents, thus more new children than the size of the population allows
+        int controlDamage = p.population.length - newGenomes.size();
+        if (controlDamage < 0) {
+            controlDamage =p.population.length;
+        }
+        else {
+            controlDamage = newGenomes.size();
+        }
+
         //overwrites the old entries by the amount of newGenomes.size()
-        for (int i = p.population.length-(newGenomes.size());  counter < newGenomes.size() ; counter++,i++) {
+        for (int i = p.population.length-controlDamage;  counter < newGenomes.size() && counter<p.population.length ; counter++,i++) {
             p.population[i]= newGenomes.get(counter);
         }
         return p;
