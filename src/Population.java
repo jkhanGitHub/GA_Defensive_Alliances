@@ -790,29 +790,47 @@ public class Population{
         return p;
     }
 
+    static Population remove_isolated_nodes(Population population,OneGenome parentGraph){
+        for (int i=0; i<population.population.length; i++){
+                //remove the isolated node
+                population.population[i] = Genome.removeIsolatedNodes(population.population[i],parentGraph);
+        }
+        return population;
+    }
+    //o(n) = (n^2)
     static Population remove_duplicates(Population population, int numberOFNodes, float existenceRate, int[][] graph, OneGenome parentGraph){
 
+        //remove isolated nodes
+        Population temp = remove_isolated_nodes(population, parentGraph);
+
         boolean found = false;
-        for (int i = 0; i < population.population.length-1; i++) {
-            for (int j = i+1; j < population.population_fitness; j++) {
-                int difference = Genome.difference(population.population[i],population.population[j]);
+        int counter = 0;
+        for (int i = 0; i < temp.population.length-1; i++) {
+            for (int j = i+1; j < temp.population.length; j++) {
+                int difference = Genome.difference(temp.population[i],temp.population[j]);
                 if (difference==0){
                     //remove the duplicate
-                    population.population[i] = new Genome(numberOFNodes,existenceRate,graph);
+                    temp.population[i] = new Genome(numberOFNodes,existenceRate,graph);
 
-                    Genome.calculateDegrees(graph,population.population[i]);
-                    population.population[i].setFitness(FitnessFunctions.calculateFitnessMIN(population.population[i],parentGraph));
-                    population.population[i].calculateSize();
+                    //calculate degrees
+                    Genome.calculateDegrees(graph,temp.population[i]);
+                    //calculate fitness
+                    temp.population[i].setFitness(FitnessFunctions.calculateFitnessMIN(temp.population[i],parentGraph));
+                    //calculate size
+                    temp.population[i].calculateSize();
+
                     found = true;
+                    counter++;
+                    break;
                 }
             }
         }
         if (found) {
-            System.out.println("Duplicates found and removed");
+            System.out.println("Duplicates found and removed: " + counter);
         }
         else {
             System.out.println("No duplicates found");
         }
-        return population;
+        return temp;
     }
 }

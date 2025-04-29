@@ -226,14 +226,15 @@ public class Genome {
         return sum;
     }
 
-    static Genome removeIsolatedNodes(Genome g){
-        for (int i = 0; i < g.length; i++) {
-            if (g.degrees[i]==0){
-                g.genome[i]=0;
+    //expects parentgraph with removed isolated nodes
+    static Genome removeIsolatedNodes(Genome g, OneGenome parentGraph) {
+        Genome genome = g;
+        for (int i = 0; i < genome.length; i++) {
+            if (parentGraph.degrees[i]==0){
+                genome.genome[i]=0;
             }
-            g.calculateSize();
         }
-        return g;
+        return genome;
     }
 
 }

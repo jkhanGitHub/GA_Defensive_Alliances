@@ -46,7 +46,7 @@ The following is an example of a generic evolutionary algorithm:
     //new population will take over the best from last generation + all new children
     //WARNING: IF NUMBER OF PARENTS IS >= Number of children then the whole population will be replaced
     // new nodes in next population is (NUMBER_OF_CONTESTANTS_PER_ROUND/NUMBER_OF_CHILDS_PER_PARENT) in percent
-    public static final int NUMBER_OF_CONTESTANTS_PER_ROUND = (int) Math.pow(2,7); // only 1 winner -< lower number ensures more worse parents and probably more diversity
+    public static final int NUMBER_OF_CONTESTANTS_PER_ROUND = (int) Math.pow(2,6); // only 1 winner -< lower number ensures more worse parents and probably more diversity
 
     //increase this number to increase the number of children per parent also resulting in bigger population in each generation, only makes sense when making population a list wont be doing that tho xD
     //higher number -< earlier local maximum because of incest
@@ -75,10 +75,10 @@ The following is an example of a generic evolutionary algorithm:
         int i = 0;
         while (population.getPopulation()[i].getFitness() >= 0) {
             if (!defensiveAlliances.contains(population.getPopulation()[i])){
-                Genome g = Genome.removeIsolatedNodes(population.getPopulation()[i]);
+                Genome g = Genome.removeIsolatedNodes(population.getPopulation()[i],PARENT_GRAPH);
                 defensiveAlliances.add(g);
-                i++;
             }
+            i++;
         }
         if (i>0) System.out.println("\u001B[31m"+ "new Defensive Alliances found: " + i + "\u001B[0m");
     }
@@ -152,15 +152,16 @@ The following is an example of a generic evolutionary algorithm:
                     NUMBER_OF_CHILDS_PER_PARENT,
                     newGenParents,
                     1,
-                    10,
-                     random.nextInt(Mutations.implementedMutationMethods)
+                    5,
+                     //random.nextInt(Mutations.implementedMutationMethods)
+                    1
                     );
 
 
             //increase counter
             counter++;
 
-            /*
+    /*
             //using this mutation at least once on the whole population fastens up the algorithm a lot
             if (counter<=2){
                 population = Population.mutate_Population(
@@ -174,25 +175,31 @@ The following is an example of a generic evolutionary algorithm:
                         10,
                         UPPER_BOUND_OF_GenomesToBeModified
                 );
-            }*/
+            }
+     */
+            /*
+
+             */
             //additional Mutations
             if(true) {
-                population = Population.mutate_Population_fixedAmount_of_Best(
+                population = Population.mutate_Population_RandomAmount_of_RandomlyChoosen(
                         population,
                         graph,
                         NUMBER_OF_NODES,
                         PARENT_GRAPH,
                         MUTATION_RATE,
-                        random.nextInt(Mutations.implementedMutationMethods),
+                        random.nextInt(2)+2,
                         //random.nextInt(MAX_NUMBER_OF_NODES_REMOVED_BY_MUTATION)+1
-                        10,
+                        5,
                         UPPER_BOUND_OF_GenomesToBeModified
                 );
             }
 
-
+            //remove isolated nodes from population, implemented inside remove_duplicates
             //remove duplicates from population and replace them with random generated genomes
-            //population = Population.remove_duplicates(population, NUMBER_OF_NODES, NODE_EXISTENCE_PROBABILITY, graph, PARENT_GRAPH);
+            //this is important because otherwise the algorithm will get stuck in local optima way faster
+            //can potentially result in duplicates in the population but chances are low
+            population = Population.remove_duplicates(population, NUMBER_OF_NODES, NODE_EXISTENCE_PROBABILITY, graph, PARENT_GRAPH);
 
 
 
@@ -229,12 +236,13 @@ The following is an example of a generic evolutionary algorithm:
 
         //check if best genomes are the same
         boolean b = true;
-        for (int i = 0; i < population.getPopulation().length && b; i++) {
-            if (population.getPopulation()[0].getGenome()[i] != population.getPopulation()[1].getGenome()[i]) {
-                b = false;
+        int amount = 0;
+        for (int i = 1; i < population.getPopulation().length && b; i++) {
+            if (population.getPopulation()[0].getGenome()[i] != population.getPopulation()[i].getGenome()[i]) {
+                amount++;
             }
         }
-        if (b) System.out.println("same Genomes");
+        System.out.println("same Genomes: " + amount);
     }
 
 
