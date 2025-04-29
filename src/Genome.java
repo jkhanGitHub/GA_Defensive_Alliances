@@ -157,26 +157,34 @@ public class Genome {
     //find the edges in the graph with the highest degree and check against the degree of the subgraph(genmome)
     static Map<Integer, Integer> orderedMapOf_harmfulNodes(OneGenome parent_graph, Genome subgraph){
         int difference; //initialize the array with the length of the parent graph to store the difference in degrees
-        Map<Integer, Integer> mapWithDifferencesInDegreesAndThereOriginalPosition = new HashMap<>(); //create a map to store the index and value of the difference
+        int relativeFitness;
+        Map<Integer, Integer> mapWithRelativeFitnessOfNode_And_OriginalPosition = new HashMap<>(); //create a map to store the index and value of the difference
 
         for (int i = 0; i < subgraph.genome.length; i++) {
             if(subgraph.genome[i]==1){
                 difference = parent_graph.getDegrees()[i] - subgraph.getDegrees()[i] ; //calculate the difference in degrees between the parent graph and the subgraph; Higher value means bigger difference
-                mapWithDifferencesInDegreesAndThereOriginalPosition.put(i, difference); //put the index and value of the difference in the map
+                relativeFitness = Math.abs(subgraph.getDegrees()[i] - difference); //the bigger the worse
+                mapWithRelativeFitnessOfNode_And_OriginalPosition.put(i, relativeFitness); //put the index and value of the difference in the map
                 }
             else{
-                difference = 0;
-                mapWithDifferencesInDegreesAndThereOriginalPosition.put(i, difference);
+                relativeFitness = 0;
+                mapWithRelativeFitnessOfNode_And_OriginalPosition.put(i, relativeFitness);
             }
         }
 
         //sort the map by value
-        mapWithDifferencesInDegreesAndThereOriginalPosition.entrySet()
+        Map<Integer, Integer> sortedMap = mapWithRelativeFitnessOfNode_And_OriginalPosition.entrySet()
                 .stream()
-                .sorted(Map.Entry.<Integer, Integer>comparingByValue().reversed());
+                .sorted(Map.Entry.<Integer, Integer>comparingByValue().reversed())
+                .collect(Collectors.toMap(
+                        Map.Entry::getKey,
+                        Map.Entry::getValue,
+                        (e1, e2) -> e1, // Merge function (not needed here as keys are unique)
+                        LinkedHashMap::new // Use LinkedHashMap to preserve the sorted order
+                ));
 
 
-        return mapWithDifferencesInDegreesAndThereOriginalPosition;
+        return sortedMap;
     }
 
 
