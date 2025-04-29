@@ -55,7 +55,7 @@ The following is an example of a generic evolutionary algorithm:
     public static final int MULTIPLIER = POPULATION_SIZE / NUMBER_OF_CONTESTANTS_PER_ROUND; //Multiplier for some selection methods which have an average parent output of 1
 
     //Explanation of mutation identfieres found in Population.java mutate_Population()
-    public static final float MUTATION_RATE = NUMBER_OF_NODES * 0.05f; //mutation rate, 0.01 means 1% chance of mutation per node, 0.1 means 10% chance of mutation per node
+    public static final float MUTATION_RATE = (1/NUMBER_OF_NODES)*5; //mutation rate, 0.01 means 1% chance of mutation per node, 0.1 means 10% chance of mutation per node
     public static final int NUMBER_OF_ITERATIONS = 300; //number of generations
 
     public static final int BREAK_FITNESS = NUMBER_OF_NODES - 2;
@@ -151,10 +151,10 @@ The following is an example of a generic evolutionary algorithm:
                     PROBABILITY,
                     NUMBER_OF_CHILDS_PER_PARENT,
                     newGenParents,
-                    1,
+                    0,
                     5,
                      //random.nextInt(Mutations.implementedMutationMethods)
-                    1
+                    2
                     );
 
 
@@ -181,19 +181,7 @@ The following is an example of a generic evolutionary algorithm:
 
              */
             //additional Mutations
-            if(true) {
-                population = Population.mutate_Population_RandomAmount_of_RandomlyChoosen(
-                        population,
-                        graph,
-                        NUMBER_OF_NODES,
-                        PARENT_GRAPH,
-                        MUTATION_RATE,
-                        random.nextInt(2)+2,
-                        //random.nextInt(MAX_NUMBER_OF_NODES_REMOVED_BY_MUTATION)+1
-                        5,
-                        UPPER_BOUND_OF_GenomesToBeModified
-                );
-            }
+
 
             //remove isolated nodes from population, implemented inside remove_duplicates
             //remove duplicates from population and replace them with random generated genomes

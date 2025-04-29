@@ -363,7 +363,6 @@ public class Population{
 
         System.out.println("Mutation: mutation" + mutationIdentifiers.get(mutation_identifier) + '\t' +amountOfMutations);
 
-
         int count = 0;
         Random random = new Random();
 
@@ -372,8 +371,8 @@ public class Population{
         while(count < population.population.length) {
             threads[count] = new Thread(()->{
                 //randomly select a genome to mutate
-                int i = random.nextInt(population.population.length);
-                Genome newChild = new Genome(numberOfNodes,population.population[i].getGenome(),graph);
+                final int i = random.nextInt(population.population.length);
+                Genome newChild = population.population[i];
 
                 //Mutation
                 switch (mutation_identifier) {
@@ -389,12 +388,12 @@ public class Population{
                         break;
                     case 2:
                         //Mutation of vertices with high degree
-                        newChild = Mutations.test_high_degree_vertices_mutation(population.population[i],amountOfMutations,parentGraph);
+                        newChild = Mutations.test_high_degree_vertices_mutation(newChild,amountOfMutations,parentGraph);
                         break;
                     case 3:
                         //remove harmful node
                         Genome.calculateDegrees(graph,newChild);
-                        newChild = Mutations.remove_many_harmful_Nodes(population.population[i],parentGraph,amountOfMutations);
+                        newChild = Mutations.remove_many_harmful_Nodes(newChild,parentGraph,amountOfMutations);
                         break;
                     default:
                         throw new IllegalStateException("Unexpected value: " + mutation_identifier);
@@ -436,8 +435,8 @@ public class Population{
         while(count < amountOfGenomes) {
             threads[count] = new Thread(()->{
                 //randomly select a genome to mutate
-                int i = random.nextInt(population.population.length);
-                Genome newChild = new Genome(numberOfNodes,population.population[i].getGenome(),graph);
+                final int i = random.nextInt(population.population.length);
+                Genome newChild = population.population[i];
 
                 //Mutation
                 switch (mutation_identifier) {
@@ -453,12 +452,12 @@ public class Population{
                         break;
                     case 2:
                         //Mutation of vertices with high degree
-                        newChild = Mutations.test_high_degree_vertices_mutation(population.population[i],amountOfMutations,parentGraph);
+                        newChild = Mutations.test_high_degree_vertices_mutation(newChild,amountOfMutations,parentGraph);
                         break;
                     case 3:
                         //remove harmful node
                         Genome.calculateDegrees(graph,newChild);
-                        newChild = Mutations.remove_many_harmful_Nodes(population.population[i],parentGraph,amountOfMutations);
+                        newChild = Mutations.remove_many_harmful_Nodes(newChild,parentGraph,amountOfMutations);
                         break;
                     default:
                         throw new IllegalStateException("Unexpected value: " + mutation_identifier);
@@ -499,7 +498,7 @@ public class Population{
             final int i = j;
             threads[i] = new Thread(()->{
                 //randomly select a genome to mutate
-                Genome newChild = new Genome(numberOfNodes,population.population[i].getGenome(),graph);
+                Genome newChild = population.population[i];
 
                 //Mutation
                 switch (mutation_identifier) {
@@ -515,12 +514,12 @@ public class Population{
                         break;
                     case 2:
                         //Mutation of vertices with high degree
-                        newChild = Mutations.test_high_degree_vertices_mutation(population.population[i],amountOfMutations,parentGraph);
+                        newChild = Mutations.test_high_degree_vertices_mutation(newChild,amountOfMutations,parentGraph);
                         break;
                     case 3:
                         //remove harmful node
                         Genome.calculateDegrees(graph,newChild);
-                        newChild = Mutations.remove_many_harmful_Nodes(population.population[i],parentGraph,amountOfMutations);
+                        newChild = Mutations.remove_many_harmful_Nodes(newChild,parentGraph,amountOfMutations);
                         break;
                     default:
                         throw new IllegalStateException("Unexpected value: " + mutation_identifier);
@@ -560,7 +559,7 @@ public class Population{
             final int i = j;
             threads[i] = new Thread(()->{
                 //randomly select a genome to mutate
-                Genome newChild = new Genome(numberOfNodes,population.population[n-i].getGenome(),graph);
+                Genome newChild = population.population[n-i];
 
                 //Mutation
                 switch (mutation_identifier) {
@@ -576,12 +575,12 @@ public class Population{
                         break;
                     case 2:
                         //Mutation of vertices with high degree
-                        newChild = Mutations.test_high_degree_vertices_mutation(population.population[n-i],amountOfMutations,parentGraph);
+                        newChild = Mutations.test_high_degree_vertices_mutation(newChild,amountOfMutations,parentGraph);
                         break;
                     case 3:
                         //remove harmful node
                         Genome.calculateDegrees(graph,newChild);
-                        newChild = Mutations.remove_many_harmful_Nodes(population.population[n-i],parentGraph,amountOfMutations);
+                        newChild = Mutations.remove_many_harmful_Nodes(newChild,parentGraph,amountOfMutations);
                         break;
                     default:
                         throw new IllegalStateException("Unexpected value: " + mutation_identifier);
@@ -622,8 +621,8 @@ public class Population{
             final int x = k;
             threads[i] = new Thread(()->{
                 //randomly select a genome to mutate
-                Genome newChild = new Genome(numberOfNodes,population.population[i].getGenome(),graph);
-                Genome worseChild = new Genome(numberOfNodes,population.population[n-x].getGenome(),graph);
+                Genome newChild = population.population[i];
+                Genome worseChild = population.population[n-x];
 
                 //Mutation
                 switch (mutation_identifier) {
@@ -643,15 +642,15 @@ public class Population{
                         break;
                     case 2:
                         //Mutation of vertices with high degree
-                        newChild = Mutations.test_high_degree_vertices_mutation(population.population[i],amountOfMutations,parentGraph);
-                        worseChild = Mutations.test_high_degree_vertices_mutation(population.population[n-x],amountOfMutations,parentGraph);
+                        newChild = Mutations.test_high_degree_vertices_mutation(newChild,amountOfMutations,parentGraph);
+                        worseChild = Mutations.test_high_degree_vertices_mutation(worseChild,amountOfMutations,parentGraph);
                         break;
                     case 3:
                         //remove harmful node
                         Genome.calculateDegrees(graph,newChild);
                         Genome.calculateDegrees(graph,worseChild);
-                        newChild = Mutations.remove_many_harmful_Nodes(population.population[i],parentGraph,amountOfMutations);
-                        worseChild = Mutations.remove_many_harmful_Nodes(population.population[n-x],parentGraph,amountOfMutations);
+                        newChild = Mutations.remove_many_harmful_Nodes(newChild,parentGraph,amountOfMutations);
+                        worseChild = Mutations.remove_many_harmful_Nodes(worseChild,parentGraph,amountOfMutations);
                         break;
                     default:
                         throw new IllegalStateException("Unexpected value: " + mutation_identifier);
@@ -685,13 +684,13 @@ public class Population{
     static Population mutate_Population_RandomAmount_of_RandomlyChoosen(Population population, int[][] graph, int numberOfNodes, OneGenome parentGraph, float mutationrate, int mutation_identifier, int amountOfMutations, int upperBound){
         List<Genome> nextGenChildren = Collections.synchronizedList(new LinkedList<>()); // Thread-safe list
 
-        System.out.println("Mutation: mutation" + mutationIdentifiers.get(mutation_identifier) + '\t' +amountOfMutations);
+        System.out.println("Mutation: mutation" + mutationIdentifiers.get(mutation_identifier));
 
 
         int count = 0;
         Random random = new Random();
         int amountOfGenomes = random.nextInt(upperBound); //random number between 0 and population size
-        System.out.println("amountOfGenomes to be mutated: " + amountOfGenomes);
+        System.out.println("Maximum amountOfGenomes to be mutated: " + amountOfGenomes);
 
         Thread[] threads = new Thread[amountOfGenomes];
 
@@ -699,7 +698,7 @@ public class Population{
             threads[count] = new Thread(()->{
                 //randomly select a genome to mutate
                 int i = random.nextInt(population.population.length);
-                Genome newChild = new Genome(numberOfNodes,population.population[i].getGenome(),graph);
+                Genome newChild = population.population[i];
 
                 //Mutation
                 switch (mutation_identifier) {
@@ -715,12 +714,12 @@ public class Population{
                         break;
                     case 2:
                         //Mutation of vertices with high degree
-                        newChild = Mutations.test_high_degree_vertices_mutation(population.population[i],amountOfMutations,parentGraph);
+                        newChild = Mutations.test_high_degree_vertices_mutation(newChild,amountOfMutations,parentGraph);
                         break;
                     case 3:
                         //remove harmful node
                         Genome.calculateDegrees(graph,newChild);
-                        newChild = Mutations.remove_many_harmful_Nodes(population.population[i],parentGraph,amountOfMutations);
+                        newChild = Mutations.remove_many_harmful_Nodes(newChild,parentGraph,amountOfMutations);
                         break;
                     default:
                         throw new IllegalStateException("Unexpected value: " + mutation_identifier);
@@ -752,19 +751,12 @@ public class Population{
         Population p = population;
         int counter=0;
 
+        int n = population.population.length-1;
 
-        //some selectioons Methods can Result in more new Parents, thus more new children than the size of the population allows
-        int controlDamage = p.population.length - newGenomes.size();
-        if (controlDamage < 0) {
-            controlDamage =p.population.length;
-        }
-        else {
-            controlDamage = newGenomes.size();
-        }
-
-        //overwrites the old entries by the amount of newGenomes.size()
-        for (int i = p.population.length-controlDamage;  counter < newGenomes.size() && counter<p.population.length ; counter++,i++) {
-            p.population[i]= newGenomes.get(counter);
+        //overwrites the worst entries by the amount of newGenomes.size()
+        for (Genome genome : newGenomes) {
+            p.population[n-counter] = genome;
+            counter++;
         }
         Population.updateGeneration();
         return p;
@@ -774,18 +766,12 @@ public class Population{
         Population p = population;
         int counter=0;
 
-        //some selectioons Methods can Result in more new Parents, thus more new children than the size of the population allows
-        int controlDamage = p.population.length - newGenomes.size();
-        if (controlDamage < 0) {
-            controlDamage =p.population.length;
-        }
-        else {
-            controlDamage = newGenomes.size();
-        }
+        int n = population.population.length-1;
 
-        //overwrites the old entries by the amount of newGenomes.size()
-        for (int i = p.population.length-controlDamage;  counter < newGenomes.size() && counter<p.population.length ; counter++,i++) {
-            p.population[i]= newGenomes.get(counter);
+        //overwrites the worst entries by the amount of newGenomes.size()
+        for (Genome genome : newGenomes) {
+            p.population[n-counter] = genome;
+            counter++;
         }
         return p;
     }

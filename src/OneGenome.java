@@ -2,7 +2,9 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 //Represents whole Graph
 public class OneGenome extends Genome {
@@ -53,9 +55,17 @@ public class OneGenome extends Genome {
         for (int i = 0; i < degrees.length; i++) {
             orderedMapOfHighestDegrees.put(i, degrees[i]);
         }
-        orderedMapOfHighestDegrees.entrySet().stream()
-                .sorted(Map.Entry.<Integer, Integer>comparingByValue().reversed());
+
+        orderedMapOfHighestDegrees = orderedMapOfHighestDegrees.entrySet().stream()
+                .sorted(Map.Entry.<Integer, Integer>comparingByValue().reversed())
+                .collect(Collectors.toMap(
+                        Map.Entry::getKey,
+                        Map.Entry::getValue,
+                        (e1, e2) -> e1, // Merge function (not needed here as keys are unique)
+                        LinkedHashMap::new // Use LinkedHashMap to preserve the sorted order
+                ));
     }
+
 
     public int[] getDegrees() {
         return degrees;
