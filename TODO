@@ -10,4 +10,9 @@ Forkjoins dont work on macAir only PC atleast for me
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 TODO
-modified genomes are not in list properly
+Think about how to handle duplicates in the best way
+Think about best method to produce new generation
+Think about how to handle the size of the networks
+possible speedups
+faster mutations and ?creation?
+improve impact each new generation brings e.g mean generation  fitness

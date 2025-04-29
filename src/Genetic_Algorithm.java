@@ -34,7 +34,7 @@ The following is an example of a generic evolutionary algorithm:
 
     public static final float NODE_EXISTENCE_PROBABILITY = 0.5F;
 
-    public static final int POPULATION_SIZE = (int) Math.pow(2,11); //Powers of two are best suited for variable tournament selection, use  factors of two for 1v1
+    public static final int POPULATION_SIZE = (int) Math.pow(2,12); //Powers of two are best suited for variable tournament selection, use  factors of two for 1v1
 
     public static final int MAX_NUMBER_OF_NODES_REMOVED_BY_MUTATION = 5; //maximum number of nodes removed by mutation, smaller numbers will probably have higher impact
 
@@ -46,16 +46,16 @@ The following is an example of a generic evolutionary algorithm:
     //new population will take over the best from last generation + all new children
     //WARNING: IF NUMBER OF PARENTS IS >= Number of children then the whole population will be replaced
     // new nodes in next population is (NUMBER_OF_CONTESTANTS_PER_ROUND/NUMBER_OF_CHILDS_PER_PARENT) in percent
-    public static final int NUMBER_OF_CONTESTANTS_PER_ROUND = (int) Math.pow(2,6); // only 1 winner -< lower number ensures more worse parents and probably more diversity
+    public static final int NUMBER_OF_CONTESTANTS_PER_ROUND = (int) Math.pow(2,3); // only 1 winner -< lower number ensures more worse parents and probably more diversity
 
     //increase this number to increase the number of children per parent also resulting in bigger population in each generation, only makes sense when making population a list wont be doing that tho xD
     //higher number -< earlier local maximum because of incest
-    public static final int NUMBER_OF_CHILDS_PER_PARENT = 1;
+    public static final int NUMBER_OF_CHILDS_PER_PARENT = 3;
 
     public static final int MULTIPLIER = POPULATION_SIZE / NUMBER_OF_CONTESTANTS_PER_ROUND; //Multiplier for some selection methods which have an average parent output of 1
 
     //Explanation of mutation identfieres found in Population.java mutate_Population()
-    public static final float MUTATION_RATE = (1/NUMBER_OF_NODES)*5; //mutation rate, 0.01 means 1% chance of mutation per node, 0.1 means 10% chance of mutation per node
+    public static final float MUTATION_RATE = 0.01f; //mutation rate, 0.01 means 1% chance of mutation per node, 0.1 means 10% chance of mutation per node
     public static final int NUMBER_OF_ITERATIONS = 300; //number of generations
 
     public static final int BREAK_FITNESS = NUMBER_OF_NODES - 2;
@@ -154,7 +154,7 @@ The following is an example of a generic evolutionary algorithm:
                     0,
                     5,
                      //random.nextInt(Mutations.implementedMutationMethods)
-                    2
+                    1
                     );
 
 
@@ -180,15 +180,29 @@ The following is an example of a generic evolutionary algorithm:
             /*
 
              */
+            /*
             //additional Mutations
-
+            population = Population.mutate_Population_fixedAmount_of_RandomlyChoosen(
+                    population,
+                    graph,
+                    NUMBER_OF_NODES,
+                    PARENT_GRAPH,
+                    MUTATION_RATE,
+                    random.nextInt(1,Mutations.implementedMutationMethods), //mutation 2 and 3 will be executed
+                    //random.nextInt(MAX_NUMBER_OF_NODES_REMOVED_BY_MUTATION)+1
+                    10,
+                    UPPER_BOUND_OF_GenomesToBeModified
+            );
+             */
 
             //remove isolated nodes from population, implemented inside remove_duplicates
             //remove duplicates from population and replace them with random generated genomes
             //this is important because otherwise the algorithm will get stuck in local optima way faster
             //can potentially result in duplicates in the population but chances are low
-            population = Population.remove_duplicates(population, NUMBER_OF_NODES, NODE_EXISTENCE_PROBABILITY, graph, PARENT_GRAPH);
-
+            // remove_duplicates is really slow
+            if (counter%5==0) {
+                population = Population.remove_duplicates_Threaded(population, NUMBER_OF_NODES, NODE_EXISTENCE_PROBABILITY, graph, PARENT_GRAPH);
+            }
 
 
             population.sort_Population_by_fitness_and_size_reversed();

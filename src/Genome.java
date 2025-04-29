@@ -58,6 +58,7 @@ public class Genome {
     Genome() {
     }
 
+    //dont remove the graph parameter, it is needed for overloading
     protected Genome(int numberOfNodes, float existenceRate, int[][] graph) {
         length = numberOfNodes;
         genome = new int[length];
@@ -75,6 +76,25 @@ public class Genome {
         degrees = new int[length];
 
         init_degrees();
+    }
+
+
+    protected Genome(int[] genetic_data) {
+        length = genetic_data.length;;
+        genome = complement(genetic_data);
+        degrees = new int[length];
+
+        init_degrees();
+    }
+
+    //needed for DeepCopy never heard about it before me neither :)))))))))))) FUCKING BULLSHIT NEEDED DAYS TO BE FOUND
+    protected Genome(Genome genome) {
+        this.genome = Arrays.copyOf(genome.genome, genome.genome.length);
+        this.degrees = Arrays.copyOf(genome.degrees, genome.degrees.length);
+        this.positiveFitness = genome.positiveFitness;
+        this.fitness = genome.fitness;
+        this.size = genome.size;
+        this.length = genome.length;
     }
 
 
@@ -110,6 +130,14 @@ public class Genome {
                 }
             }
         });
+    }
+
+    int[] complement(int[] genome) {
+        int[] complement = new int[genome.length];
+        for (int i = 0; i < genome.length; i++) {
+            complement[i] = Math.abs(genome[i] - 1);
+        }
+        return complement;
     }
 
     void init_degrees(){

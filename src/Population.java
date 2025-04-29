@@ -1,4 +1,10 @@
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.*;
 
 //many methods might have unused parameters, these are just there so that the methods can be interchanged in the genetic algorithm
 public class Population{
@@ -174,9 +180,11 @@ public class Population{
                 threads[finalI] = new Thread(() -> {
                     Genome newChild = new Genome(numberOfNodes, geneticCodesOfChildrens[finalI], graph);
 
+                    /*
                     //easiest way to mutate the genome
                     int[] mutation = Mutations.mutation(mutationrate,newChild);
                     newChild.setGenome(mutation);
+                    */
 
                     //Mutation
                     switch (mutation_identifier) {
@@ -280,9 +288,12 @@ public class Population{
                 threads[finalI] = new Thread(() -> {
                     Genome newChild = new Genome(numberOfNodes, geneticCodesOfChildrens[finalI], graph);
 
+                    /*
                     //easiest way to mutate the genome
                     int[] mutation = Mutations.mutation(mutationrate,newChild);
                     newChild.setGenome(mutation);
+
+                     */
 
                     //Mutation
                     switch (mutation_identifier) {
@@ -361,7 +372,8 @@ public class Population{
     static Population mutate_Population(Population population, int[][] graph, int numberOfNodes, OneGenome parentGraph, float mutationrate, int mutation_identifier, int amountOfMutations, int fillerForInterchangeablity) {
         List<Genome> nextGenChildren = Collections.synchronizedList(new LinkedList<>()); // Thread-safe list
 
-        System.out.println("Mutation: mutation" + mutationIdentifiers.get(mutation_identifier) + '\t' +amountOfMutations);
+        System.out.println("Mutation: " + mutationIdentifiers.get(mutation_identifier));
+        System.out.println("Maximum amountOfGenomes to be mutated: " + population.population.length);
 
         int count = 0;
         Random random = new Random();
@@ -372,7 +384,7 @@ public class Population{
             threads[count] = new Thread(()->{
                 //randomly select a genome to mutate
                 final int i = random.nextInt(population.population.length);
-                Genome newChild = population.population[i];
+                Genome newChild = new Genome(population.population[i]);
 
                 //Mutation
                 switch (mutation_identifier) {
@@ -424,8 +436,8 @@ public class Population{
     static Population mutate_Population_fixedAmount_of_RandomlyChoosen(Population population, int[][] graph, int numberOfNodes, OneGenome parentGraph, float mutationrate, int mutation_identifier, int amountOfMutations, int amountOfGenomes){
         List<Genome> nextGenChildren = Collections.synchronizedList(new LinkedList<>()); // Thread-safe list
 
-        System.out.println("Mutation: mutation" + mutationIdentifiers.get(mutation_identifier) + '\t' +amountOfMutations);
-
+        System.out.println("Mutation: " + mutationIdentifiers.get(mutation_identifier));
+        System.out.println("Maximum amountOfGenomes to be mutated: " + amountOfGenomes);
 
         int count = 0;
         Random random = new Random();
@@ -436,7 +448,7 @@ public class Population{
             threads[count] = new Thread(()->{
                 //randomly select a genome to mutate
                 final int i = random.nextInt(population.population.length);
-                Genome newChild = population.population[i];
+                Genome newChild = new Genome(population.population[i]);
 
                 //Mutation
                 switch (mutation_identifier) {
@@ -489,8 +501,8 @@ public class Population{
     static Population mutate_Population_fixedAmount_of_Best(Population population, int[][] graph, int numberOfNodes, OneGenome parentGraph, float mutationrate, int mutation_identifier, int amountOfMutations, int amountOfGenomes){
         List<Genome> nextGenChildren = Collections.synchronizedList(new LinkedList<>()); // Thread-safe list
 
-        System.out.println("Mutation: mutation" + mutationIdentifiers.get(mutation_identifier) + '\t' +amountOfMutations);
-
+        System.out.println("Mutation: " + mutationIdentifiers.get(mutation_identifier));
+        System.out.println("Maximum amountOfGenomes to be mutated: " + amountOfGenomes);
 
         Thread[] threads = new Thread[amountOfGenomes];
 
@@ -498,7 +510,7 @@ public class Population{
             final int i = j;
             threads[i] = new Thread(()->{
                 //randomly select a genome to mutate
-                Genome newChild = population.population[i];
+                Genome newChild = new Genome(population.population[i]);
 
                 //Mutation
                 switch (mutation_identifier) {
@@ -549,8 +561,8 @@ public class Population{
     static Population mutate_Population_fixedAmount_of_Worst(Population population, int[][] graph, int numberOfNodes, OneGenome parentGraph, float mutationrate, int mutation_identifier, int amountOfMutations, int amountOfGenomes){
         List<Genome> nextGenChildren = Collections.synchronizedList(new LinkedList<>()); // Thread-safe list
 
-        System.out.println("Mutation: mutation" + mutationIdentifiers.get(mutation_identifier) + '\t' +amountOfMutations);
-
+        System.out.println("Mutation: " + mutationIdentifiers.get(mutation_identifier));
+        System.out.println("Maximum amountOfGenomes to be mutated: " + amountOfGenomes);
 
         Thread[] threads = new Thread[amountOfGenomes];
         int n = population.population.length-1;
@@ -559,7 +571,7 @@ public class Population{
             final int i = j;
             threads[i] = new Thread(()->{
                 //randomly select a genome to mutate
-                Genome newChild = population.population[n-i];
+                Genome newChild = new Genome(population.population[n-i]);
 
                 //Mutation
                 switch (mutation_identifier) {
@@ -610,8 +622,8 @@ public class Population{
     static Population mutate_Population_fixedAmount_of_Best_and_Worst(Population population, int[][] graph, int numberOfNodes, OneGenome parentGraph, float mutationrate, int mutation_identifier, int amountOfMutations, int amountOfGenomes){
         List<Genome> nextGenChildren = Collections.synchronizedList(new LinkedList<>()); // Thread-safe list
 
-        System.out.println("Mutation: mutation" + mutationIdentifiers.get(mutation_identifier) + '\t' +amountOfMutations);
-
+        System.out.println("Mutation: " + mutationIdentifiers.get(mutation_identifier));
+        System.out.println("Maximum amountOfGenomes to be mutated: " + amountOfGenomes);
 
         Thread[] threads = new Thread[amountOfGenomes/2];
         int n = population.population.length;
@@ -621,8 +633,8 @@ public class Population{
             final int x = k;
             threads[i] = new Thread(()->{
                 //randomly select a genome to mutate
-                Genome newChild = population.population[i];
-                Genome worseChild = population.population[n-x];
+                Genome newChild = new Genome(population.population[i]);
+                Genome worseChild = new Genome(population.population[n-x]);
 
                 //Mutation
                 switch (mutation_identifier) {
@@ -684,7 +696,7 @@ public class Population{
     static Population mutate_Population_RandomAmount_of_RandomlyChoosen(Population population, int[][] graph, int numberOfNodes, OneGenome parentGraph, float mutationrate, int mutation_identifier, int amountOfMutations, int upperBound){
         List<Genome> nextGenChildren = Collections.synchronizedList(new LinkedList<>()); // Thread-safe list
 
-        System.out.println("Mutation: mutation" + mutationIdentifiers.get(mutation_identifier));
+        System.out.println("Mutation: " + mutationIdentifiers.get(mutation_identifier));
 
 
         int count = 0;
@@ -698,7 +710,7 @@ public class Population{
             threads[count] = new Thread(()->{
                 //randomly select a genome to mutate
                 int i = random.nextInt(population.population.length);
-                Genome newChild = population.population[i];
+                Genome newChild = new Genome(population.population[i]);
 
                 //Mutation
                 switch (mutation_identifier) {
@@ -755,6 +767,7 @@ public class Population{
 
         //overwrites the worst entries by the amount of newGenomes.size()
         for (Genome genome : newGenomes) {
+            if (counter >= n) break; // Prevents ArrayIndexOutOfBoundsException
             p.population[n-counter] = genome;
             counter++;
         }
@@ -770,6 +783,7 @@ public class Population{
 
         //overwrites the worst entries by the amount of newGenomes.size()
         for (Genome genome : newGenomes) {
+            if (counter >= n) break; // Prevents ArrayIndexOutOfBoundsException
             p.population[n-counter] = genome;
             counter++;
         }
@@ -816,6 +830,56 @@ public class Population{
         }
         else {
             System.out.println("No duplicates found");
+        }
+        return temp;
+    }
+
+    static Population remove_duplicates_Threaded(Population population, int numberOFNodes, float existenceRate, int[][] graph, OneGenome parentGraph){
+
+        //remove isolated nodes
+        Population temp = remove_isolated_nodes(population, parentGraph);
+
+        // Thread-safe map to store updated genomes
+        ConcurrentHashMap<Integer, Genome> updatedPopulation = new ConcurrentHashMap<>();
+        ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
+
+
+        AtomicBoolean found = new AtomicBoolean(false);
+        AtomicInteger counter = new AtomicInteger();
+        for (int i = 0; i < temp.population.length-1; i++) {
+            final int index = i;
+            executor.submit(() -> {
+                for (int j = index+1; j < temp.population.length; j++) {
+                    int difference = Genome.difference(temp.population[index],temp.population[j]);
+                    if (difference==0){
+                        //complementary genome
+                        Genome newGenome = new Genome(temp.population[index].getGenome());
+                        Genome.calculateDegrees(graph, newGenome);
+                        newGenome.setFitness(FitnessFunctions.calculateFitnessMIN(newGenome, parentGraph));
+                        newGenome.calculateSize();
+                        updatedPopulation.put(index, newGenome);
+
+                        found.set(true);
+                        counter.incrementAndGet();
+                        break;
+                    }
+                }
+            });
+        }
+        executor.shutdown();
+
+        try {
+            executor.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+
+        for (Map.Entry<Integer, Genome> entry : updatedPopulation.entrySet()) {
+            int index = entry.getKey();
+            temp.population[index] = entry.getValue();
+        }
+        if (found.get()) {
+            System.out.println("\u001B[35m"+"Duplicates found and removed: " + counter.get()+"\u001B[0m");
         }
         return temp;
     }

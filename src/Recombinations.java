@@ -8,6 +8,8 @@ public class Recombinations {
 
 
     static final float INTERSECTION_PROBABILITY = 0.9f;
+
+
     public static int[][] onePointCrossover(int[] a, int[] b) {
         // Validate input arrays
         if (a.length != b.length) {
