@@ -4,7 +4,7 @@ import java.util.*;
 //Selection methods are used to select parents for the next generation
 public class Selection {
 
-    static final int IMPLEMENTED_SELECTION_METHODS = 5;
+    static final int IMPLEMENTED_SELECTION_METHODS = 4;
 
     static Dictionary<Integer, String> selectionMethods = new Hashtable<>();
     static{
@@ -127,13 +127,10 @@ public class Selection {
         int denominator = n*(n+1)/2;
 
         //Multiplier so we can have more winners
-        //without multiplier the mean value would be about 1
-        double multiplier = Genetic_Algorithm.MULTIPLIER;
 
         int i = 0;// Calculate the probabilities for each genome
         while (selectedParents.size()<numberOfOffspring) {
             double p_i = (double) (2 * (n - i + 1)) /(denominator);
-            p_i *= multiplier;
             if ((p_i > random.nextDouble()) && !selectedParentIDs.contains(i)) {
                 selectedParentIDs.add(i);
                 // Add the genome to the selected parents list

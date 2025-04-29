@@ -33,6 +33,28 @@ public class Recombinations {
         return new int[][]{ab, ba};
     }
 
+    public static int[][] onePointCrossover(int[] a, int[] b, int childrenAmount) {
+
+        int[][] listOfChildren = new int[childrenAmount][1];
+        // Validate input arrays
+        if (a.length != b.length) {
+            throw new IllegalArgumentException("Parent arrays must be of equal length");
+        }
+
+        Random random = new Random();
+        // Select random crossover point (0 to length-1 inclusive)
+        int crossoverPoint = random.nextInt(a.length);
+
+        for (int k = 0; k < childrenAmount; k++) {
+            // Create offspring array
+            int[] child = new int[a.length];
+            System.arraycopy(a, 0, child, 0, crossoverPoint + 1);
+            System.arraycopy(b, crossoverPoint + 1, child, crossoverPoint + 1, a.length - (crossoverPoint + 1));
+            listOfChildren[k] = child;
+        }
+        return listOfChildren;
+    }
+
     static int[][] intersection_with_proabability(int[] genome1, int[] genome2, float proabibility,int childrenAmount) {
         int[][] listOfChildren = new int[childrenAmount][1];
         //intersection

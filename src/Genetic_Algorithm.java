@@ -46,7 +46,7 @@ The following is an example of a generic evolutionary algorithm:
     //new population will take over the best from last generation + all new children
     //WARNING: IF NUMBER OF PARENTS IS >= Number of children then the whole population will be replaced
     // new nodes in next population is (NUMBER_OF_CONTESTANTS_PER_ROUND/NUMBER_OF_CHILDS_PER_PARENT) in percent
-    public static final int NUMBER_OF_CONTESTANTS_PER_ROUND = 128; // only 1 winner -< lower number ensures more worse parents and probably more diversity
+    public static final int NUMBER_OF_CONTESTANTS_PER_ROUND = 64; // only 1 winner -< lower number ensures more worse parents and probably more diversity
 
     //increase this number to increase the number of children per parent also resulting in bigger population in each generation, only makes sense when making population a list wont be doing that tho xD
     //higher number -< earlier local maximum because of incest
@@ -56,7 +56,7 @@ The following is an example of a generic evolutionary algorithm:
 
     //Explanation of mutation identfieres found in Population.java mutate_Population()
     public static final float MUTATION_RATE = 1 / NUMBER_OF_NODES;
-    public static final int NUMBER_OF_ITERATIONS = 100; //number of generations
+    public static final int NUMBER_OF_ITERATIONS = 10000; //number of generations
 
     public static final int BREAK_FITNESS = NUMBER_OF_NODES - 2;
 
@@ -64,7 +64,7 @@ The following is an example of a generic evolutionary algorithm:
 
     public static final float PROBABILITY = 0.5f; //probability of intersection, 0.5 means 50% chance of intersection and 50% chance of crossover
 
-    final static int UPPER_BOUND = POPULATION_SIZE/2; //upper bound for ADDITIONAL_amount of genomes to be mutated
+    final static int UPPER_BOUND = POPULATION_SIZE/NUMBER_OF_CONTESTANTS_PER_ROUND; //upper bound for ADDITIONAL_amount of genomes to be mutated
     public static int[][] graph;
 
     public static Map<Integer, Genome> bestGenomes = new HashMap<>();
@@ -74,9 +74,11 @@ The following is an example of a generic evolutionary algorithm:
     static void addDefensiveAlliance(Population population) {
         int i = 0;
         while (population.getPopulation()[i].getFitness() >= 0) {
+            if (!defensiveAlliances.contains(population.getPopulation()[i]))
                 defensiveAlliances.add(population.getPopulation()[i]);
                 i++;
             }
+        if (i>0) System.out.println("\u001B[31m"+ "new Defensive Alliances found: " + i + "\u001B[0m");
     }
 
     //when using onepointcrossover the parentgraph should not be included in the population!
@@ -124,7 +126,7 @@ The following is an example of a generic evolutionary algorithm:
             List<Genome> newGenParents = Selection.select_SelectionMethod(
                     population,
                     NUMBER_OF_CONTESTANTS_PER_ROUND,
-                    random.nextInt(Selection.IMPLEMENTED_SELECTION_METHODS - 1));//-2 since i dont want elitism to be selected or exponential_rankedselection
+                    random.nextInt(Selection.IMPLEMENTED_SELECTION_METHODS));// since i dont want elitism to be selected or exponential_rankedselection
 
 
             //Recombnination Identifiers:
@@ -145,33 +147,38 @@ The following is an example of a generic evolutionary algorithm:
                     PROBABILITY,
                     NUMBER_OF_CHILDS_PER_PARENT,
                     newGenParents,
-                    1);
+                    1,
+                    random.nextInt(5),
+                    random.nextInt(2) + 2
+                    );
 
+
+            //increase counter
+            counter++;
             //additional Mutations
-            population = Population.mutate_Population_RandomAmount_of_RandomlyChoosen(
-                    population,
-                    graph,
-                    NUMBER_OF_NODES,
-                    PARENT_GRAPH,
-                    MUTATION_RATE,
-                    random.nextInt(2) + 2,
-                    //random.nextInt(MAX_NUMBER_OF_NODES_REMOVED_BY_MUTATION)+1
-                    random.nextInt(10),
-                    UPPER_BOUND
-            );
+            if(true) {
+                population = Population.mutate_Population_fixedAmount_of_Best_and_Worst(
+                        population,
+                        graph,
+                        NUMBER_OF_NODES,
+                        PARENT_GRAPH,
+                        MUTATION_RATE,
+                        random.nextInt(2) + 2,
+                        //random.nextInt(MAX_NUMBER_OF_NODES_REMOVED_BY_MUTATION)+1
+                        random.nextInt(10),
+                        UPPER_BOUND
+                );
+            }
 
 
             //remove duplicates from population and replace them with random generated genomes
-            population = Population.remove_duplicates(population, NUMBER_OF_NODES, NODE_EXISTENCE_PROBABILITY, graph, PARENT_GRAPH);
+            //population = Population.remove_duplicates(population, NUMBER_OF_NODES, NODE_EXISTENCE_PROBABILITY, graph, PARENT_GRAPH);
 
 
 
             population.sort_Population_by_fitness_and_size_reversed();
             population.setPopulation_fitness(FitnessFunctions.calculate_Population_fitness(population));
             population.setMean_fitness(FitnessFunctions.calculate_Mean_fitness(population));
-
-            //increase counter
-            counter++;
 
             //adds defensive alliance to a list if it has been found
             addDefensiveAlliance(population);
