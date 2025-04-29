@@ -34,7 +34,7 @@ The following is an example of a generic evolutionary algorithm:
 
     public static final float NODE_EXISTENCE_PROBABILITY = 0.5F;
 
-    public static final int POPULATION_SIZE = 4096; //Powers of two are best suited for variable tournament selection, use  factors of two for 1v1
+    public static final int POPULATION_SIZE = (int) Math.pow(2,11); //Powers of two are best suited for variable tournament selection, use  factors of two for 1v1
 
     public static final int MAX_NUMBER_OF_NODES_REMOVED_BY_MUTATION = 5; //maximum number of nodes removed by mutation, smaller numbers will probably have higher impact
 
@@ -151,9 +151,9 @@ The following is an example of a generic evolutionary algorithm:
                     PROBABILITY,
                     NUMBER_OF_CHILDS_PER_PARENT,
                     newGenParents,
-                    0,
+                    1,
                     5,
-                     3
+                     1
                     );
 
 
@@ -183,9 +183,9 @@ The following is an example of a generic evolutionary algorithm:
                         NUMBER_OF_NODES,
                         PARENT_GRAPH,
                         MUTATION_RATE,
-                        3,
+                        2,
                         //random.nextInt(MAX_NUMBER_OF_NODES_REMOVED_BY_MUTATION)+1
-                        5,
+                        1,
                         UPPER_BOUND_OF_GenomesToBeModified
                 );
             }

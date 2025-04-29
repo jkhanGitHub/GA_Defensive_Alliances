@@ -57,7 +57,7 @@ public class Mutations {
             else {
                 continue;
             }
-            numberOfVerticesTested--;
+            numberOfNodes--;
         }
 
         return mutatedGenome;
@@ -93,7 +93,7 @@ public class Mutations {
         Map<Integer, Integer> map = Genome.orderedMapOf_harmfulNodes(parent, subgraph);
         Iterator<Map.Entry<Integer, Integer>> iterator = map.entrySet().iterator();
 
-        for (int i = 0; i < numberOfNodes; i++) {
+        for (int i = 0; i < numberOfNodes && iterator.hasNext(); i++) {
             Map.Entry<Integer, Integer> entry = iterator.next();
             int key = entry.getKey(); //index of the node
             int value = entry.getValue(); //difference in degrees; degree change after Operation
@@ -102,6 +102,7 @@ public class Mutations {
                 //remove the node from the subgraph
                 mutatedGenome.getGenome()[key] = 0;
             }
+            else break; //map is ordered =< no more relevant value in map
         }
 
         /*//Experimental from Here ---------------------------------------------------------------------------
