@@ -1,5 +1,6 @@
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Random;
 
 public class Mutations {
 
@@ -29,7 +30,11 @@ public class Mutations {
         Iterator<Map.Entry<Integer, Integer>> iterator = parentGraph.getOrderedMapOfHighestDegrees().entrySet().iterator();
 
         boolean bool = true;
-        while (iterator.hasNext() && bool && numberOfVerticesTested > 0) {
+        Random random = new Random();
+
+        int numberOfNodes = random.nextInt(numberOfVerticesTested+1);
+
+        while (iterator.hasNext() && bool && numberOfNodes > 0) {
             Map.Entry<Integer, Integer> entry = iterator.next();
             int index = entry.getKey();
             if(mutatedGenome.getGenome()[index] == 0){
@@ -81,9 +86,14 @@ public class Mutations {
         //remove the node with the highest degree
         Genome mutatedGenome = subgraph;
 
+        Random random = new Random();
+
+        int numberOfNodes = random.nextInt(numberOfNodesToRemove+1);
+
         Map<Integer, Integer> map = Genome.orderedMapOf_harmfulNodes(parent, subgraph);
         Iterator<Map.Entry<Integer, Integer>> iterator = map.entrySet().iterator();
-        for (int i = 0; i < numberOfNodesToRemove; i++) {
+
+        for (int i = 0; i < numberOfNodes; i++) {
             Map.Entry<Integer, Integer> entry = iterator.next();
             int key = entry.getKey(); //index of the node
             int value = entry.getValue(); //difference in degrees; degree change after Operation

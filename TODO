@@ -6,3 +6,4 @@ add methods for manipulation of found defensiveAlliances
 implement how defensiveAlliances should be handled
 
 Forkjoins dont work on macAir only PC atleast for me
+Mutation methods 2 and 3 are really slow and take   wayy too many ressources

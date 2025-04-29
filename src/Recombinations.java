@@ -42,10 +42,11 @@ public class Recombinations {
         }
 
         Random random = new Random();
-        // Select random crossover point (0 to length-1 inclusive)
-        int crossoverPoint = random.nextInt(a.length);
 
         for (int k = 0; k < childrenAmount; k++) {
+            // Select random crossover point (0 to length-1 inclusive)
+            int crossoverPoint = random.nextInt(a.length);
+
             // Create offspring array
             int[] child = new int[a.length];
             System.arraycopy(a, 0, child, 0, crossoverPoint + 1);

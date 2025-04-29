@@ -55,7 +55,7 @@ The following is an example of a generic evolutionary algorithm:
     public static final int MULTIPLIER = POPULATION_SIZE / NUMBER_OF_CONTESTANTS_PER_ROUND; //Multiplier for some selection methods which have an average parent output of 1
 
     //Explanation of mutation identfieres found in Population.java mutate_Population()
-    public static final float MUTATION_RATE = 3 / NUMBER_OF_NODES;
+    public static final float MUTATION_RATE = NUMBER_OF_NODES * 0.05f; //mutation rate, 0.01 means 1% chance of mutation per node, 0.1 means 10% chance of mutation per node
     public static final int NUMBER_OF_ITERATIONS = 300; //number of generations
 
     public static final int BREAK_FITNESS = NUMBER_OF_NODES - 2;
@@ -152,14 +152,15 @@ The following is an example of a generic evolutionary algorithm:
                     NUMBER_OF_CHILDS_PER_PARENT,
                     newGenParents,
                     0,
-                    10,
-                    random.nextInt(3) + 1
+                    5,
+                     3
                     );
 
 
             //increase counter
             counter++;
 
+            /*
             //using this mutation at least once on the whole population fastens up the algorithm a lot
             if (counter<=2){
                 population = Population.mutate_Population(
@@ -173,18 +174,18 @@ The following is an example of a generic evolutionary algorithm:
                         10,
                         UPPER_BOUND_OF_GenomesToBeModified
                 );
-            }
+            }*/
             //additional Mutations
             if(true) {
-                population = Population.mutate_Population_fixedAmount_of_Best_and_Worst(
+                population = Population.mutate_Population_fixedAmount_of_Best(
                         population,
                         graph,
                         NUMBER_OF_NODES,
                         PARENT_GRAPH,
                         MUTATION_RATE,
-                        random.nextInt(3)+1,
+                        3,
                         //random.nextInt(MAX_NUMBER_OF_NODES_REMOVED_BY_MUTATION)+1
-                        10,
+                        5,
                         UPPER_BOUND_OF_GenomesToBeModified
                 );
             }

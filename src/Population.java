@@ -273,16 +273,107 @@ public class Population{
 
         //recombine Parents: Number of parents = POPULATION_SIZE/numberOfContestantsPerRound
         for (int i = 0, j = 1; j < nextGenParents.size(); i = i + 2, j = j + 2) {
-        int[][] geneticCodesOfChildrens = Recombinations.intersection_with_proabability(nextGenParents.get(i).getGenome(), nextGenParents.get(j).getGenome(), proabibility, newChildsPerParents);
-        Thread[] threads = new Thread[newChildsPerParents];
-        for (int k = 0; k < geneticCodesOfChildrens.length; k++) {
-            final int finalI = k;
-            threads[finalI] = new Thread(() -> {
-                Genome newChild = new Genome(numberOfNodes, geneticCodesOfChildrens[finalI], graph);
+            int[][] geneticCodesOfChildrens = Recombinations.intersection_with_proabability(nextGenParents.get(i).getGenome(), nextGenParents.get(j).getGenome(), proabibility, newChildsPerParents);
+            Thread[] threads = new Thread[newChildsPerParents];
+            for (int k = 0; k < geneticCodesOfChildrens.length; k++) {
+                final int finalI = k;
+                threads[finalI] = new Thread(() -> {
+                    Genome newChild = new Genome(numberOfNodes, geneticCodesOfChildrens[finalI], graph);
 
-                //easiest way to mutate the genome
-                int[] mutation = Mutations.mutation(mutationrate,newChild);
-                newChild.setGenome(mutation);
+                    //easiest way to mutate the genome
+                    int[] mutation = Mutations.mutation(mutationrate,newChild);
+                    newChild.setGenome(mutation);
+
+                    //Mutation
+                    switch (mutation_identifier) {
+                        case 0:
+                            //Mutation
+                            int[] mutated = Mutations.mutation(mutationrate,newChild);
+                            newChild.setGenome(mutated);
+                            break;
+                        case 1:
+                            //Mutation of vertices with high degree
+                            int[] mutated_high_degree = Mutations.mutation_of_vertices_with_high_degree(mutationrate,newChild);
+                            newChild.setGenome(mutated_high_degree);
+                            break;
+                        case 2:
+                            //Mutation of vertices with high degree
+                            newChild = Mutations.test_high_degree_vertices_mutation(newChild,amountOfMutations,parentGraph);
+                            break;
+                        case 3:
+                            //remove harmful node
+                            Genome.calculateDegrees(graph,newChild);
+                            newChild = Mutations.remove_many_harmful_Nodes(newChild,parentGraph,amountOfMutations);
+                            break;
+                        default:
+                            throw new IllegalStateException("Unexpected value: " + mutation_identifier);
+                    }
+
+                    //calculate degrees
+                    Genome.calculateDegrees(graph, newChild);
+
+                    //calculate fitness
+                    newChild.setFitness(FitnessFunctions.calculateFitnessMIN(newChild, parentGraph));
+
+                    //calculate size
+                    newChild.calculateSize();
+
+                    //add to the thread-safe list
+                    nextGenChildren.add(newChild);
+                });
+                threads[finalI].start();
+            }
+            for (Thread t :
+                    threads) {
+                try {
+                    t.join();
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+
+        //Elites of the previous gen stay in the next generation
+        //Number of Elites = POPULATION_SIZE - (POPULATION_SIZE/numberOfContestantsPerRound)
+
+        return update_Population(population, nextGenChildren);
+    }
+
+    // add new cases when implementing new REcombination methods
+    static Population update_Population_Recombination_Identifier(Population population, int[][] graph, int numberOfNodes, OneGenome parentGraph, float mutationrate, float proabibility, int newChildsPerParents, List<Genome> nextGenParents, int recombination_identifier, int amountOfMutations, int mutation_identifier) {
+
+        System.out.println("Recombination Method: " + recombinationIdentifiers.get(recombination_identifier));
+
+        switch (recombination_identifier) {
+            case 0:
+                return update_Population_OnePointCrossover_Threaded(population, graph, numberOfNodes, parentGraph, mutationrate, proabibility, newChildsPerParents, nextGenParents, amountOfMutations, mutation_identifier);
+            case 1:
+                return update_Population_ProababilityIntersection_Threaded(population, graph, numberOfNodes, parentGraph, mutationrate, proabibility, newChildsPerParents, nextGenParents, amountOfMutations, mutation_identifier);
+            case 2:
+                return update_Population_OnePointCrossover(population, graph, numberOfNodes, parentGraph, mutationrate, proabibility, newChildsPerParents, nextGenParents, amountOfMutations, mutation_identifier);
+            case 3:
+                return update_Population_ProababilityIntersection(population, graph, numberOfNodes, parentGraph, mutationrate, proabibility, newChildsPerParents, nextGenParents);
+            default:
+                throw new IllegalStateException("Unexpected value: " + recombination_identifier);
+        }
+    }
+
+    static Population mutate_Population(Population population, int[][] graph, int numberOfNodes, OneGenome parentGraph, float mutationrate, int mutation_identifier, int amountOfMutations, int fillerForInterchangeablity) {
+        List<Genome> nextGenChildren = Collections.synchronizedList(new LinkedList<>()); // Thread-safe list
+
+        System.out.println("Mutation: mutation" + mutationIdentifiers.get(mutation_identifier) + '\t' +amountOfMutations);
+
+
+        int count = 0;
+        Random random = new Random();
+
+        Thread[] threads = new Thread[population.population.length];
+
+        while(count < population.population.length) {
+            threads[count] = new Thread(()->{
+                //randomly select a genome to mutate
+                int i = random.nextInt(population.population.length);
+                Genome newChild = new Genome(numberOfNodes,population.population[i].getGenome(),graph);
 
                 //Mutation
                 switch (mutation_identifier) {
@@ -298,30 +389,27 @@ public class Population{
                         break;
                     case 2:
                         //Mutation of vertices with high degree
-                        newChild = Mutations.test_high_degree_vertices_mutation(newChild,amountOfMutations,parentGraph);
+                        newChild = Mutations.test_high_degree_vertices_mutation(population.population[i],amountOfMutations,parentGraph);
                         break;
                     case 3:
                         //remove harmful node
                         Genome.calculateDegrees(graph,newChild);
-                        newChild = Mutations.remove_many_harmful_Nodes(newChild,parentGraph,amountOfMutations);
+                        newChild = Mutations.remove_many_harmful_Nodes(population.population[i],parentGraph,amountOfMutations);
                         break;
                     default:
                         throw new IllegalStateException("Unexpected value: " + mutation_identifier);
                 }
-
                 //calculate degrees
-                Genome.calculateDegrees(graph, newChild);
-
+                Genome.calculateDegrees(graph,newChild);
                 //calculate fitness
-                newChild.setFitness(FitnessFunctions.calculateFitnessMIN(newChild, parentGraph));
-
+                newChild.setFitness(FitnessFunctions.calculateFitnessMIN(newChild,parentGraph));
                 //calculate size
                 newChild.calculateSize();
 
-                //add to the thread-safe list
                 nextGenChildren.add(newChild);
             });
-            threads[finalI].start();
+            threads[count].start();
+            count++;
         }
         for (Thread t :
                 threads) {
@@ -331,95 +419,7 @@ public class Population{
                 throw new RuntimeException(e);
             }
         }
-    }
-
-    //Elites of the previous gen stay in the next generation
-    //Number of Elites = POPULATION_SIZE - (POPULATION_SIZE/numberOfContestantsPerRound)
-
-        return update_Population(population, nextGenChildren);
-}
-
-// add new cases when implementing new REcombination methods
-static Population update_Population_Recombination_Identifier(Population population, int[][] graph, int numberOfNodes, OneGenome parentGraph, float mutationrate, float proabibility, int newChildsPerParents, List<Genome> nextGenParents, int recombination_identifier, int amountOfMutations, int mutation_identifier) {
-
-    System.out.println("Recombination Method: " + recombinationIdentifiers.get(recombination_identifier));
-
-        switch (recombination_identifier) {
-            case 0:
-                return update_Population_OnePointCrossover_Threaded(population, graph, numberOfNodes, parentGraph, mutationrate, proabibility, newChildsPerParents, nextGenParents, amountOfMutations, mutation_identifier);
-            case 1:
-                return update_Population_ProababilityIntersection_Threaded(population, graph, numberOfNodes, parentGraph, mutationrate, proabibility, newChildsPerParents, nextGenParents, amountOfMutations, mutation_identifier);
-            case 2:
-                return update_Population_OnePointCrossover(population, graph, numberOfNodes, parentGraph, mutationrate, proabibility, newChildsPerParents, nextGenParents, amountOfMutations, mutation_identifier);
-            case 3:
-                return update_Population_ProababilityIntersection(population, graph, numberOfNodes, parentGraph, mutationrate, proabibility, newChildsPerParents, nextGenParents);
-            default:
-                throw new IllegalStateException("Unexpected value: " + recombination_identifier);
-        }
-}
-
-static Population mutate_Population(Population population, int[][] graph, int numberOfNodes, OneGenome parentGraph, float mutationrate, int mutation_identifier, int amountOfMutations, int fillerForInterchangeablity) {
-        List<Genome> nextGenChildren = Collections.synchronizedList(new LinkedList<>()); // Thread-safe list
-
-        System.out.println("Mutation: mutation" + mutationIdentifiers.get(mutation_identifier) + '\t' +amountOfMutations);
-
-
-    int count = 0;
-    Random random = new Random();
-
-    Thread[] threads = new Thread[population.population.length];
-
-    while(count < population.population.length) {
-        threads[count] = new Thread(()->{
-            //randomly select a genome to mutate
-            int i = random.nextInt(population.population.length);
-            Genome newChild = new Genome(numberOfNodes,population.population[i].getGenome(),graph);
-
-            //Mutation
-            switch (mutation_identifier) {
-                case 0:
-                    //Mutation
-                    int[] mutated = Mutations.mutation(mutationrate,newChild);
-                    newChild.setGenome(mutated);
-                    break;
-                case 1:
-                    //Mutation of vertices with high degree
-                    int[] mutated_high_degree = Mutations.mutation_of_vertices_with_high_degree(mutationrate,newChild);
-                    newChild.setGenome(mutated_high_degree);
-                    break;
-                case 2:
-                    //Mutation of vertices with high degree
-                    newChild = Mutations.test_high_degree_vertices_mutation(population.population[i],amountOfMutations,parentGraph);
-                    break;
-                case 3:
-                    //remove harmful node
-                    Genome.calculateDegrees(graph,newChild);
-                    newChild = Mutations.remove_many_harmful_Nodes(population.population[i],parentGraph,amountOfMutations);
-                    break;
-                default:
-                    throw new IllegalStateException("Unexpected value: " + mutation_identifier);
-            }
-            //calculate degrees
-            Genome.calculateDegrees(graph,newChild);
-            //calculate fitness
-            newChild.setFitness(FitnessFunctions.calculateFitnessMIN(newChild,parentGraph));
-            //calculate size
-            newChild.calculateSize();
-
-            nextGenChildren.add(newChild);
-        });
-        threads[count].start();
-        count++;
-    }
-    for (Thread t :
-            threads) {
-        try {
-            t.join();
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-    }
-    return update_Population_without_GenerationIncrease(population,nextGenChildren);
+        return update_Population_without_GenerationIncrease(population,nextGenChildren);
     }
 
     static Population mutate_Population_fixedAmount_of_RandomlyChoosen(Population population, int[][] graph, int numberOfNodes, OneGenome parentGraph, float mutationrate, int mutation_identifier, int amountOfMutations, int amountOfGenomes){
@@ -756,7 +756,7 @@ static Population mutate_Population(Population population, int[][] graph, int nu
         //some selectioons Methods can Result in more new Parents, thus more new children than the size of the population allows
         int controlDamage = p.population.length - newGenomes.size();
         if (controlDamage < 0) {
-           controlDamage =p.population.length;
+            controlDamage =p.population.length;
         }
         else {
             controlDamage = newGenomes.size();
