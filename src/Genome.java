@@ -218,5 +218,15 @@ public class Genome {
         return sum;
     }
 
+    static Genome removeIsolatedNodes(Genome g){
+        for (int i = 0; i < g.length; i++) {
+            if (g.degrees[i]==0){
+                g.genome[i]=0;
+            }
+            g.calculateSize();
+        }
+        return g;
+    }
+
 }
 

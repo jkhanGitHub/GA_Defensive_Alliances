@@ -34,7 +34,7 @@ The following is an example of a generic evolutionary algorithm:
 
     public static final float NODE_EXISTENCE_PROBABILITY = 0.5F;
 
-    public static final int POPULATION_SIZE = 8192; //Powers of two are best suited for variable tournament selection, use  factors of two for 1v1
+    public static final int POPULATION_SIZE = 4096; //Powers of two are best suited for variable tournament selection, use  factors of two for 1v1
 
     public static final int MAX_NUMBER_OF_NODES_REMOVED_BY_MUTATION = 5; //maximum number of nodes removed by mutation, smaller numbers will probably have higher impact
 
@@ -74,10 +74,12 @@ The following is an example of a generic evolutionary algorithm:
     static void addDefensiveAlliance(Population population) {
         int i = 0;
         while (population.getPopulation()[i].getFitness() >= 0) {
-            if (!defensiveAlliances.contains(population.getPopulation()[i]))
-                defensiveAlliances.add(population.getPopulation()[i]);
+            if (!defensiveAlliances.contains(population.getPopulation()[i])){
+                Genome g = Genome.removeIsolatedNodes(population.getPopulation()[i]);
+                defensiveAlliances.add(g);
                 i++;
             }
+        }
         if (i>0) System.out.println("\u001B[31m"+ "new Defensive Alliances found: " + i + "\u001B[0m");
     }
 
@@ -165,7 +167,7 @@ The following is an example of a generic evolutionary algorithm:
                         MUTATION_RATE,
                         random.nextInt(2) + 2,
                         //random.nextInt(MAX_NUMBER_OF_NODES_REMOVED_BY_MUTATION)+1
-                        random.nextInt(10),
+                        random.nextInt(25),
                         UPPER_BOUND
                 );
             }
