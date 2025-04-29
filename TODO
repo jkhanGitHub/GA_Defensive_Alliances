@@ -8,4 +8,4 @@ implement how defensiveAlliances should be handled
 Forkjoins dont work on macAir only PC atleast for me
 Mutation methods 2 and 3 are really slow and take   wayy too many ressources
 
-remove many_harmful_Nodes resluts in infintylopop somewhere if size gets too low
+infintylopop somewhere if size gets too low (0) or high (Genome.size)!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
