@@ -135,8 +135,10 @@ The following is an example of a generic evolutionary algorithm:
              /*
     static Dictionary<Integer,String> recombinationIdentifiers = new Hashtable<Integer,String>();
     static {
-        recombinationIdentifiers.put(0,"OnePointCrossover");
-        recombinationIdentifiers.put(1, "ProababilityIntersection");
+        recombinationIdentifiers.put(0,"OnePointCrossoverThreaded");
+        recombinationIdentifiers.put(1, "ProababilityIntersectionThreaded");
+        recombinationIdentifiers.put(2, "OnePointCrossover");
+        recombinationIdentifiers.put(3, "ProababilityIntersection");
     }
      */
             //create new population
@@ -167,7 +169,7 @@ The following is an example of a generic evolutionary algorithm:
                         MUTATION_RATE,
                         random.nextInt(2) + 2,
                         //random.nextInt(MAX_NUMBER_OF_NODES_REMOVED_BY_MUTATION)+1
-                        random.nextInt(25),
+                        random.nextInt(10),
                         UPPER_BOUND
                 );
             }
@@ -181,12 +183,14 @@ The following is an example of a generic evolutionary algorithm:
             population.sort_Population_by_fitness_and_size_reversed();
             population.setPopulation_fitness(FitnessFunctions.calculate_Population_fitness(population));
             population.setMean_fitness(FitnessFunctions.calculate_Mean_fitness(population));
+            population.setMean_size(Population.calculateMeanSize(population));
 
             //adds defensive alliance to a list if it has been found
             addDefensiveAlliance(population);
 
             //Print some stats
             System.out.println('\n'+ "Generation: " + Population.generation);
+            System.out.println("Mean Size of Population: " + population.mean_size);
             System.out.println("Fitness of Population: " + population.population_fitness);
             System.out.println("Mean Fitness of Population: " + population.mean_fitness);
             System.out.println("Best Fitness in Population: " + population.getPopulation()[0].getFitness() + "\t Size: " + population.getPopulation()[0].getSize());

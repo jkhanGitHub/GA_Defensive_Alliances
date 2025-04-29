@@ -14,8 +14,10 @@ public class Population{
 
     static Dictionary<Integer,String> recombinationIdentifiers = new Hashtable<Integer,String>();
     static {
-        recombinationIdentifiers.put(0,"OnePointCrossover");
-        recombinationIdentifiers.put(1, "ProababilityIntersection");
+        recombinationIdentifiers.put(0,"OnePointCrossoverThreaded");
+        recombinationIdentifiers.put(1, "ProababilityIntersectionThreaded");
+        recombinationIdentifiers.put(2, "OnePointCrossover");
+        recombinationIdentifiers.put(3, "ProababilityIntersection");
     }
 
     public  Genome[] getPopulation() {
@@ -54,7 +56,20 @@ public class Population{
 
     int mean_fitness;
 
-    int mean_fitness_positive;
+    public void setMean_size(int mean_size) {
+        this.mean_size = mean_size;
+    }
+
+    int mean_size;
+
+    static int calculateMeanSize(Population population){
+        int sum = 0;
+        for (Genome genom:
+                population.population) {
+            sum += genom.getSize();
+        };
+        return sum/population.population.length;
+    }
 
     /*Population(int sizeOfPopulation, int numberOFNodes, float existenceRate, int[][] graph, OneGenome parentGraph){
 
@@ -113,43 +128,7 @@ public class Population{
     }
 
 
-    static Population update_Population_OnePointCrossover(Population population, int[][] graph, int numberOfNodes, OneGenome parentGraph, float mutationrate, float proabibility, int newChildsPerParents, List<Genome> nextGenParents){
-        List<Genome> nextGenChildren = Collections.synchronizedList(new LinkedList<>()); // Thread-safe list
-
-        //recombine Parents: Number of parents = POPULATION_SIZE/numberOfContestantsPerRound
-        for (int i = 0,j = 1; j < nextGenParents.size(); i=i+2,j= j+2) {
-            int[][] geneticCodesOfChildrens = Recombinations.onePointCrossover(nextGenParents.get(i).getGenome(),nextGenParents.get(j).getGenome());
-
-            Genome ba = new Genome(numberOfNodes,geneticCodesOfChildrens[1],graph);
-            Genome ab = new Genome(numberOfNodes,geneticCodesOfChildrens[0],graph);
-
-            //Mutation
-            int[] mutated_ba = Mutations.mutation(mutationrate,ba);
-            int[] mutated_ab = Mutations.mutation(mutationrate,ab);
-            ba.setGenome(mutated_ba);
-            ab.setGenome(mutated_ab);
-
-            //calculate degrees
-            Genome.calculateDegrees(graph,ba);
-            Genome.calculateDegrees(graph,ab);
-
-            //calculate fitness
-            ab.setFitness(FitnessFunctions.calculateFitnessMIN(ab,parentGraph));
-            ba.setFitness(FitnessFunctions.calculateFitnessMIN(ba,parentGraph));
-
-
-            //calculate size
-            ab.calculateSize();
-            ba.calculateSize();
-
-            nextGenChildren.add(ab);
-            nextGenChildren.add(ba);
-        }
-
-        return update_Population(population, nextGenChildren);
-    }
-
-    static Population update_Population_OnePointCrossover_Threaded(Population population, int[][] graph, int numberOfNodes, OneGenome parentGraph, float mutationrate, float proabibility, int newChildsPerParents, List<Genome> nextGenParents, int amountOfMutations, int mutation_identifier){
+    static Population update_Population_OnePointCrossover(Population population, int[][] graph, int numberOfNodes, OneGenome parentGraph, float mutationrate, float proabibility, int newChildsPerParents, List<Genome> nextGenParents, int amountOfMutations, int mutation_identifier){
 
         System.out.println("Recombination Method: OnePointCrossover");
 
@@ -180,6 +159,78 @@ public class Population{
         //Elites of the previous gen stay in the next generation
         //Number of Elites = POPULATION_SIZE - (POPULATION_SIZE/numberOfContestantsPerRound)
         return update_Population(population,nextGenChildren);
+    }
+
+    static Population update_Population_OnePointCrossover_Threaded(Population population, int[][] graph, int numberOfNodes, OneGenome parentGraph, float mutationrate, float proabibility, int newChildsPerParents, List<Genome> nextGenParents, int amountOfMutations, int mutation_identifier){
+
+        List<Genome> nextGenChildren = Collections.synchronizedList(new LinkedList<>()); // Thread-safe list
+
+        //recombine Parents: Number of parents = POPULATION_SIZE/numberOfContestantsPerRound
+        for (int i = 0, j = 1; j < nextGenParents.size(); i = i + 2, j = j + 2) {
+            int[][] geneticCodesOfChildrens = Recombinations.onePointCrossover(nextGenParents.get(i).getGenome(),nextGenParents.get(j).getGenome(),newChildsPerParents);
+            Thread[] threads = new Thread[newChildsPerParents];
+            for (int k = 0; k < geneticCodesOfChildrens.length; k++) {
+                final int finalI = k;
+                threads[finalI] = new Thread(() -> {
+                    Genome newChild = new Genome(numberOfNodes, geneticCodesOfChildrens[finalI], graph);
+
+                    //easiest way to mutate the genome
+                    int[] mutation = Mutations.mutation(mutationrate,newChild);
+                    newChild.setGenome(mutation);
+
+                    //Mutation
+                    switch (mutation_identifier) {
+                        case 0:
+                            //Mutation
+                            int[] mutated = Mutations.mutation(mutationrate,newChild);
+                            newChild.setGenome(mutated);
+                            break;
+                        case 1:
+                            //Mutation of vertices with high degree
+                            int[] mutated_high_degree = Mutations.mutation_of_vertices_with_high_degree(mutationrate,newChild);
+                            newChild.setGenome(mutated_high_degree);
+                            break;
+                        case 2:
+                            //Mutation of vertices with high degree
+                            newChild = Mutations.test_high_degree_vertices_mutation(newChild,amountOfMutations,parentGraph);
+                            break;
+                        case 3:
+                            //remove harmful node
+                            Genome.calculateDegrees(graph,newChild);
+                            newChild = Mutations.remove_many_harmful_Nodes(newChild,parentGraph,amountOfMutations);
+                            break;
+                        default:
+                            throw new IllegalStateException("Unexpected value: " + mutation_identifier);
+                    }
+
+                    //calculate degrees
+                    Genome.calculateDegrees(graph, newChild);
+
+                    //calculate fitness
+                    newChild.setFitness(FitnessFunctions.calculateFitnessMIN(newChild, parentGraph));
+
+                    //calculate size
+                    newChild.calculateSize();
+
+                    //add to the thread-safe list
+                    nextGenChildren.add(newChild);
+                });
+                threads[finalI].start();
+            }
+            for (Thread t :
+                    threads) {
+                try {
+                    t.join();
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+
+        //Elites of the previous gen stay in the next generation
+        //Number of Elites = POPULATION_SIZE - (POPULATION_SIZE/numberOfContestantsPerRound)
+
+        return update_Population(population, nextGenChildren);
     }
 
 
@@ -217,8 +268,6 @@ public class Population{
 
 
     static Population update_Population_ProababilityIntersection_Threaded(Population population, int[][] graph, int numberOfNodes, OneGenome parentGraph, float mutationrate, float proabibility, int newChildsPerParents, List<Genome> nextGenParents, int amountOfMutations, int mutation_identifier) {
-
-        System.out.println("Recombination Method: ProababilityIntersection");
 
         List<Genome> nextGenChildren = Collections.synchronizedList(new LinkedList<>()); // Thread-safe list
 
@@ -293,11 +342,17 @@ public class Population{
 // add new cases when implementing new REcombination methods
 static Population update_Population_Recombination_Identifier(Population population, int[][] graph, int numberOfNodes, OneGenome parentGraph, float mutationrate, float proabibility, int newChildsPerParents, List<Genome> nextGenParents, int recombination_identifier, int amountOfMutations, int mutation_identifier) {
 
+    System.out.println("Recombination Method: " + recombinationIdentifiers.get(recombination_identifier));
+
         switch (recombination_identifier) {
             case 0:
                 return update_Population_OnePointCrossover_Threaded(population, graph, numberOfNodes, parentGraph, mutationrate, proabibility, newChildsPerParents, nextGenParents, amountOfMutations, mutation_identifier);
             case 1:
                 return update_Population_ProababilityIntersection_Threaded(population, graph, numberOfNodes, parentGraph, mutationrate, proabibility, newChildsPerParents, nextGenParents, amountOfMutations, mutation_identifier);
+            case 2:
+                return update_Population_OnePointCrossover(population, graph, numberOfNodes, parentGraph, mutationrate, proabibility, newChildsPerParents, nextGenParents, amountOfMutations, mutation_identifier);
+            case 3:
+                return update_Population_ProababilityIntersection(population, graph, numberOfNodes, parentGraph, mutationrate, proabibility, newChildsPerParents, nextGenParents);
             default:
                 throw new IllegalStateException("Unexpected value: " + recombination_identifier);
         }

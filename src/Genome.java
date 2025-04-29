@@ -155,7 +155,7 @@ public class Genome {
 
 
     //find the edges in the graph with the highest degree and check against the degree of the subgraph(genmome)
-    /*static Map<Integer, Integer> orderedMapOf_harmfulNodes(OneGenome parent_graph, Genome subgraph){
+    static Map<Integer, Integer> orderedMapOf_harmfulNodes(OneGenome parent_graph, Genome subgraph){
         int difference; //initialize the array with the length of the parent graph to store the difference in degrees
         Map<Integer, Integer> mapWithDifferencesInDegreesAndThereOriginalPosition = new HashMap<>(); //create a map to store the index and value of the difference
 
@@ -177,11 +177,11 @@ public class Genome {
 
 
         return mapWithDifferencesInDegreesAndThereOriginalPosition;
-    }*/
+    }
 
 
     //parallelized version of orderedMapOf_harmfulNodes
-    static Map<Integer, Integer> orderedMapOf_harmfulNodes(OneGenome parent_graph, Genome subgraph) {
+    /*static Map<Integer, Integer> orderedMapOf_harmfulNodes(OneGenome parent_graph, Genome subgraph) {
         int length = subgraph.genome.length;
         Map<Integer, Integer> resultMap = new ConcurrentHashMap<>();
 
@@ -206,7 +206,7 @@ public class Genome {
                         (e1, e2) -> e1,
                         LinkedHashMap::new
                 ));
-    }
+    }*/
 
     //i feel like java takes a shortcut here and compares object ids
     //in order to prevent this bullshit we need to copy the arrey?

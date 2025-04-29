@@ -4,7 +4,7 @@ public class Recombinations {
 
 
     //change when implementing new Recombination methods
-    final static int implementedRecombinationMethods = 2;
+    final static int implementedRecombinationMethods = 4;
 
 
     static final float INTERSECTION_PROBABILITY = 0.9f;
