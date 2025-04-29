@@ -55,8 +55,8 @@ The following is an example of a generic evolutionary algorithm:
     public static final int MULTIPLIER = POPULATION_SIZE / NUMBER_OF_CONTESTANTS_PER_ROUND; //Multiplier for some selection methods which have an average parent output of 1
 
     //Explanation of mutation identfieres found in Population.java mutate_Population()
-    public static final float MUTATION_RATE = 1 / NUMBER_OF_NODES;
-    public static final int NUMBER_OF_ITERATIONS = 10000; //number of generations
+    public static final float MUTATION_RATE = 3 / NUMBER_OF_NODES;
+    public static final int NUMBER_OF_ITERATIONS = 300; //number of generations
 
     public static final int BREAK_FITNESS = NUMBER_OF_NODES - 2;
 
@@ -64,7 +64,7 @@ The following is an example of a generic evolutionary algorithm:
 
     public static final float PROBABILITY = 0.5f; //probability of intersection, 0.5 means 50% chance of intersection and 50% chance of crossover
 
-    final static int UPPER_BOUND = POPULATION_SIZE/NUMBER_OF_CONTESTANTS_PER_ROUND; //upper bound for ADDITIONAL_amount of genomes to be mutated
+    final static int UPPER_BOUND_OF_GenomesToBeModified = POPULATION_SIZE/NUMBER_OF_CONTESTANTS_PER_ROUND; //upper bound for ADDITIONAL_amount of genomes to be mutated
     public static int[][] graph;
 
     public static Map<Integer, Genome> bestGenomes = new HashMap<>();
@@ -151,14 +151,29 @@ The following is an example of a generic evolutionary algorithm:
                     PROBABILITY,
                     NUMBER_OF_CHILDS_PER_PARENT,
                     newGenParents,
-                    1,
-                    random.nextInt(5),
-                    random.nextInt(2) + 2
+                    0,
+                    10,
+                    random.nextInt(3) + 1
                     );
 
 
             //increase counter
             counter++;
+
+            //using this mutation at least once on the whole population fastens up the algorithm a lot
+            if (counter<=2){
+                population = Population.mutate_Population(
+                        population,
+                        graph,
+                        NUMBER_OF_NODES,
+                        PARENT_GRAPH,
+                        MUTATION_RATE,
+                        counter+1, //mutation 2 and 3 will be executed
+                        //random.nextInt(MAX_NUMBER_OF_NODES_REMOVED_BY_MUTATION)+1
+                        10,
+                        UPPER_BOUND_OF_GenomesToBeModified
+                );
+            }
             //additional Mutations
             if(true) {
                 population = Population.mutate_Population_fixedAmount_of_Best_and_Worst(
@@ -167,10 +182,10 @@ The following is an example of a generic evolutionary algorithm:
                         NUMBER_OF_NODES,
                         PARENT_GRAPH,
                         MUTATION_RATE,
-                        random.nextInt(2) + 2,
+                        random.nextInt(3)+1,
                         //random.nextInt(MAX_NUMBER_OF_NODES_REMOVED_BY_MUTATION)+1
-                        random.nextInt(10),
-                        UPPER_BOUND
+                        10,
+                        UPPER_BOUND_OF_GenomesToBeModified
                 );
             }
 
