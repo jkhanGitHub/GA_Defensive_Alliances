@@ -15,7 +15,7 @@ public class Genome {
     //if positiveFitness is OneGenome.worstFitnessPossible, then the  genome is a defensive alliance
     double positiveFitness; //the higher, the better
 
-
+    Map<Integer, Integer> harmfulNodes;
     int[] genome;
 
     int[] degrees;
@@ -186,28 +186,24 @@ public class Genome {
     }
 
 
-    //find the edges in the graph with the highest degree and check against the degree of the subgraph(genmome)
-    static Map<Integer, Integer> orderedMapOf_harmfulNodes(OneGenome parent_graph, Genome subgraph){
-        int difference; //initialize the array with the length of the parent graph to store the difference in degrees
-        int relativeFitness;
+    //find the edges in the graph with the highest degree and check against the degree of the subgraph(genome)
+    Map<Integer, Integer> orderedMapOfHarmfulNodes(OneGenome parent_graph){
+        int harmfulnessFitness; //initialize the array with the length of the parent graph to store the difference in degrees
         Map<Integer, Integer> mapWithRelativeFitnessOfNode_And_OriginalPosition = new HashMap<>(); //create a map to store the index and value of the difference
 
-        for (int i = 0; i < subgraph.genome.length; i++) {
-            if(subgraph.genome[i]==1){
-                difference = parent_graph.getDegrees()[i] - subgraph.getDegrees()[i] ; //calculate the difference in degrees between the parent graph and the subgraph; Higher value means bigger difference
-                relativeFitness = Math.abs(subgraph.getDegrees()[i] - difference); //the bigger the worse
-                mapWithRelativeFitnessOfNode_And_OriginalPosition.put(i, relativeFitness); //put the index and value of the difference in the map
+        for (int i = 0; i < genome.length; i++) {
+            if(genome[i]==1){
+                harmfulnessFitness = (2*degrees[i])+1-parent_graph.degrees[i] ; //harmfulness>0 means the node is not harmful, harmfulness<0 means the node is harmful
+                if (harmfulnessFitness < 0) { //only add the harmful nodes to the map
+                    mapWithRelativeFitnessOfNode_And_OriginalPosition.put(i, harmfulnessFitness); //store the index and value of the difference in the map
                 }
-            else{
-                relativeFitness = 0;
-                mapWithRelativeFitnessOfNode_And_OriginalPosition.put(i, relativeFitness);
             }
         }
 
-        //sort the map by value
+        //sort the map by value //the smaller the value the more harmful the node is
         Map<Integer, Integer> sortedMap = mapWithRelativeFitnessOfNode_And_OriginalPosition.entrySet()
                 .stream()
-                .sorted(Map.Entry.<Integer, Integer>comparingByValue().reversed())
+                .sorted(Map.Entry.<Integer, Integer>comparingByValue())
                 .collect(Collectors.toMap(
                         Map.Entry::getKey,
                         Map.Entry::getValue,
@@ -216,6 +212,7 @@ public class Genome {
                 ));
 
 
+        harmfulNodes = sortedMap; //store the map in the harmfulNodes variable
         return sortedMap;
     }
 
@@ -250,9 +247,13 @@ public class Genome {
 
     static Genome learn(Genome genome, OneGenome parentGraph, int numberOfChanges) {
         //TODO implement learning
+        int fitness = genome.getFitness();
+        int size = genome.getSize();
+
         Genome temp;
+        temp = Learning.test_high_degree_vertices_mutation(genome, numberOfChanges, parentGraph);
         temp = Learning.remove_many_harmful_Nodes(genome, parentGraph, numberOfChanges);
-        temp = Learning.test_high_degree_vertices_mutation(temp, numberOfChanges, parentGraph);
+
 
         temp = Genome.calculateDegreesUndirected(parentGraph.graph, temp);
         temp.calculateSize();

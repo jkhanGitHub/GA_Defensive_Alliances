@@ -9,14 +9,12 @@ public class Learning {
         learnMethods.put(3, "Remove harmful nodes");
     }
 
-    protected static Genome test_high_degree_vertices_mutation(Genome g, int numberOfNodesToRemove, OneGenome parentGraph){
-        Genome mutatedGenome = g;
+    protected static Genome test_high_degree_vertices_mutation(Genome mutatedGenome, int numberOfNodesToRemove, OneGenome parentGraph){
+
         Iterator<Map.Entry<Integer, Integer>> iterator = parentGraph.getOrderedMapOfHighestDegrees().entrySet().iterator();
+        int oldFitness = mutatedGenome.getFitness();
 
-        boolean bool = true;
-        Random random = new Random();
-
-        while (iterator.hasNext() && bool && numberOfNodesToRemove > 0) {
+        while (iterator.hasNext() && numberOfNodesToRemove > 0) {
             Map.Entry<Integer, Integer> entry = iterator.next();
             int index = entry.getKey();
             if(mutatedGenome.getGenome()[index] == 0){
@@ -27,19 +25,20 @@ public class Learning {
                 Genome.calculateDegreesUndirected(Genetic_Algorithm.graph, mutatedGenome);
 
                 //calculate the fitness of the mutated genome
-                mutatedGenome.setFitness(FitnessFunctions.calculateFitnessMIN(mutatedGenome, parentGraph));
+                int newFitness = FitnessFunctions.calculateFitnessMIN(mutatedGenome, parentGraph);
 
                 //reject the mutated genome if it is worse than the original genome
-                if (mutatedGenome.getFitness()< g.getFitness()){
+                if (oldFitness > newFitness){
                     mutatedGenome.getGenome()[index] = 0;
+                    continue;
                 }
                 //to Here ---------------------------------------------------------------------------
+                //Update fitness
+                mutatedGenome.setFitness(newFitness);
+                oldFitness = newFitness;
+                numberOfNodesToRemove--;
 
             }
-            else {
-                continue;
-            }
-            numberOfNodesToRemove--;
         }
 
         return mutatedGenome;
@@ -48,18 +47,20 @@ public class Learning {
     //parent.getOrderedMapOfHighestDegrees().entrySet().iterator(); in iterator eintragen
     protected static Genome remove_harmfulNode(Genome subgraph, OneGenome parent){
         //remove the node with the highest degree
-        Map<Integer, Integer> map = Genome.orderedMapOf_harmfulNodes(parent, subgraph);
+        Map<Integer, Integer> map = subgraph.orderedMapOfHarmfulNodes(parent);
         Iterator<Map.Entry<Integer, Integer>> iterator = map.entrySet().iterator();
-        //get the first entry
+
+        //check if the map is empty
+        if (!iterator.hasNext()) {
+            return subgraph; // No harmful nodes to remove
+        }
+        //get the first entry in the map
         Map.Entry<Integer, Integer> entry = iterator.next();
         int key = entry.getKey(); //index of the node
         int value = entry.getValue(); //difference in degrees; degree change after Operation
 
-        if (value > 0) {
-            //remove the node from the subgraph
-            subgraph.getGenome()[key] = 0;
-        }
-        else return subgraph;
+        //remove the node from the subgraph
+        subgraph.getGenome()[key] = 0;
 
         return subgraph;
     }
@@ -69,9 +70,7 @@ public class Learning {
         //remove the node with the highest degree
         Genome mutatedGenome = subgraph;
 
-        Random random = new Random();
-
-        Map<Integer, Integer> map = Genome.orderedMapOf_harmfulNodes(parent, subgraph);
+        Map<Integer, Integer> map = subgraph.orderedMapOfHarmfulNodes(parent);
         Iterator<Map.Entry<Integer, Integer>> iterator = map.entrySet().iterator();
 
         for (int i = 0; i < numberOfNodesToRemove && iterator.hasNext(); i++) {
@@ -79,11 +78,8 @@ public class Learning {
             int key = entry.getKey(); //index of the node
             int value = entry.getValue(); //difference in degrees; degree change after Operation
 
-            if (value > 0) {
-                //remove the node from the subgraph
-                mutatedGenome.getGenome()[key] = 0;
-            }
-            else break; //map is ordered =< no more relevant value in map
+            //remove the node from the subgraph
+            mutatedGenome.getGenome()[key] = 0;
         }
 
         /*//Experimental from Here ---------------------------------------------------------------------------
