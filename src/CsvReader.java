@@ -19,7 +19,6 @@ public class CsvReader {
         return rows;
     }
 
-    //returns a matrix filled out by one symmetrical side since its undirectional and ignores [i][i] since its not in csv if it was one would need to adjust the the criteria for defensive alliances to (deg_m(v) +1) to deg_m(v)
     public static int[][] readCsvEdgesToMatrix(String filePath, int length) throws IOException {
         int [][] graph_matrix = new int[length][length];
 
@@ -29,7 +28,25 @@ public class CsvReader {
                 String[] columns = line.split(",");
                 try {
                     graph_matrix[Integer.parseInt(columns[0])][Integer.parseInt(columns[1])]=1;
-                    //graph_matrix[Integer.parseInt(columns[1])][Integer.parseInt(columns[0])]=1;//comment out if directional
+                } catch (NumberFormatException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+        return graph_matrix;
+    }
+
+    //returns a matrix filled out by one symmetrical side since its undirectional and ignores [i][i] since its not in csv if it was one would need to adjust the the criteria for defensive alliances to (deg_m(v) +1) to deg_m(v)
+    public static int[][] readCsvEdgesToSymmetricalMatrix(String filePath, int length) throws IOException {
+        int [][] graph_matrix = new int[length][length];
+
+        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                String[] columns = line.split(",");
+                try {
+                    graph_matrix[Integer.parseInt(columns[0])][Integer.parseInt(columns[1])]=1;
+                    graph_matrix[Integer.parseInt(columns[1])][Integer.parseInt(columns[0])]=1;//comment out if directional
                 } catch (NumberFormatException e) {
                     throw new RuntimeException(e);
                 }

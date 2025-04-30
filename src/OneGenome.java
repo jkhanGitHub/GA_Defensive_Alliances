@@ -29,7 +29,7 @@ public class OneGenome extends Genome {
         calculateSize();
 
         init_degrees();
-        readEdges_off_symmetrical_Matrix(graph);
+        calculateDegreesUndirected(graph, this);
         orderedMapOfHighestDegrees();
     }
 
