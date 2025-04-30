@@ -128,25 +128,6 @@ public class Genome {
         return g;
     }
 
-    /*
-    //parallelized version of calculateDegrees
-    static Genome calculateDegrees(int[][] matrix, Genome g) {
-        IntStream.range(0, g.length).parallel().forEach(i -> {
-            if (g.genome[i] == 1) {
-                for (int j = 0; j < g.length; j++) {
-                    if (g.genome[j] == 1 && matrix[i][j] == 1) {
-                        synchronized (g.degrees) {
-                            g.degrees[i]++;
-                            g.degrees[j]++;
-                        }
-                    }
-                }
-            }
-        });
-        return g;
-    }
-     */
-
     int[] complement(int[] genome) {
         int[] complement = new int[genome.length];
         for (int i = 0; i < genome.length; i++) {
@@ -199,7 +180,6 @@ public class Genome {
                 }
             }
         }
-
         //sort the map by value //the smaller the value the more harmful the node is
         Map<Integer, Integer> sortedMap = mapWithRelativeFitnessOfNode_And_OriginalPosition.entrySet()
                 .stream()
@@ -210,8 +190,6 @@ public class Genome {
                         (e1, e2) -> e1, // Merge function (not needed here as keys are unique)
                         LinkedHashMap::new // Use LinkedHashMap to preserve the sorted order
                 ));
-
-
         harmfulNodes = sortedMap; //store the map in the harmfulNodes variable
         return sortedMap;
     }
@@ -282,5 +260,12 @@ public class Genome {
         return genome;
     }
 
+    void printParameters() {
+        System.out.println("Genome: " + Arrays.toString(genome));
+        System.out.println("Degrees: " + Arrays.toString(degrees));
+        System.out.println("Size: " + size);
+        System.out.println("Fitness: " + fitness);
+        System.out.println("Positive Fitness: " + positiveFitness);
+    }
 }
 

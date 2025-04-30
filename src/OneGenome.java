@@ -31,6 +31,7 @@ public class OneGenome extends Genome {
         init_degrees();
         calculateDegreesUndirected(graph, this);
         orderedMapOfHighestDegrees();
+        calculateWorstFitnessPossible();
     }
 
     void calculateWorstFitnessPossible(){

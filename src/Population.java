@@ -7,7 +7,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.*;
 
 //many methods might have unused parameters, these are just there so that the methods can be interchanged in the genetic algorithm
-public class Population{
+public class Population {
     Genome[] population; //Array is used since it is easy to update and we keep its size static
 
     int amountOfLearning = Genetic_Algorithm.AmountOfLearnings;
@@ -22,14 +22,18 @@ public class Population{
 
     int mean_size;
 
+    List<Genome> survivors;
+    List<Genome> offspringsFromPreviousGeneration;
 
-    static Dictionary<Integer,String> mutationIdentifiers = new Hashtable<Integer,String>();
+    Genome bestGenomeFromLastGeneration;
+    static Dictionary<Integer, String> mutationIdentifiers = new Hashtable<Integer, String>();
+
     static {
-        mutationIdentifiers.put(0,"Mutation");
+        mutationIdentifiers.put(0, "Mutation");
         mutationIdentifiers.put(1, "Mutation of vertices with high degree");
     }
 
-    public  Genome[] getPopulation() {
+    public Genome[] getPopulation() {
         return population;
     }
 
@@ -58,7 +62,7 @@ public class Population{
         this.mean_size = mean_size;
     }
 
-    Population(int sizeOfPopulation, int numberOFNodes, float existenceRate, int[][] graph, OneGenome parentGraph){
+    Population(int sizeOfPopulation, int numberOFNodes, float existenceRate, int[][] graph, OneGenome parentGraph) {
         population = new Genome[sizeOfPopulation];
         generation++;
         Thread[] threads = new Thread[sizeOfPopulation];
@@ -69,8 +73,8 @@ public class Population{
         population[0] = parentGraph;
         for (int i = 0; i < population.length; i++) {
             final int finalI = i;
-            threads[finalI] = new Thread(()-> {
-                population[finalI] = new Genome(numberOFNodes,existenceRate,graph);
+            threads[finalI] = new Thread(() -> {
+                population[finalI] = new Genome(numberOFNodes, existenceRate, graph);
                 //calculate degrees
                 Genome.calculateDegreesUndirected(graph, population[finalI]);
                 //calculate fitness
@@ -79,8 +83,8 @@ public class Population{
             threads[finalI].start();
         }
 
-        for (Thread t:
-             threads) {
+        for (Thread t :
+                threads) {
             try {
                 t.join();
             } catch (InterruptedException e) {
@@ -95,16 +99,17 @@ public class Population{
     }
 
 
-    Population(Population oldGeneration, int[][] graph, OneGenome parentGraph, float mutationrate, float proabibility, int newChildsPerParents, List<Genome> nextGenParents, int mutation_identifier, int recombination_identifier, boolean activateLearning){
+    Population(Population oldGeneration, int[][] graph, OneGenome parentGraph, float mutationrate, float proabibility, int newChildsPerParents, List<Genome> nextGenParents, int mutation_identifier, int recombination_identifier, boolean activateLearning) {
         population = new Genome[oldGeneration.population.length];
-        List<Genome> childrenList;
-        childrenList = generate_nextChildrenListThreaded(graph, parentGraph, mutationrate, proabibility, newChildsPerParents, nextGenParents, mutation_identifier, recombination_identifier);
+        bestGenomeFromLastGeneration = oldGeneration.getPopulation()[0];
+        offspringsFromPreviousGeneration = generate_nextChildrenListThreaded(graph, parentGraph, mutationrate, proabibility, newChildsPerParents, nextGenParents, mutation_identifier, recombination_identifier);
 
         List<Genome> newGeneration;
-        newGeneration = createListOfNextGeneration_Boltzmann(oldGeneration, childrenList);
+        newGeneration = createListOfNextGeneration_Boltzmann(oldGeneration, offspringsFromPreviousGeneration);
 
-        if(activateLearning){
-            survivors_learn(oldGeneration, newGeneration, parentGraph, amountOfLearning);
+        survivors = getSurvivors(oldGeneration, newGeneration);
+        if (activateLearning) {
+            survivors_learn(survivors, parentGraph, amountOfLearning);
             newGeneration.sort(Comparator.comparingInt(Genome::getFitness).reversed());
         }
 
@@ -113,57 +118,60 @@ public class Population{
             population[i] = newGeneration.get(i);
         }
 
-        generation = oldGeneration.getGeneration()+1;
+        generation = oldGeneration.getGeneration() + 1;
+        population_fitness = FitnessFunctions.calculate_Population_fitness(this);
+        mean_fitness = FitnessFunctions.calculate_Mean_fitness(this);
+        mean_size = calculateMeanSize(this);
+    }
+
+    Population(Population oldGeneration, int[][] graph, OneGenome parentGraph, float mutationrate, float proabibility, int newChildsPerParents, List<Genome> nextGenParents, int mutation_identifier, int recombination_identifier, int amountOfLearners, boolean randomizeLearners) {
+        population = new Genome[oldGeneration.population.length];
+        bestGenomeFromLastGeneration = oldGeneration.getPopulation()[0];
+        List<Genome> childrenList;
+        childrenList = generate_nextChildrenListThreaded(graph, parentGraph, mutationrate, proabibility, newChildsPerParents, nextGenParents, mutation_identifier, recombination_identifier);
+
+        List<Genome> newGeneration;
+        newGeneration = createListOfNextGeneration_Boltzmann(oldGeneration, childrenList);
+
+
+        List<Genome> survivors = getSurvivors(oldGeneration, newGeneration);
+        survivors_learn(survivors, parentGraph, amountOfLearning, amountOfLearners, randomizeLearners);
+        newGeneration.sort(Comparator.comparingInt(Genome::getFitness).reversed());
+
+
+        //add Entries to the new population
+        for (int i = 0; i < newGeneration.size(); i++) {
+            population[i] = newGeneration.get(i);
+        }
+
+        generation = oldGeneration.getGeneration() + 1;
         population_fitness = FitnessFunctions.calculate_Population_fitness(this);
         mean_fitness = FitnessFunctions.calculate_Mean_fitness(this);
         mean_size = calculateMeanSize(this);
     }
 
 
-    static int calculateMeanSize(Population population){
+    static int calculateMeanSize(Population population) {
         int sum = 0;
-        for (Genome genom:
+        for (Genome genom :
                 population.population) {
             sum += genom.getSize();
-        };
-        return sum/population.population.length;
+        }
+        ;
+        return sum / population.population.length;
     }
 
-    /*Population(int sizeOfPopulation, int numberOFNodes, float existenceRate, int[][] graph, OneGenome parentGraph){
-
-        population = new Genome[sizeOfPopulation];
-        Thread[] threads = new Thread[sizeOfPopulation];
-        //generation number will be updated in Selection in order to reuse the sorted population
-        //Generates Genomes
-
-
-        //comment out and change loop to start at 0 if parent graph should not be in array
-        //population[0] = parentGraph;
-
-        for (int i = 0; i < population.length; i++) {
-            final int finalI = i;
-            threads[finalI] = new Thread(()-> population[finalI] = new Genome(numberOFNodes,existenceRate,graph));
-            threads[finalI].start();
-        }
-        for (Thread t:
-             threads) {
-            try {
-                t.join();
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-        }
-
-    }*/
-    //comment out and change loop to start at 0 if parent graph should not be in array
-
     //best fitness to worst
-    public void sort_Population_by_fitness_and_size_reversed(){
+    public void sort_Population_by_fitness_and_size_reversed() {
         Arrays.sort(population, Comparator.comparingInt(Genome::getFitness).reversed());
     }
 
-    void survivors_learn(Population oldGeneration, List<Genome> newGeneration, OneGenome parentGraph, int amountOfLearning) {
-        List<Genome> survivors = getSurvivors(oldGeneration, newGeneration);
+    int getAmountOfRejectedChildren(int amountOfChildren, int amountOfSurvivors) {
+        return amountOfChildren - amountOfSurvivors;
+
+    }
+
+    void survivors_learn(List<Genome> survivors, OneGenome parentGraph, int amountOfLearning) {
         Thread[] threads = new Thread[survivors.size()];
 
         for (int i = 0; i < survivors.size(); i++) {
@@ -183,14 +191,45 @@ public class Population{
             }
         }
     }
-    static List<Genome> generate_nextChildrenListThreaded(int[][] graph, OneGenome parentGraph, float mutationrate, float proabibility, int newChildsPerParents, List<Genome> nextGenParents,int mutation_identifier, int recombination_identifier) {
+
+    void survivors_learn(List<Genome> survivors, OneGenome parentGraph, int amountOfLearning, int learnerAmount, boolean randomizeLearners) {
+        /**
+         * This method is used to let the surviviors of the last generation learn.
+         * @learnerAmount is the amount of survivors that are going to learn.
+         * @randomizeLearners true results in the learners being picked at random.
+         * @randomizeLearners false results in the best survivors learning. since the list should be sorted.
+         */
+        Thread[] threads = new Thread[learnerAmount];
+
+        if (randomizeLearners) {
+            Collections.shuffle(survivors);
+        }
+        for (int i = 0; (i < survivors.size()) && (i < learnerAmount); i++) {
+            final int index = i;
+            threads[index] = new Thread(() -> {
+                Genome.learn(survivors.get(index), parentGraph, amountOfLearning);
+            });
+            threads[index].start();
+        }
+        // Wait for all threads to complete
+        for (Thread thread : threads) {
+            try {
+                thread.join();
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt(); // Restore interrupted status
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    static List<Genome> generate_nextChildrenListThreaded(int[][] graph, OneGenome parentGraph, float mutationrate, float proabibility, int newChildsPerParents, List<Genome> nextGenParents, int mutation_identifier, int recombination_identifier) {
 
         List<Genome> nextGenChildren = Collections.synchronizedList(new LinkedList<>()); // Thread-safe list
         System.out.println("Recombination Method: " + Recombinations.recombinationIdentifiers.get(recombination_identifier));
 
         //recombine Parents: Number of parents = POPULATION_SIZE/numberOfContestantsPerRound
         for (int i = 0, j = 1; j < nextGenParents.size(); i = i + 2, j = j + 2) {
-            int[][] geneticCodesOfChildrens = Recombinations.recombination_with_identifier(nextGenParents.get(i).getGenome(),nextGenParents.get(j).getGenome(),proabibility,newChildsPerParents,recombination_identifier);
+            int[][] geneticCodesOfChildrens = Recombinations.recombination_with_identifier(nextGenParents.get(i).getGenome(), nextGenParents.get(j).getGenome(), proabibility, newChildsPerParents, recombination_identifier);
             Thread[] threads = new Thread[newChildsPerParents];
             for (int k = 0; k < geneticCodesOfChildrens.length; k++) {
                 final int finalI = k;
@@ -207,12 +246,12 @@ public class Population{
                     switch (mutation_identifier) {
                         case 0:
                             //Mutation
-                            int[] mutated = Mutations.mutation(mutationrate,newChild);
+                            int[] mutated = Mutations.mutation(mutationrate, newChild);
                             newChild.setGenome(mutated);
                             break;
                         case 1:
                             //Mutation of vertices with high degree
-                            int[] mutated_high_degree = Mutations.mutation_of_vertices_with_high_degree(mutationrate,newChild);
+                            int[] mutated_high_degree = Mutations.mutation_of_vertices_with_high_degree(mutationrate, newChild);
                             newChild.setGenome(mutated_high_degree);
                             break;
                         default:
@@ -250,15 +289,14 @@ public class Population{
     }
 
 
-
     static List<Genome> generate_nextChildrenList(int[][] graph, int numberOfNodes, OneGenome parentGraph, float mutationrate, float proabibility, int newChildsPerParents, List<Genome> nextGenParents, int mutation_identifier, int recombination_identifier) {
 
         List<Genome> nextGenChildren = Collections.synchronizedList(new LinkedList<>()); // Thread-safe list
         System.out.println("Recombination Method: " + Recombinations.recombinationIdentifiers.get(recombination_identifier));
 
         //recombine Parents: Number of parents = POPULATION_SIZE/numberOfContestantsPerRound
-        for (int i = 0,j = 1; j < nextGenParents.size(); i=i+2,j= j+2) {
-            int[][] geneticCodesOfChildrens = Recombinations.recombination_with_identifier(nextGenParents.get(i).getGenome(),nextGenParents.get(j).getGenome(),proabibility,newChildsPerParents,recombination_identifier);
+        for (int i = 0, j = 1; j < nextGenParents.size(); i = i + 2, j = j + 2) {
+            int[][] geneticCodesOfChildrens = Recombinations.recombination_with_identifier(nextGenParents.get(i).getGenome(), nextGenParents.get(j).getGenome(), proabibility, newChildsPerParents, recombination_identifier);
             for (int k = 0; k < geneticCodesOfChildrens.length; k++) {
                 Genome newChild = new Genome(geneticCodesOfChildrens[k]);
 
@@ -266,12 +304,12 @@ public class Population{
                 switch (mutation_identifier) {
                     case 0:
                         //Mutation
-                        int[] mutated = Mutations.mutation(mutationrate,newChild);
+                        int[] mutated = Mutations.mutation(mutationrate, newChild);
                         newChild.setGenome(mutated);
                         break;
                     case 1:
                         //Mutation of vertices with high degree
-                        int[] mutated_high_degree = Mutations.mutation_of_vertices_with_high_degree(mutationrate,newChild);
+                        int[] mutated_high_degree = Mutations.mutation_of_vertices_with_high_degree(mutationrate, newChild);
                         newChild.setGenome(mutated_high_degree);
                         break;
                     default:
@@ -279,10 +317,10 @@ public class Population{
                 }
 
                 //calculate degrees
-                Genome.calculateDegreesUndirected(graph,newChild);
+                Genome.calculateDegreesUndirected(graph, newChild);
 
                 //calculate fitness
-                newChild.setFitness(FitnessFunctions.calculateFitnessMIN(newChild,parentGraph));
+                newChild.setFitness(FitnessFunctions.calculateFitnessMIN(newChild, parentGraph));
                 nextGenChildren.add(newChild);
 
                 //calculate size
@@ -296,8 +334,8 @@ public class Population{
     }
 
 
-    List<Genome> createListOfNextGeneration_Boltzmann(Population population, List<Genome> newGenomes){
-        int counter=0;
+    List<Genome> createListOfNextGeneration_Boltzmann(Population population, List<Genome> newGenomes) {
+        int counter = 0;
 
         //add OldGeneration to the list
         newGenomes.addAll(Arrays.asList(population.population));
@@ -312,43 +350,44 @@ public class Population{
     }
 
 
-    static List<Genome> getSurvivors(Population population, List<Genome> newGenomes){
+    static List<Genome> getSurvivors(Population population, List<Genome> newGenomes) {
         //get List of survivors
         List<Genome> survivors = new ArrayList<>();
         for (Genome oldTimer : population.getPopulation()) {
-            if(newGenomes.contains(oldTimer)){
+            if (newGenomes.contains(oldTimer)) {
                 survivors.add(oldTimer);
             }
         }
         return survivors;
     }
 
-    static Population remove_isolated_nodes(Population population,OneGenome parentGraph){
-        for (int i=0; i<population.population.length; i++){
-                //remove the isolated node
-                population.population[i] = Genome.removeIsolatedNodes(population.population[i],parentGraph);
+    static Population remove_isolated_nodes(Population population, OneGenome parentGraph) {
+        for (int i = 0; i < population.population.length; i++) {
+            //remove the isolated node
+            population.population[i] = Genome.removeIsolatedNodes(population.population[i], parentGraph);
         }
         return population;
     }
+
     //o(n) = (n^2)
-    static Population remove_duplicates(Population population, int numberOFNodes, float existenceRate, int[][] graph, OneGenome parentGraph){
+    static Population remove_duplicates(Population population, int numberOFNodes, float existenceRate, int[][] graph, OneGenome parentGraph) {
 
         //remove isolated nodes
         Population temp = remove_isolated_nodes(population, parentGraph);
 
         boolean found = false;
         int counter = 0;
-        for (int i = 0; i < temp.population.length-1; i++) {
-            for (int j = i+1; j < temp.population.length; j++) {
-                int difference = Genome.difference(temp.population[i],temp.population[j]);
-                if (difference==0){
+        for (int i = 0; i < temp.population.length - 1; i++) {
+            for (int j = i + 1; j < temp.population.length; j++) {
+                int difference = Genome.difference(temp.population[i], temp.population[j]);
+                if (difference == 0) {
                     //remove the duplicate
-                    temp.population[i] = new Genome(numberOFNodes,existenceRate,graph);
+                    temp.population[i] = new Genome(numberOFNodes, existenceRate, graph);
 
                     //calculate degrees
-                    Genome.calculateDegreesUndirected(graph,temp.population[i]);
+                    Genome.calculateDegreesUndirected(graph, temp.population[i]);
                     //calculate fitness
-                    temp.population[i].setFitness(FitnessFunctions.calculateFitnessMIN(temp.population[i],parentGraph));
+                    temp.population[i].setFitness(FitnessFunctions.calculateFitnessMIN(temp.population[i], parentGraph));
                     //calculate size
                     temp.population[i].calculateSize();
 
@@ -360,14 +399,13 @@ public class Population{
         }
         if (found) {
             System.out.println("Duplicates found and removed: " + counter);
-        }
-        else {
+        } else {
             System.out.println("No duplicates found");
         }
         return temp;
     }
 
-    static Population remove_duplicates_Threaded(Population population, int numberOFNodes, float existenceRate, int[][] graph, OneGenome parentGraph){
+    static Population remove_duplicates_Threaded(Population population, int numberOFNodes, float existenceRate, int[][] graph, OneGenome parentGraph) {
 
         // Thread-safe map to store updated genomes
         ConcurrentHashMap<Integer, Genome> updatedPopulation = new ConcurrentHashMap<>();
@@ -383,11 +421,11 @@ public class Population{
                 population.population[index] = Genome.removeIsolatedNodes(population.population[index], parentGraph);
 
                 //loop wont run if i = population.population.length
-                for (int j = index+1; j < population.population.length; j++) {
-                    int difference = Genome.difference(population.population[index],population.population[j]);
-                    if (difference==0){
+                for (int j = index + 1; j < population.population.length; j++) {
+                    int difference = Genome.difference(population.population[index], population.population[j]);
+                    if (difference == 0) {
                         //create complementary genome
-                        Genome newGenome = new Genome(population.population[index].getGenome(),true);
+                        Genome newGenome = new Genome(population.population[index].getGenome(), true);
 
                         //calculate degrees
                         Genome.calculateDegreesUndirected(graph, newGenome);
@@ -416,8 +454,34 @@ public class Population{
             population.population[index] = entry.getValue();
         }
         if (found.get()) {
-            System.out.println("\u001B[35m"+"Duplicates found and removed: " + counter.get()+"\u001B[0m");
+            System.out.println("\u001B[35m" + "Duplicates found and removed: " + counter.get() + "\u001B[0m");
         }
         return population;
+    }
+
+    static void printStats(Population population) {
+        System.out.println("Generation: " + population.generation);
+        System.out.println("Population fitness: " + population.population_fitness);
+        System.out.println("Mean fitness: " + population.mean_fitness);
+        System.out.println("Mean size: " + population.mean_size);
+        System.out.println("Population size: " + population.population.length);
+    }
+
+    void printStats() {
+        System.out.println("Generation: " + generation);
+        System.out.println("Population fitness: " + population_fitness);
+        System.out.println("Mean fitness: " + mean_fitness);
+        System.out.println("Mean size: " + mean_size);
+        System.out.println("Population size: " + population.length +'\n');
+
+        System.out.println("Amount of Genomes that survived: " + survivors.size());
+        System.out.println("Amount of Accepted Children: " + (population.length - survivors.size()));System.out.println("Amount of Genomes that survived: " + survivors.size());
+        System.out.println("Amount of Accepted Children: " + (population.length - survivors.size())+'\n');
+
+        System.out.println("First Best Fitness in Population: " + population[0].getFitness() + " Size: " + population[0].getSize());
+        System.out.println("Second Best Fitness in Population: " + population[1].getFitness() + " Size: " + population[1].getSize());
+        System.out.println("Difference between best and second best genome: " + Genome.difference(population[0], population[1]));
+        System.out.println("Genetic Difference between best Genomes of current and past generation: " + Genome.difference(population[0], bestGenomeFromLastGeneration));
+        System.out.println("---------------------------------------------------------------------------------------------------------------------------------------------------"+'\n');
     }
 }

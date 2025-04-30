@@ -8,9 +8,6 @@ public class Recombinations {
     //change when implementing new Recombination methods
     final static int implementedRecombinationMethods = 4;
 
-
-    static final float INTERSECTION_PROBABILITY = 0.9f;
-
     static Dictionary<Integer,String> recombinationIdentifiers = new Hashtable<Integer,String>();
     static {
         recombinationIdentifiers.put(0,"OnePointCrossover");
@@ -98,16 +95,5 @@ public class Recombinations {
                 throw new IllegalArgumentException("Invalid recombination identifier");
         }
     }
-
-    // Example usage
-       /* public static void main(String[] args) {
-            int[] parentA = {1, 2, 3, 4, 5};
-            int[] parentB = {6, 7, 8, 9, 10};
-
-            int[][] offspring = onePointCrossover(parentA, parentB);
-
-            System.out.println("AB offspring: " + java.util.Arrays.toString(offspring[0]));
-            System.out.println("BA offspring: " + java.util.Arrays.toString(offspring[1]));
-        }*/
 }
 
