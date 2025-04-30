@@ -15,6 +15,7 @@ public class OneGenome extends Genome {
         return orderedMapOfHighestDegrees;
     }
 
+    int[][] graph;
     //worstFitnessPossible is not actually possible but a good supremum
     static int worstFitnessPossible;
 
@@ -22,6 +23,7 @@ public class OneGenome extends Genome {
         length = numberOfNodes;
         genome = new int[length];
         degrees = new int[length];
+        this.graph = graph;
 
         generate_genome();
         calculateSize();
