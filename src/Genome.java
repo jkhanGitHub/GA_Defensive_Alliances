@@ -70,8 +70,8 @@ public class Genome {
         init_degrees();
     }
 
-    protected Genome(int numberOfNodes, int[] genetic_data, int[][] graph) {
-        length = numberOfNodes;
+    protected Genome(int[] genetic_data) {
+        length = genetic_data.length;
         genome = genetic_data;
         degrees = new int[length];
 
@@ -79,7 +79,8 @@ public class Genome {
     }
 
 
-    protected Genome(int[] genetic_data) {
+    //for the complement genome
+    protected Genome(int[] genetic_data, boolean complement) {
         length = genetic_data.length;;
         genome = complement(genetic_data);
         degrees = new int[length];
@@ -103,7 +104,7 @@ public class Genome {
         size =  Arrays.stream(genome).sum();
     }
 
-    /*static void calculateDegrees(int[][] matrix,Genome g){
+    static Genome calculateDegrees(int[][] matrix,Genome g){
         for (int i = 0; i < g.length; i++) {
             if(g.genome[i]==1){
                 for (int j = 0; j < g.length; j++) {
@@ -114,8 +115,10 @@ public class Genome {
                 }
             }
         }
-    }*/
+        return g;
+    }
 
+    /*
     //parallelized version of calculateDegrees
     static void calculateDegrees(int[][] matrix, Genome g) {
         IntStream.range(0, g.length).parallel().forEach(i -> {
@@ -131,6 +134,7 @@ public class Genome {
             }
         });
     }
+     */
 
     int[] complement(int[] genome) {
         int[] complement = new int[genome.length];
@@ -215,7 +219,6 @@ public class Genome {
         return sortedMap;
     }
 
-
     //parallelized version of orderedMapOf_harmfulNodes
     /*static Map<Integer, Integer> orderedMapOf_harmfulNodes(OneGenome parent_graph, Genome subgraph) {
         int length = subgraph.genome.length;
@@ -243,6 +246,19 @@ public class Genome {
                         LinkedHashMap::new
                 ));
     }*/
+
+
+    static Genome learn(Genome genome, OneGenome parentGraph, int numberOfChanges) {
+        //TODO implement learning
+        Genome temp;
+        temp = Learning.remove_many_harmful_Nodes(genome, parentGraph, numberOfChanges);
+        temp = Learning.test_high_degree_vertices_mutation(temp, numberOfChanges, parentGraph);
+
+        temp = Genome.calculateDegrees(parentGraph.graph, temp);
+        temp.calculateSize();
+        temp.setFitness(FitnessFunctions.calculateFitnessMIN(temp, parentGraph));
+        return temp;
+    }
 
     //i feel like java takes a shortcut here and compares object ids
     //in order to prevent this bullshit we need to copy the arrey?

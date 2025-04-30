@@ -1,3 +1,5 @@
+import java.util.Dictionary;
+import java.util.Hashtable;
 import java.util.Random;
 
 public class Recombinations {
@@ -8,6 +10,12 @@ public class Recombinations {
 
 
     static final float INTERSECTION_PROBABILITY = 0.9f;
+
+    static Dictionary<Integer,String> recombinationIdentifiers = new Hashtable<Integer,String>();
+    static {
+        recombinationIdentifiers.put(0,"OnePointCrossover");
+        recombinationIdentifiers.put(1, "ProababilityIntersection");
+    }
 
 
     public static int[][] onePointCrossover(int[] a, int[] b) {
@@ -78,6 +86,17 @@ public class Recombinations {
             listOfChildren[k] = intersected_array;
         }
         return listOfChildren;
+    }
+
+    static int[][] recombination_with_identifier(int[] genome1, int[] genome2, float proabibility,int childrenAmount, int recombinationIdentifier){
+        switch (recombinationIdentifier) {
+            case 0:
+                return onePointCrossover(genome1, genome2, childrenAmount);
+            case 1:
+                return intersection_with_proabability(genome1, genome2, proabibility, childrenAmount);
+            default:
+                throw new IllegalArgumentException("Invalid recombination identifier");
+        }
     }
 
     // Example usage
