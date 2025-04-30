@@ -54,7 +54,7 @@ The following is an example of a generic evolutionary algorithm:
     public static final int NUMBER_OF_NODES = 7624;
 
 
-    public static final int AmountOfLearnings = 1;
+    public static final int AmountOfLearnings = 3;
 
     public static final float NODE_EXISTENCE_PROBABILITY = 0.5F;
 
@@ -173,7 +173,7 @@ The following is an example of a generic evolutionary algorithm:
                     newGenParents,
                     mutationIdentifiersSwapped.get("Mutation"),
                     recombinationIdentifiers.get("OnePointCrossoverThreaded"),
-                    true
+                    true //modify learning parameter aswell
             );
 
             //increase counter
