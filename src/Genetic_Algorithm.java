@@ -70,11 +70,11 @@ The following is an example of a generic evolutionary algorithm:
     //new population will take over the best from last generation + all new children
     //WARNING: IF NUMBER OF PARENTS IS >= Number of children then the whole population will be replaced
     // new nodes in next population is (NUMBER_OF_CONTESTANTS_PER_ROUND/NUMBER_OF_CHILDS_PER_PARENT) in percent
-    public static final int NUMBER_OF_CONTESTANTS_PER_ROUND = (int) Math.pow(2, 2); // only 1 winner -< lower number ensures more worse parents and probably more diversity
+    public static final int NUMBER_OF_CONTESTANTS_PER_ROUND = (int) Math.pow(2, 4); // only 1 winner -< lower number ensures more worse parents and probably more diversity
 
     //increase this number to increase the number of children per parent also resulting in bigger population in each generation, only makes sense when making population a list wont be doing that tho xD
     //higher number -< earlier local maximum because of incest
-    public static final int NUMBER_OF_CHILDS_PER_PARENT = 4;
+    public static final int NUMBER_OF_CHILDS_PER_PARENT = 10;
 
     public static final int MULTIPLIER = POPULATION_SIZE / NUMBER_OF_CONTESTANTS_PER_ROUND; //Multiplier for some selection methods which have an average parent output of 1
 
@@ -171,7 +171,7 @@ The following is an example of a generic evolutionary algorithm:
                     PROBABILITY,
                     NUMBER_OF_CHILDS_PER_PARENT,
                     newGenParents,
-                    mutationIdentifiersSwapped.get("Mutation of vertices with high degree"),
+                    mutationIdentifiersSwapped.get("Mutation"),
                     recombinationIdentifiers.get("OnePointCrossoverThreaded"),
                     true
             );
@@ -194,7 +194,7 @@ The following is an example of a generic evolutionary algorithm:
 
 
         try {
-            graph = CsvReader.readCsvEdgesToMatrix(FILEPATH, NUMBER_OF_NODES);
+            graph = CsvReader.readCsvEdgesToSymmetricalMatrix(FILEPATH, NUMBER_OF_NODES);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -202,7 +202,6 @@ The following is an example of a generic evolutionary algorithm:
         PARENT_GRAPH = new OneGenome(NUMBER_OF_NODES, graph);
         PARENT_GRAPH.remove_isolated_nodes();
 
-        Genome.calculateDegrees(graph, PARENT_GRAPH);
         PARENT_GRAPH.calculateWorstFitnessPossible();
 
         geneticAlgorithm(NUMBER_OF_NODES, NODE_EXISTENCE_PROBABILITY, POPULATION_SIZE, NUMBER_OF_ITERATIONS, BREAK_FITNESS, PARENT_GRAPH, graph);

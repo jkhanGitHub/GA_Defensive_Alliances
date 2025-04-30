@@ -72,7 +72,7 @@ public class Population{
             threads[finalI] = new Thread(()-> {
                 population[finalI] = new Genome(numberOFNodes,existenceRate,graph);
                 //calculate degrees
-                Genome.calculateDegrees(graph, population[finalI]);
+                Genome.calculateDegreesUndirected(graph, population[finalI]);
                 //calculate fitness
                 population[finalI].setFitness(FitnessFunctions.calculateFitnessMIN(population[finalI], parentGraph));
             });
@@ -105,6 +105,7 @@ public class Population{
 
         if(activateLearning){
             survivors_learn(oldGeneration, newGeneration, parentGraph, amountOfLearning);
+            newGeneration.sort(Comparator.comparingInt(Genome::getFitness).reversed());
         }
 
         //add Entries to the new population
@@ -168,10 +169,7 @@ public class Population{
         for (int i = 0; i < survivors.size(); i++) {
             final int index = i;
             threads[index] = new Thread(() -> {
-                Genome updatedSurvivor = Genome.learn(survivors.get(index), parentGraph, amountOfLearning);
-                synchronized (survivors) {
-                    survivors.set(index, updatedSurvivor);
-                }
+                Genome.learn(survivors.get(index), parentGraph, amountOfLearning);
             });
             threads[index].start();
         }
@@ -222,7 +220,7 @@ public class Population{
                     }
 
                     //calculate degrees
-                    Genome.calculateDegrees(graph, newChild);
+                    Genome.calculateDegreesUndirected(graph, newChild);
 
                     //calculate fitness
                     newChild.setFitness(FitnessFunctions.calculateFitnessMIN(newChild, parentGraph));
@@ -281,7 +279,7 @@ public class Population{
                 }
 
                 //calculate degrees
-                Genome.calculateDegrees(graph,newChild);
+                Genome.calculateDegreesUndirected(graph,newChild);
 
                 //calculate fitness
                 newChild.setFitness(FitnessFunctions.calculateFitnessMIN(newChild,parentGraph));
@@ -348,7 +346,7 @@ public class Population{
                     temp.population[i] = new Genome(numberOFNodes,existenceRate,graph);
 
                     //calculate degrees
-                    Genome.calculateDegrees(graph,temp.population[i]);
+                    Genome.calculateDegreesUndirected(graph,temp.population[i]);
                     //calculate fitness
                     temp.population[i].setFitness(FitnessFunctions.calculateFitnessMIN(temp.population[i],parentGraph));
                     //calculate size
@@ -392,7 +390,7 @@ public class Population{
                         Genome newGenome = new Genome(population.population[index].getGenome(),true);
 
                         //calculate degrees
-                        Genome.calculateDegrees(graph, newGenome);
+                        Genome.calculateDegreesUndirected(graph, newGenome);
                         //calculate fitness
                         newGenome.setFitness(FitnessFunctions.calculateFitnessMIN(newGenome, parentGraph));
                         //calculate size

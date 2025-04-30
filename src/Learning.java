@@ -24,7 +24,7 @@ public class Learning {
 
                 //Experimental from Here ---------------------------------------------------------------------------
                 //calculate the degrees of the mutated genome
-                Genome.calculateDegrees(Genetic_Algorithm.graph, mutatedGenome);
+                Genome.calculateDegreesUndirected(Genetic_Algorithm.graph, mutatedGenome);
 
                 //calculate the fitness of the mutated genome
                 mutatedGenome.setFitness(FitnessFunctions.calculateFitnessMIN(mutatedGenome, parentGraph));

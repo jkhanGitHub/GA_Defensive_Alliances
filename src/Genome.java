@@ -1,12 +1,6 @@
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.stream.IntStream;
-import java.util.concurrent.*;
 import java.util.stream.Collectors;
 import java.util.*;
 
@@ -104,10 +98,12 @@ public class Genome {
         size =  Arrays.stream(genome).sum();
     }
 
-    static Genome calculateDegrees(int[][] matrix,Genome g){
+
+    //calculate the degrees of the genome in an undirected graph
+    static Genome calculateDegreesUndirected(int[][] matrix, Genome g){
         for (int i = 0; i < g.length; i++) {
             if(g.genome[i]==1){
-                for (int j = 0; j < g.length; j++) {
+                for (int j = i+1; j < g.length; j++) {
                     if(g.genome[j]==1 && matrix[i][j]==1){
                         g.degrees[i]++;
                         g.degrees[j]++;
@@ -118,9 +114,23 @@ public class Genome {
         return g;
     }
 
+    //calculate the degrees of the genome in a directed graph
+    static Genome calculateDegreesDirected(int[][] matrix,Genome g){
+        for (int i = 0; i < g.length; i++) {
+            if(g.genome[i]==1){
+                for (int j = 0; j < g.length; j++) {
+                    if(g.genome[j]==1 && matrix[i][j]==1){
+                        g.degrees[i]++;
+                    }
+                }
+            }
+        }
+        return g;
+    }
+
     /*
     //parallelized version of calculateDegrees
-    static void calculateDegrees(int[][] matrix, Genome g) {
+    static Genome calculateDegrees(int[][] matrix, Genome g) {
         IntStream.range(0, g.length).parallel().forEach(i -> {
             if (g.genome[i] == 1) {
                 for (int j = 0; j < g.length; j++) {
@@ -133,6 +143,7 @@ public class Genome {
                 }
             }
         });
+        return g;
     }
      */
 
@@ -156,17 +167,6 @@ public class Genome {
                 genome[i] = 1;
             }
             else genome[i] = 0;
-        }
-    }
-
-    void readEdges_off_symmetrical_Matrix(int[][] matrix){
-        for (int i = 0; i < length; i++) {
-            for (int j = 0; j < length; j++) {
-                if(matrix[i][j]==1){
-                    degrees[i]++;
-                    degrees[j]++;
-                }
-            }
         }
     }
 
@@ -254,7 +254,7 @@ public class Genome {
         temp = Learning.remove_many_harmful_Nodes(genome, parentGraph, numberOfChanges);
         temp = Learning.test_high_degree_vertices_mutation(temp, numberOfChanges, parentGraph);
 
-        temp = Genome.calculateDegrees(parentGraph.graph, temp);
+        temp = Genome.calculateDegreesUndirected(parentGraph.graph, temp);
         temp.calculateSize();
         temp.setFitness(FitnessFunctions.calculateFitnessMIN(temp, parentGraph));
         return temp;

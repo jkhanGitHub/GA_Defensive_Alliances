@@ -20,8 +20,16 @@ public class Mutations {
     //degrees of genome must have been calculated before
     protected static int[] mutation_of_vertices_with_high_degree(float mutationrate, Genome g){
         Genome mutatedGenome = g;
+        int multiplier = 0;
         for (int i=0; i<mutatedGenome.length; i++) {
-            if (Math.random()<=(mutationrate*mutatedGenome.getDegrees()[i])) {
+            if(mutatedGenome.getDegrees()[i]==0){
+                multiplier = 1;
+            }
+            else {
+                multiplier = mutatedGenome.getDegrees()[i];
+            }
+            double randomValue = Math.random();
+            if (randomValue<=(mutationrate*multiplier)) {
                 mutatedGenome.genome[i]=Math.abs(mutatedGenome.genome[i]-1);
             }
         }
