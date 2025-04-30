@@ -79,7 +79,7 @@ The following is an example of a generic evolutionary algorithm:
     public static final int MULTIPLIER = POPULATION_SIZE / NUMBER_OF_CONTESTANTS_PER_ROUND; //Multiplier for some selection methods which have an average parent output of 1
 
     //Explanation of mutation identfieres found in Population.java mutate_Population()
-    public static final float MUTATION_RATE = 0.01f; //mutation rate, 0.01 means 1% chance of mutation per node, 0.1 means 10% chance of mutation per node
+    public static final float MUTATION_RATE = 1/NUMBER_OF_NODES; //mutation rate, 0.01 means 1% chance of mutation per node, 0.1 means 10% chance of mutation per node
     public static final int NUMBER_OF_ITERATIONS = 300; //number of generations
 
     public static final int BREAK_FITNESS = NUMBER_OF_NODES - 2;
@@ -88,7 +88,7 @@ The following is an example of a generic evolutionary algorithm:
 
     public static final float PROBABILITY = 0.5f; //probability of intersection, 0.5 means 50% chance of intersection and 50% chance of crossover
 
-    final static int UPPER_BOUND_OF_GenomesToBeModified = POPULATION_SIZE / NUMBER_OF_CONTESTANTS_PER_ROUND; //upper bound for ADDITIONAL_amount of genomes to be mutated
+    final static int UPPER_BOUND_OF_LEARNERS = POPULATION_SIZE / NUMBER_OF_CONTESTANTS_PER_ROUND; //upper bound for ADDITIONAL_amount of genomes to be mutated
     public static int[][] graph;
 
     public static Map<Integer, Genome> bestGenomes = new HashMap<>();
@@ -111,52 +111,21 @@ The following is an example of a generic evolutionary algorithm:
     static void geneticAlgorithm(int NUMBER_OF_NODES, float NODE_EXISTENCE_PROBABILITY, int POPULATION_SIZE, int NUMBER_OF_ITERATIONS, int BREAK_FITNESS, OneGenome PARENT_GRAPH, int[][] graph) {
         //Generatess first Population and calculates the Fitness of each Genome
         Population population = new Population(POPULATION_SIZE, NUMBER_OF_NODES, NODE_EXISTENCE_PROBABILITY, graph, PARENT_GRAPH);
-
         population.sort_Population_by_fitness_and_size_reversed();
 
-        //adds the best genome to the list of best genomes
+
         int counter = 0;
-        bestGenomes.put(counter, population.getPopulation()[0]);
-
-        /*//prints Perfect minimal solutions maybe comment out
-        int i =0;
-        while (population.getPopulation()[i].fitness == BREAK_FITNESS) {
-            population.getPopulation()[i].printGenome();
-        }
-        if(i>0) return;
-        */
-
         while (population.generation != NUMBER_OF_ITERATIONS) {
             //adds defensive alliance to a list if it has been found
             addDefensiveAlliance(population);
-
-            //Print some stats
-            System.out.println('\n' + "Generation: " + population.generation);
-            System.out.println("Mean Size of Population: " + population.mean_size);
-            System.out.println("Fitness of Population: " + population.population_fitness);
-            System.out.println("Mean Fitness of Population: " + population.mean_fitness);
-            System.out.println("Best Fitness in Population: " + population.getPopulation()[0].getFitness() + "\t Size: " + population.getPopulation()[0].getSize());
-            System.out.println("Second Best Fitness in Population: " + population.getPopulation()[1].getFitness() + "\t Size: " + population.getPopulation()[1].getSize());
-            System.out.println("Worst Fitness in Population: " + population.getPopulation()[POPULATION_SIZE - 1].getFitness() + "\t Size: " + population.getPopulation()[POPULATION_SIZE - 1].getSize() + "\n");
-
-            //print difference between best and second best genome
-            System.out.println("Difference between best and second best genome: " + Genome.difference(population.getPopulation()[0], population.getPopulation()[1]));
-
-            //Since genetic algorithm have the tendency to get stuck in local optima, we can check if the best genome is the same as the previous one
+            //adds the best genome to the list of best genomes
             bestGenomes.put(counter, population.getPopulation()[0]);
 
-            //check difference between best genomes
-            if(counter>0){
-                int difference = Genome.difference(bestGenomes.get(counter), bestGenomes.get(counter-1));
-                System.out.println("GENETIC Difference between best Genomes of current and past generation: " + difference);
-            }
-
-            System.out.println("------------------------------------------------------------------------------------------------------------------------------------------" + '\n');
+            //Print some stats
+            population.printStats();
 
             //change Selection method to whhatever
             //Literatur says that using many different selection methods is better
-
-
             List<Genome> newGenParents = Selection.select_SelectionMethod(
                     population,
                     NUMBER_OF_CONTESTANTS_PER_ROUND,
@@ -172,18 +141,17 @@ The following is an example of a generic evolutionary algorithm:
                     NUMBER_OF_CHILDS_PER_PARENT,
                     newGenParents,
                     mutationIdentifiersSwapped.get("Mutation"),
-                    recombinationIdentifiers.get("OnePointCrossoverThreaded"),
-                    true //modify learning parameter aswell
+                    recombinationIdentifiers.get("ProababilityIntersectionThreaded"),
+                    UPPER_BOUND_OF_LEARNERS,
+                    false
             );
-
-            //increase counter
-            counter++;
             //remove isolated nodes from population, implemented inside remove_duplicates
             //remove duplicates from population and replace them with random generated genomes
             //this is important because otherwise the algorithm will get stuck in local optima way faster
             //can potentially result in duplicates in the population but chances are low
             // remove_duplicates is really slow
-            if (counter % 5 == 0) {
+            // right now it exchanges a duplicate with its complement
+            if (++counter % 10 == 0) {
                 population = Population.remove_duplicates_Threaded(population, NUMBER_OF_NODES, NODE_EXISTENCE_PROBABILITY, graph, PARENT_GRAPH);
             }
         }
@@ -191,8 +159,6 @@ The following is an example of a generic evolutionary algorithm:
 
 
     public static void main(String[] args) {
-
-
         try {
             graph = CsvReader.readCsvEdgesToSymmetricalMatrix(FILEPATH, NUMBER_OF_NODES);
         } catch (IOException e) {
@@ -201,8 +167,6 @@ The following is an example of a generic evolutionary algorithm:
 
         PARENT_GRAPH = new OneGenome(NUMBER_OF_NODES, graph);
         PARENT_GRAPH.remove_isolated_nodes();
-
-        PARENT_GRAPH.calculateWorstFitnessPossible();
 
         geneticAlgorithm(NUMBER_OF_NODES, NODE_EXISTENCE_PROBABILITY, POPULATION_SIZE, NUMBER_OF_ITERATIONS, BREAK_FITNESS, PARENT_GRAPH, graph);
 

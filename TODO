@@ -16,3 +16,12 @@ Think about how to handle the size of the networks
 possible speedups
 faster mutations and ?creation?
 improve impact each new generation brings e.g mean generation  fitness
+
+TODO
+!!!!BIG PROBLEM CHILDRENS ARE WAY TOO BAD THINK OF BETTER RECOMBINATIONS!!!!!!
+the better the generation get the more genomes stay
+
+TODO
+implement methods to find all connected components and store them
+implement Graph class that holds adjacency matrix and methods to find all connected components and store them int a List
+rename OneGenome to connectedComponent and remove inheritance from Genome
