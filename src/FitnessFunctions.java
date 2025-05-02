@@ -37,7 +37,9 @@ public class FitnessFunctions {
         int sum = 0;
         int sizeFactor = genome.getSize();
 
-        if ((sizeFactor==0) || (sizeFactor==PARENT_GRAPH.getSize())) return 0;
+        if ((sizeFactor==0) || (sizeFactor==PARENT_GRAPH.getSize())){
+            return 0;
+        }
 
         for(int i=0; i<genome.length;i++){
             if(genome.genome[i]==1){
@@ -49,6 +51,7 @@ public class FitnessFunctions {
         if(sum == 0){
             sum = (PARENT_GRAPH.getSize() - genome.getSize());
         }
+
         return sum;
     }
 

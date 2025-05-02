@@ -99,10 +99,10 @@ public class Population {
     }
 
 
-    Population(Population oldGeneration, int[][] graph, OneGenome parentGraph, float mutationrate, float proabibility, int newChildsPerParents, List<Genome> nextGenParents, int mutation_identifier, int recombination_identifier, boolean activateLearning) {
+    Population(Population oldGeneration,OneGenome parentGraph, float mutationrate, float proabibility, int newChildsPerParents, List<Genome> nextGenParents, int mutation_identifier, int recombination_identifier, boolean activateLearning) {
         population = new Genome[oldGeneration.population.length];
         bestGenomeFromLastGeneration = oldGeneration.getPopulation()[0];
-        offspringsFromPreviousGeneration = generate_nextChildrenListThreaded(graph, parentGraph, mutationrate, proabibility, newChildsPerParents, nextGenParents, mutation_identifier, recombination_identifier);
+        offspringsFromPreviousGeneration = generate_nextChildrenListThreaded(parentGraph, mutationrate, proabibility, newChildsPerParents, nextGenParents, mutation_identifier, recombination_identifier);
 
         List<Genome> newGeneration;
         newGeneration = createListOfNextGeneration_Boltzmann(oldGeneration, offspringsFromPreviousGeneration);
@@ -110,8 +110,10 @@ public class Population {
 
         if (activateLearning) {
             survivors = getSurvivors(oldGeneration, newGeneration);
-            survivors_learn(survivors, parentGraph, amountOfLearning);
-            newGeneration.sort(Comparator.comparingInt(Genome::getFitness).reversed());
+            if (survivors.size()>0){
+                survivors_learn(survivors, parentGraph, amountOfLearning);
+                newGeneration.sort(Comparator.comparingInt(Genome::getFitness).reversed());
+            }
         }
 
         //add Entries to the new population
@@ -125,20 +127,23 @@ public class Population {
         mean_size = calculateMeanSize(this);
     }
 
-    Population(Population oldGeneration, int[][] graph, OneGenome parentGraph, float mutationrate, float proabibility, int newChildsPerParents, List<Genome> nextGenParents, int mutation_identifier, int recombination_identifier, int amountOfLearners, boolean randomizeLearners) {
+    Population(Population oldGeneration,OneGenome parentGraph, float mutationrate, float proabibility, int newChildsPerParents, List<Genome> nextGenParents, int mutation_identifier, int recombination_identifier, int amountOfLearners, boolean randomizeLearners) {
         population = new Genome[oldGeneration.population.length];
         bestGenomeFromLastGeneration = oldGeneration.getPopulation()[0];
-        offspringsFromPreviousGeneration = generate_nextChildrenListThreaded(graph, parentGraph, mutationrate, proabibility, newChildsPerParents, nextGenParents, mutation_identifier, recombination_identifier);
+        offspringsFromPreviousGeneration = generate_nextChildrenListThreaded(parentGraph, mutationrate, proabibility, newChildsPerParents, nextGenParents, mutation_identifier, recombination_identifier);
 
         List<Genome> childrenList;
-        childrenList = generate_nextChildrenListThreaded(graph, parentGraph, mutationrate, proabibility, newChildsPerParents, nextGenParents, mutation_identifier, recombination_identifier);
+        childrenList = generate_nextChildrenListThreaded(parentGraph, mutationrate, proabibility, newChildsPerParents, nextGenParents, mutation_identifier, recombination_identifier);
 
         List<Genome> newGeneration;
         newGeneration = createListOfNextGeneration_Boltzmann(oldGeneration, childrenList);
 
 
         survivors = getSurvivors(oldGeneration, newGeneration);
-        survivors_learn(survivors, parentGraph, amountOfLearning, amountOfLearners, randomizeLearners);
+        if (!survivors.isEmpty()){
+            survivors_learn(survivors, parentGraph, amountOfLearning);
+            newGeneration.sort(Comparator.comparingInt(Genome::getFitness).reversed());
+        }
         newGeneration.sort(Comparator.comparingInt(Genome::getFitness).reversed());
 
 
@@ -160,7 +165,6 @@ public class Population {
                 population.population) {
             sum += genom.getSize();
         }
-        ;
         return sum / population.population.length;
     }
 
@@ -225,9 +229,10 @@ public class Population {
         }
     }
 
-    static List<Genome> generate_nextChildrenListThreaded(int[][] graph, OneGenome parentGraph, float mutationrate, float proabibility, int newChildsPerParents, List<Genome> nextGenParents, int mutation_identifier, int recombination_identifier) {
+    static List<Genome> generate_nextChildrenListThreaded(OneGenome parentGraph, float mutationrate, float proabibility, int newChildsPerParents, List<Genome> nextGenParents, int mutation_identifier, int recombination_identifier) {
 
         List<Genome> nextGenChildren = Collections.synchronizedList(new LinkedList<>()); // Thread-safe list
+        System.out.println(Recombinations.recombinationIdentifiers.get(recombination_identifier));
 
         //recombine Parents: Number of parents = POPULATION_SIZE/numberOfContestantsPerRound
         for (int i = 0, j = 1; j < nextGenParents.size(); i = i + 2, j = j + 2) {
@@ -261,13 +266,13 @@ public class Population {
                     }
 
                     //calculate degrees
-                    Genome.calculateDegreesUndirected(graph, newChild);
-
-                    //calculate fitness
-                    newChild.setFitness(FitnessFunctions.calculateFitnessMIN(newChild, parentGraph));
+                    Genome.calculateDegreesUndirected(parentGraph.graph, newChild);
 
                     //calculate size
                     newChild.calculateSize();
+
+                    //calculate fitness
+                    newChild.setFitness(FitnessFunctions.calculateFitnessMIN(newChild, parentGraph));
 
                     //add to the thread-safe list
                     nextGenChildren.add(newChild);
@@ -291,7 +296,7 @@ public class Population {
     }
 
 
-    static List<Genome> generate_nextChildrenList(int[][] graph, int numberOfNodes, OneGenome parentGraph, float mutationrate, float proabibility, int newChildsPerParents, List<Genome> nextGenParents, int mutation_identifier, int recombination_identifier) {
+    static List<Genome> generate_nextChildrenList(int numberOfNodes, OneGenome parentGraph, float mutationrate, float proabibility, int newChildsPerParents, List<Genome> nextGenParents, int mutation_identifier, int recombination_identifier) {
 
         List<Genome> nextGenChildren = Collections.synchronizedList(new LinkedList<>()); // Thread-safe list
 
@@ -318,14 +323,15 @@ public class Population {
                 }
 
                 //calculate degrees
-                Genome.calculateDegreesUndirected(graph, newChild);
-
-                //calculate fitness
-                newChild.setFitness(FitnessFunctions.calculateFitnessMIN(newChild, parentGraph));
-                nextGenChildren.add(newChild);
+                Genome.calculateDegreesUndirected(parentGraph.graph, newChild);
 
                 //calculate size
                 newChild.calculateSize();
+
+                //calculate fitness
+                newChild.setFitness(FitnessFunctions.calculateFitnessMIN(newChild, parentGraph));
+
+                nextGenChildren.add(newChild);
             }
         }
 
@@ -481,6 +487,7 @@ public class Population {
 
         System.out.println("First Best Fitness in Population: " + population[0].getFitness() + " Size: " + population[0].getSize());
         System.out.println("Second Best Fitness in Population: " + population[1].getFitness() + " Size: " + population[1].getSize());
+        System.out.println("Worst Fitness in Population: " + population[population.length-1].getFitness() + " Size: " + population[population.length-1].getSize());
         System.out.println("Difference between best and second best genome: " + Genome.difference(population[0], population[1]));
         System.out.println("Genetic Difference between best Genomes of current and past generation: " + Genome.difference(population[0], bestGenomeFromLastGeneration));
         System.out.println("---------------------------------------------------------------------------------------------------------------------------------------------------"+'\n');

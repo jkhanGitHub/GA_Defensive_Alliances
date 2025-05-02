@@ -2,20 +2,31 @@ import java.io.IOException;
 import java.util.*;
 
 //used to find connected components in a graph
-class Graph extends Genome{
-    private int[][] adjMatrix;
+class Graph {
+    protected int[][] adjMatrix;
+    protected int length;
+    protected int[] degrees;
+
+    List<List<Integer>> connected_components = new ArrayList<>();
+
+    Map<int[],int[]> componetsWithDegrees = new HashMap<>();
 
     public Graph(int numNodes) {
         length = numNodes;
         adjMatrix = new int[numNodes][numNodes]; // Initialized to 0 by default
     }
 
-    public Graph(int numberOfNodes, int[][] adjMatrix) {
-        length = numberOfNodes;
+    public Graph(int[][] adjMatrix) {
+        length = adjMatrix.length;
         this.adjMatrix = adjMatrix; // Initialized to 0 by default
-        genome = new int[length];
         degrees = new int[length];
-        generate_genome();
+
+        calculateDegreesUndirected();
+        connected_components = findComponentsBFS();
+        //sort components by size
+        connected_components.sort((a, b) -> Integer.compare(b.size(), a.size()));
+
+        generate_ComponentsWithDegrees();
     }
 
     // Add an undirected edge between u and v
@@ -54,13 +65,37 @@ class Graph extends Genome{
         return components;
     }
 
-    void generate_genome() {
+    //methods that turns IntegerLists into int arrays
+    public static int[] convertIntegerListToIntArray(List<Integer> integerList) {
+        return integerList.stream().mapToInt(Integer::intValue).toArray();
+    }
+
+    void generate_ComponentsWithDegrees(){
+        for (List<Integer>component: connected_components) {
+            int[] componentArray = convertIntegerListToIntArray(component);
+            int[] degreesOfComponent = degreesOfComponent(component);
+            componetsWithDegrees.put(componentArray,degreesOfComponent);
+        }
+    }
+    void calculateDegreesUndirected() {
         for (int i = 0; i < length; i++) {
-            genome[i] = 1;
-            calculateSize();
+            for (int j = i + 1; j < length; j++) {
+                if (adjMatrix[i][j]==1){
+                    degrees[i]++;
+                    degrees[j]++;
+                }
+            }
         }
     }
 
+     int[] degreesOfComponent(List<Integer> connectedComponent) {
+        int[] degreesOfComponent = new int[connectedComponent.size()];
+        for (int i=0; i< connectedComponent.size(); i++) {
+            int id = connectedComponent.get(i);
+            degreesOfComponent[i] = degrees[id];
+        }
+        return degreesOfComponent;
+    }
 
     public static void main(String[] args) {
         int[][] adjzMatrix;
@@ -74,11 +109,8 @@ class Graph extends Genome{
             throw new RuntimeException(e);
         }
 
-        graph = new Graph(numberOfNodes, adjzMatrix);
-        int[] degrees = new int[numberOfNodes];
-
-        List<List<Integer>> components = graph.findComponentsBFS();
-        System.out.println("!amount of connected components: " + components.size());
+        graph = new Graph(adjzMatrix);
+        System.out.println("!amount of connected components: " + graph.connected_components.size());
     }
 }
 

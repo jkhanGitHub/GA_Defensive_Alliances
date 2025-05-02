@@ -3,6 +3,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -15,6 +16,8 @@ public class OneGenome extends Genome {
         return orderedMapOfHighestDegrees;
     }
 
+    //holds the ids of the nodes in the component
+    int[] component;
     int[][] graph;
     //worstFitnessPossible is not actually possible but a good supremum
     static int worstFitnessPossible;
@@ -28,6 +31,21 @@ public class OneGenome extends Genome {
         generate_genome();
 
         calculateDegreesUndirected(graph, this);
+        orderedMapOfHighestDegrees();
+        calculateWorstFitnessPossible();
+    }
+
+    //component received by Graph.java
+    OneGenome(int[] component, int[] degreesOfComponent, int[][]adjzMatrix){
+        this.component = component;
+        length = component.length;
+        genome = new int[length];
+        degrees = degreesOfComponent;
+        graph = new int[length][length];
+
+        generate_genome();
+
+        generate_MiniGraph(adjzMatrix,component);
         orderedMapOfHighestDegrees();
         calculateWorstFitnessPossible();
     }
@@ -67,7 +85,10 @@ public class OneGenome extends Genome {
         }
     }
 
-    public int[] getDegrees() {
-        return degrees;
+    void generate_MiniGraph(int[][] adjzMatrix,int[]component){
+        for (int i = 0; i < length; i++) {
+            graph[i] = adjzMatrix[component[i]];
+        }
     }
+
 }

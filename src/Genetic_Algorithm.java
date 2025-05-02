@@ -49,11 +49,11 @@ The following is an example of a generic evolutionary algorithm:
 
 
     //Path to the csv file
-    public static final String FILEPATH = "twitch/twitch/PTBR/musae_PTBR_edges.csv";
+    public static final String FILEPATH = "lasftm_asia/lastfm_asia_edges.csv";
     //Number of Nodes of graph
-    public static final int NUMBER_OF_NODES = 1912;
+    public static final int NUMBER_OF_NODES = 7624;
 
-    public static final int POPULATION_SIZE = (int) Math.pow(2, 8); //Powers of two are best suited for variable tournament selection, use  factors of two for 1v1
+    public static final int POPULATION_SIZE = (int) Math.pow(2, 11); //Powers of two are best suited for variable tournament selection, use  factors of two for 1v1
 
 
 
@@ -74,7 +74,7 @@ The following is an example of a generic evolutionary algorithm:
     //new population will take over the best from last generation + all new children
     //WARNING: IF NUMBER OF PARENTS IS >= Number of children then the whole population will be replaced
     // new nodes in next population is (NUMBER_OF_CONTESTANTS_PER_ROUND/NUMBER_OF_CHILDS_PER_PARENT) in percent
-    public static final int NUMBER_OF_CONTESTANTS_PER_ROUND = (int) Math.pow(2, 4); // only 1 winner -< lower number ensures more worse parents and probably more diversity
+    public static final int NUMBER_OF_CONTESTANTS_PER_ROUND = (int) Math.pow(2, 2); // only 1 winner -< lower number ensures more worse parents and probably more diversity
 
     //increase this number to increase the number of children per parent also resulting in bigger population in each generation, only makes sense when making population a list wont be doing that tho xD
     //higher number -< earlier local maximum because of incest
@@ -101,7 +101,7 @@ The following is an example of a generic evolutionary algorithm:
 
     static void addDefensiveAlliance(Population population) {
         int i = 0;
-        while (i < population.getPopulation().length && population.getPopulation()[i].getFitness() >= 0) {
+        while (i < population.getPopulation().length && population.getPopulation()[i].getFitness() > 0) {
             if (!defensiveAlliances.contains(population.getPopulation()[i])) {
                 Genome g = Genome.removeIsolatedNodes(population.getPopulation()[i], PARENT_GRAPH);
                 defensiveAlliances.add(g);
@@ -112,7 +112,7 @@ The following is an example of a generic evolutionary algorithm:
     }
 
     //when using onepointcrossover the parentgraph should not be included in the population!
-    static void geneticAlgorithm(int NUMBER_OF_NODES, float NODE_EXISTENCE_PROBABILITY, int POPULATION_SIZE, int NUMBER_OF_ITERATIONS, int BREAK_FITNESS, OneGenome PARENT_GRAPH, int[][] graph) {
+    static void geneticAlgorithm(int NUMBER_OF_NODES, float NODE_EXISTENCE_PROBABILITY, int POPULATION_SIZE, int NUMBER_OF_ITERATIONS, int BREAK_FITNESS, OneGenome PARENT_GRAPH) {
         //Generatess first Population and calculates the Fitness of each Genome
         Population population = new Population(POPULATION_SIZE, NUMBER_OF_NODES, NODE_EXISTENCE_PROBABILITY, PARENT_GRAPH);
         population.sort_Population_by_fitness_and_size_reversed();
@@ -141,7 +141,6 @@ The following is an example of a generic evolutionary algorithm:
             //create new population
             population = new Population(
                     population,
-                    graph,
                     PARENT_GRAPH,
                     MUTATION_RATE,
                     PROBABILITY,
@@ -172,9 +171,12 @@ The following is an example of a generic evolutionary algorithm:
             throw new RuntimeException(e);
         }
 
-        PARENT_GRAPH = new OneGenome(NUMBER_OF_NODES, graph);
+        Graph g = new Graph(graph);
+        Map.Entry<int[], int[]> pairWithLargestComponent = g.componetsWithDegrees.entrySet().iterator().next();
 
-        geneticAlgorithm(NUMBER_OF_NODES, NODE_EXISTENCE_PROBABILITY, POPULATION_SIZE, NUMBER_OF_ITERATIONS, BREAK_FITNESS, PARENT_GRAPH, graph);
+        PARENT_GRAPH = new OneGenome(pairWithLargestComponent.getKey(), pairWithLargestComponent.getValue(),g.adjMatrix);
+
+        geneticAlgorithm(NUMBER_OF_NODES, NODE_EXISTENCE_PROBABILITY, POPULATION_SIZE, NUMBER_OF_ITERATIONS, BREAK_FITNESS, PARENT_GRAPH);
 
 
     }
