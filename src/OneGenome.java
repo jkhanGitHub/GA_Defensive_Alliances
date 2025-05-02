@@ -6,7 +6,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-//Represents whole Graph
+//Represents A connected Component of a graph
 public class OneGenome extends Genome {
 
     Map<Integer, Integer> orderedMapOfHighestDegrees = new java.util.HashMap<>();
@@ -26,9 +26,7 @@ public class OneGenome extends Genome {
         this.graph = graph;
 
         generate_genome();
-        calculateSize();
 
-        init_degrees();
         calculateDegreesUndirected(graph, this);
         orderedMapOfHighestDegrees();
         calculateWorstFitnessPossible();
@@ -41,16 +39,8 @@ public class OneGenome extends Genome {
     void generate_genome() {
         for (int i = 0; i < length; i++) {
             genome[i] = 1;
-            calculateSize();
         }
-    }
-
-    void remove_isolated_nodes(){
-        for (int i = 0; i < length; i++) {
-            if (degrees[i]==0){
-                genome[i]=0;
-            }
-        }
+        calculateSize();
     }
 
     //give a map with the highest degrees and where to find them
@@ -69,6 +59,13 @@ public class OneGenome extends Genome {
                 ));
     }
 
+    void remove_isolated_nodes(){
+        for (int i = 0; i < length; i++) {
+            if (degrees[i]==0){
+                size = size-1;
+            }
+        }
+    }
 
     public int[] getDegrees() {
         return degrees;

@@ -31,7 +31,7 @@ public class Selection {
         int n = population.population.length;
 
         // Calculate total fitness
-        double totalFitness = 0.0;
+        long totalFitness = 0;
         for (Genome genome : population.population) {
             totalFitness += genome.positiveFitness;
         }
@@ -62,7 +62,7 @@ public class Selection {
         int n = population.population.length;
 
         for (double pointer : pointers) {
-            double cumulativeFitness = 0.0;
+            long cumulativeFitness = 0;
             int i = 0;
             while (cumulativeFitness < pointer) {
                 cumulativeFitness += population.population[i].positiveFitness;
@@ -152,7 +152,7 @@ public class Selection {
         List<Genome> selectedParents = new ArrayList<>();
 
         // Calculate the total fitness of the population
-        double totalFitness = 0.0;
+        long totalFitness = 0;
         for (Genome genome : population.population) {
             totalFitness += genome.positiveFitness;
         }
@@ -230,7 +230,7 @@ public class Selection {
         }
 
         // Shuffle the selected parents to ensure that not only the best ones are selected sequentially
-        Collections.shuffle(selectedParents);
+        //Collections.shuffle(selectedParents);
 
         System.out.println("Selected parents: " + selectedParents.size());
         System.out.println("amount of new children: " + ((selectedParents.size()/2)*Genetic_Algorithm.NUMBER_OF_CHILDS_PER_PARENT));

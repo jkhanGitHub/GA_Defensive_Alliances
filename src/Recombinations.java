@@ -69,7 +69,6 @@ public class Recombinations {
         for (int k = 0; k < childrenAmount; k++) {
             int[] intersected_array = new int[genome1.length];
             for (int i = 0; i < genome1.length; i++) {
-                intersected_array[i] = 0;
                 if (genome1[i] == genome2[i]) {
                     //if (Math.random()<=INTERSECTION_PROBABILITY) //commentn out if its bad
                     intersected_array[i] = genome1[i];

@@ -35,6 +35,10 @@ public class FitnessFunctions {
 
     static int calculateFitnessMIN(Genome genome, Genome PARENT_GRAPH){
         int sum = 0;
+        int sizeFactor = genome.getSize();
+
+        if ((sizeFactor==0) || (sizeFactor==PARENT_GRAPH.getSize())) return 0;
+
         for(int i=0; i<genome.length;i++){
             if(genome.genome[i]==1){
                 int x = (2*genome.degrees[i])+1-PARENT_GRAPH.degrees[i];

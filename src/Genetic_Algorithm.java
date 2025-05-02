@@ -49,16 +49,20 @@ The following is an example of a generic evolutionary algorithm:
 
 
     //Path to the csv file
-    public static final String FILEPATH = "lasftm_asia/lastfm_asia_edges.csv";
+    public static final String FILEPATH = "twitch/twitch/PTBR/musae_PTBR_edges.csv";
     //Number of Nodes of graph
-    public static final int NUMBER_OF_NODES = 7624;
+    public static final int NUMBER_OF_NODES = 1912;
+
+    public static final int POPULATION_SIZE = (int) Math.pow(2, 8); //Powers of two are best suited for variable tournament selection, use  factors of two for 1v1
+
+
+
+
 
 
     public static final int AmountOfLearnings = 3;
 
     public static final float NODE_EXISTENCE_PROBABILITY = 0.5F;
-
-    public static final int POPULATION_SIZE = (int) Math.pow(2, 12); //Powers of two are best suited for variable tournament selection, use  factors of two for 1v1
 
     public static final int MAX_NUMBER_OF_NODES_REMOVED_BY_MUTATION = 5; //maximum number of nodes removed by mutation, smaller numbers will probably have higher impact
 
@@ -97,7 +101,7 @@ The following is an example of a generic evolutionary algorithm:
 
     static void addDefensiveAlliance(Population population) {
         int i = 0;
-        while (population.getPopulation()[i].getFitness() >= 0) {
+        while (i < population.getPopulation().length && population.getPopulation()[i].getFitness() >= 0) {
             if (!defensiveAlliances.contains(population.getPopulation()[i])) {
                 Genome g = Genome.removeIsolatedNodes(population.getPopulation()[i], PARENT_GRAPH);
                 defensiveAlliances.add(g);
@@ -110,7 +114,7 @@ The following is an example of a generic evolutionary algorithm:
     //when using onepointcrossover the parentgraph should not be included in the population!
     static void geneticAlgorithm(int NUMBER_OF_NODES, float NODE_EXISTENCE_PROBABILITY, int POPULATION_SIZE, int NUMBER_OF_ITERATIONS, int BREAK_FITNESS, OneGenome PARENT_GRAPH, int[][] graph) {
         //Generatess first Population and calculates the Fitness of each Genome
-        Population population = new Population(POPULATION_SIZE, NUMBER_OF_NODES, NODE_EXISTENCE_PROBABILITY, graph, PARENT_GRAPH);
+        Population population = new Population(POPULATION_SIZE, NUMBER_OF_NODES, NODE_EXISTENCE_PROBABILITY, PARENT_GRAPH);
         population.sort_Population_by_fitness_and_size_reversed();
 
 
@@ -122,7 +126,10 @@ The following is an example of a generic evolutionary algorithm:
             bestGenomes.put(counter, population.getPopulation()[0]);
 
             //Print some stats
-            population.printStats();
+            if (population.generation == 1){
+                Population.printStats(population);
+            }
+            else population.printStats();
 
             //change Selection method to whhatever
             //Literatur says that using many different selection methods is better
@@ -166,7 +173,6 @@ The following is an example of a generic evolutionary algorithm:
         }
 
         PARENT_GRAPH = new OneGenome(NUMBER_OF_NODES, graph);
-        PARENT_GRAPH.remove_isolated_nodes();
 
         geneticAlgorithm(NUMBER_OF_NODES, NODE_EXISTENCE_PROBABILITY, POPULATION_SIZE, NUMBER_OF_ITERATIONS, BREAK_FITNESS, PARENT_GRAPH, graph);
 

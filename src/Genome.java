@@ -23,6 +23,8 @@ public class Genome {
     int size;
     int length;
 
+    OneGenome parentGraph;
+
     public void setFitness(int fitness) {
         this.fitness = fitness;
         positiveFitness = OneGenome.worstFitnessPossible + fitness;
@@ -53,23 +55,20 @@ public class Genome {
     }
 
     //dont remove the graph parameter, it is needed for overloading
-    protected Genome(int numberOfNodes, float existenceRate, int[][] graph) {
+    protected Genome(int numberOfNodes, float existenceRate, OneGenome parentGraph) {
+        this.parentGraph = parentGraph;
         length = numberOfNodes;
         genome = new int[length];
         degrees = new int[length];
 
         generate_genome(existenceRate);
         calculateSize();
-
-        init_degrees();
     }
 
     protected Genome(int[] genetic_data) {
         length = genetic_data.length;
         genome = genetic_data;
         degrees = new int[length];
-
-        init_degrees();
     }
 
 
@@ -78,8 +77,6 @@ public class Genome {
         length = genetic_data.length;;
         genome = complement(genetic_data);
         degrees = new int[length];
-
-        init_degrees();
     }
 
     //needed for DeepCopy never heard about it before me neither :)))))))))))) FUCKING BULLSHIT NEEDED DAYS TO BE FOUND
@@ -134,12 +131,6 @@ public class Genome {
             complement[i] = Math.abs(genome[i] - 1);
         }
         return complement;
-    }
-
-    void init_degrees(){
-        for(int i=0; i<length; i++){
-            degrees[i]=0;
-        }
     }
 
     void generate_genome(float existenceRate){
@@ -258,6 +249,14 @@ public class Genome {
             }
         }
         return genome;
+    }
+
+    void remove_isolated_nodes(){
+        for (int i = 0; i < length; i++) {
+            if (degrees[i]==0){
+                genome[i]=0;
+            }
+        }
     }
 
     void printParameters() {
