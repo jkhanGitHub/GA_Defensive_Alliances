@@ -78,7 +78,7 @@ The following is an example of a generic evolutionary algorithm:
 
     //increase this number to increase the number of children per parent also resulting in bigger population in each generation, only makes sense when making population a list wont be doing that tho xD
     //higher number -< earlier local maximum because of incest
-    public static final int NUMBER_OF_CHILDS_PER_PARENT = 10;
+    public static final int NUMBER_OF_CHILDS_PER_PARENT = 5;
 
     public static final int MULTIPLIER = POPULATION_SIZE / NUMBER_OF_CONTESTANTS_PER_ROUND; //Multiplier for some selection methods which have an average parent output of 1
 
@@ -139,18 +139,17 @@ The following is an example of a generic evolutionary algorithm:
                     random.nextInt(Selection.IMPLEMENTED_SELECTION_METHODS));// since i dont want elitism to be selected or exponential_rankedselection
 
             //create new population
-            population = new Population(
-                    population,
-                    PARENT_GRAPH,
+            Population.population = Population.newGeneration(
                     MUTATION_RATE,
                     PROBABILITY,
                     NUMBER_OF_CHILDS_PER_PARENT,
                     newGenParents,
                     mutationIdentifiersSwapped.get("Mutation"),
-                    recombinationIdentifiers.get("ProababilityIntersectionThreaded"),
-                    UPPER_BOUND_OF_LEARNERS,
+                    recombinationIdentifiers.get("OnePointCrossoverThreaded"),
+                    3,
                     false
             );
+
             //remove isolated nodes from population, implemented inside remove_duplicates
             //remove duplicates from population and replace them with random generated genomes
             //this is important because otherwise the algorithm will get stuck in local optima way faster
@@ -158,7 +157,7 @@ The following is an example of a generic evolutionary algorithm:
             // remove_duplicates is really slow
             // right now it exchanges a duplicate with its complement
             if (++counter % 10 == 0) {
-                population = Population.remove_duplicates_Threaded(population, NUMBER_OF_NODES, NODE_EXISTENCE_PROBABILITY, graph, PARENT_GRAPH);
+               Population.population = Population.remove_duplicates_Threaded(NUMBER_OF_NODES, NODE_EXISTENCE_PROBABILITY,PARENT_GRAPH);
             }
         }
     }

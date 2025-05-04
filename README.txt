@@ -11,3 +11,7 @@ Selection enthält Selektionsmethoden, welche zurzeit auch Recombination und upd
 
 Der Genetische Algorithmus wird mit den Parametern der Genetic_Algorithm datei ausgeführt.
 Falls der Algorithmus zu viele Threads nutzt, nutze bitte die Methode Selection.tournamentSelectionElimination_ProababilityIntersection statt Selection.tournamentSelectionElimination_ProababilityIntersection_Threaded
+
+
+the learn Function in the Genome calss executes a Function called Learning.test_high_degree_vertices_mutation(genome, numberOfChanges, parentGraph); //insanely good method wirth even worse operational time(n^3)*(till numberOfChanges Reached)
+outcomment this one to reduce execution time by  alot

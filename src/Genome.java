@@ -23,14 +23,12 @@ public class Genome {
     int size;
     int length;
 
-    OneGenome parentGraph;
-
     public void setFitness(int fitness) {
         this.fitness = fitness;
         positiveFitness = OneGenome.worstFitnessPossible + fitness;
     }
 
-    int fitness;
+    int fitness =0;
 
     public int[] getGenome() {
         return genome;
@@ -55,8 +53,7 @@ public class Genome {
     }
 
     //dont remove the graph parameter, it is needed for overloading
-    protected Genome(int numberOfNodes, float existenceRate, OneGenome parentGraph) {
-        this.parentGraph = parentGraph;
+    protected Genome(int numberOfNodes, float existenceRate) {
         length = numberOfNodes;
         genome = new int[length];
         degrees = new int[length];
@@ -79,7 +76,6 @@ public class Genome {
         degrees = new int[length];
     }
 
-    //needed for DeepCopy never heard about it before me neither :)))))))))))) FUCKING BULLSHIT NEEDED DAYS TO BE FOUND
     protected Genome(Genome genome) {
         this.genome = Arrays.copyOf(genome.genome, genome.genome.length);
         this.degrees = Arrays.copyOf(genome.degrees, genome.degrees.length);
@@ -220,7 +216,7 @@ public class Genome {
         int size = genome.getSize();
 
         Genome temp;
-        temp = Learning.test_high_degree_vertices_mutation(genome, numberOfChanges, parentGraph);
+        temp = Learning.test_high_degree_vertices_mutation(genome, numberOfChanges, parentGraph); //insanely good method wirth even worse operational time(n^3)*(till numberOfChanges Reached)
         temp = Learning.remove_many_harmful_Nodes(genome, parentGraph, numberOfChanges);
 
 
