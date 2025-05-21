@@ -9,7 +9,10 @@ public class Learning {
         learnMethods.put(3, "Remove harmful nodes");
     }
 
-    protected static Genome test_high_degree_vertices_mutation(Genome mutatedGenome, int numberOfNodesToRemove, OneGenome parentGraph){
+    protected static List<Integer> add_test_high_degree_vertices_mutation(Genome mutatedGenome, int numberOfNodesToRemove, OneGenome parentGraph){
+
+        //initialize List in which all the changed alleles are stored
+        List<Integer> changedAllele = new ArrayList<>();
 
         Iterator<Map.Entry<Integer, Integer>> iterator = parentGraph.getOrderedMapOfHighestDegrees().entrySet().iterator();
         int oldFitness = mutatedGenome.getFitness();
@@ -22,7 +25,7 @@ public class Learning {
 
                 //Experimental from Here ---------------------------------------------------------------------------
                 //calculate the degrees of the mutated genome
-                Genome.calculateDegreesUndirected(Genetic_Algorithm.graph, mutatedGenome);
+                Genome.updateDegreesAndSize(parentGraph.graph, mutatedGenome, index);
                 mutatedGenome.setSize(mutatedGenome.size+1);
 
                 //calculate the fitness of the mutated genome
@@ -39,22 +42,22 @@ public class Learning {
                 mutatedGenome.setFitness(newFitness);
                 oldFitness = newFitness;
                 numberOfNodesToRemove--;
-
+                changedAllele.add(index);
             }
         }
 
-        return mutatedGenome;
+        return changedAllele;
     }
 
     //parent.getOrderedMapOfHighestDegrees().entrySet().iterator(); in iterator eintragen
-    protected static Genome remove_harmfulNode(Genome subgraph, OneGenome parent){
+    protected static int remove_harmfulNode(Genome subgraph, OneGenome parent){
         //remove the node with the highest degree
         Map<Integer, Integer> map = subgraph.orderedMapOfHarmfulNodes(parent);
         Iterator<Map.Entry<Integer, Integer>> iterator = map.entrySet().iterator();
 
         //check if the map is empty
         if (!iterator.hasNext()) {
-            return subgraph; // No harmful nodes to remove
+            return -1; // No harmful nodes to remove, return invalid integer
         }
         //get the first entry in the map
         Map.Entry<Integer, Integer> entry = iterator.next();
@@ -64,13 +67,15 @@ public class Learning {
         //remove the node from the subgraph
         subgraph.getGenome()[key] = 0;
 
-        return subgraph;
+        return key;
     }
 
     //remove the node with the highest degree
-    protected static Genome remove_many_harmful_Nodes(Genome subgraph, OneGenome parent, int numberOfNodesToRemove){
+    protected static List<Integer> remove_many_harmful_Nodes(Genome subgraph, OneGenome parent, int numberOfNodesToRemove){
+        //initialize List in which all the changed alleles are stored
+        List<Integer> changedAllele = new ArrayList<>();
+
         //remove the node with the highest degree
-        Genome mutatedGenome = subgraph;
 
         Map<Integer, Integer> map = subgraph.orderedMapOfHarmfulNodes(parent);
         Iterator<Map.Entry<Integer, Integer>> iterator = map.entrySet().iterator();
@@ -81,24 +86,29 @@ public class Learning {
             int value = entry.getValue(); //difference in degrees; degree change after Operation
 
             //remove the node from the subgraph
-            mutatedGenome.getGenome()[key] = 0;
+            subgraph.getGenome()[key] = 0;
+            changedAllele.add(key);
         }
 
-        /*//Experimental from Here ---------------------------------------------------------------------------
+        //Experimental from Here ---------------------------------------------------------------------------
         //calculate the degrees of the mutated genome
-        Genome.calculateDegrees(Genetic_Algorithm.graph, mutatedGenome);
+        for (int i = 0; i < changedAllele.size(); i++) {
+            int index = changedAllele.get(i);
+            Genome.updateDegreesAndSize(parent.graph, subgraph, index);
+        }
+
 
         //calculate the fitness of the mutated genome
-        mutatedGenome.setFitness(FitnessFunctions.calculateFitness(mutatedGenome, parent));
+        subgraph.setFitness(FitnessFunctions.calculateFitnessMIN(subgraph, parent));
 
-        //reject the mutated genome if it is worse than the original genome
-        if (mutatedGenome.getFitness()< subgraph.getFitness()){
-            return subgraph;
+        /*//reject the mutated genome if it is worse than the original genome
+        if (subgraph.getFitness()< subgraph.getFitness()){
+            return changedAllele;
         }
         //to Here ---------------------------------------------------------------------------*/
 
 
-        return mutatedGenome;
+        return changedAllele;
     }
 
 }

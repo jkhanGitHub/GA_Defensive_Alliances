@@ -18,7 +18,7 @@ public class Genome {
     Genome mother = null;
     Genome father = null;
 
-    List<Integer> changedAllele = null;
+    List<Integer> changedAllele = new ArrayList<>();
 
     int crossoverPoint = 0; //for OnePointcrossover
     Map<Integer, Integer> harmfulNodes;
@@ -86,6 +86,16 @@ public class Genome {
         this.mother = mother;
         this.father = father;
         this.crossoverPoint = crossoverPoint;
+        if (crossoverPoint>(length/2)){
+            degrees = Arrays.copyOf(mother.degrees, mother.degrees.length);
+            changedAllele = addChangedAllele(this,mother);
+            size = mother.size;
+        }
+        else {
+            degrees = Arrays.copyOf(father.degrees, father.degrees.length);
+            changedAllele = addChangedAllele(this,father);
+            size = father.size;
+        }
     }
 
     protected Genome(int[] genetic_data, Genome mother, Genome father,List<Integer> changedAllele) {
@@ -95,6 +105,10 @@ public class Genome {
         this.mother = mother;
         this.father = father;
         this.changedAllele = changedAllele;
+
+        //could be either mother or father doesnt matter when it comes to probability Intersection
+        degrees = Arrays.copyOf(mother.degrees, mother.degrees.length);
+        size = mother.size;
     }
 
 
@@ -120,6 +134,15 @@ public class Genome {
         size =  Arrays.stream(genome).sum();
     }
 
+    //implies that 1 in child genome means node added and 0 means node removed if in changed allele else no change
+    List<Integer> addChangedAllele(Genome child, Genome dominantParent){
+        for (int i = 0; i < child.length; i++) {
+            if (child.genome[i] != dominantParent.genome[i]){
+                child.changedAllele.add(i);
+            }
+        }
+        return child.changedAllele;
+    }
 
     //calculate the degrees of the genome in an undirected graph
     static Genome calculateDegreesUndirected(int[][] matrix, Genome g){
@@ -134,6 +157,23 @@ public class Genome {
             }
         }
         return g;
+    }
+
+    //each column is supposed to be an element of the changed Allele List
+    static Genome updateDegreesAndSize(int[][] matrix, Genome genome, int column){
+        for (int i = 0; i <column; i++) {
+            if (matrix[column][i]==1){
+                    if(genome.genome[column]==1){
+                        genome.degrees[i]++;
+                        genome.degrees[column]++;
+                    }
+                    else if(genome.genome[column]==0){
+                        genome.degrees[i]--;
+                        genome.degrees[column]--;
+                    }
+                }
+        }
+        return genome;
     }
 
     //calculate the degrees of the genome in a directed graph
@@ -243,16 +283,12 @@ public class Genome {
         //TODO implement learning
         int fitness = genome.getFitness();
         int size = genome.getSize();
+        List<Integer> changedAllele;
 
-        Genome temp;
-        temp = Learning.test_high_degree_vertices_mutation(genome, numberOfChanges, parentGraph); //insanely good method wirth even worse operational time(n^3)*(till numberOfChanges Reached)
-        temp = Learning.remove_many_harmful_Nodes(genome, parentGraph, numberOfChanges);
+        changedAllele = Learning.add_test_high_degree_vertices_mutation(genome, numberOfChanges, parentGraph); //insanely good method wirth even worse operational time(n^3)*(till numberOfChanges Reached)
+        changedAllele = Learning.remove_many_harmful_Nodes(genome, parentGraph, numberOfChanges);
 
-
-        temp = Genome.calculateDegreesUndirected(parentGraph.graph, temp);
-        temp.calculateSize();
-        temp.setFitness(FitnessFunctions.calculateFitnessMIN(temp, parentGraph));
-        return temp;
+        return genome;
     }
 
     static Genome learn_test(Genome genome, OneGenome parentGraph, int numberOfChanges) {
@@ -260,9 +296,8 @@ public class Genome {
         int fitness = genome.getFitness();
         int size = genome.getSize();
 
-        Genome temp;
-        temp = Learning.test_high_degree_vertices_mutation(genome, numberOfChanges, parentGraph); //insanely good method wirth even worse operational time(n^3)*(till numberOfChanges Reached)
-        return temp;
+        Learning.add_test_high_degree_vertices_mutation(genome, numberOfChanges, parentGraph); //insanely good method wirth even worse operational time(n^3)*(till numberOfChanges Reached)
+        return genome;
     }
 
     static Genome learn_remove(Genome genome, OneGenome parentGraph, int numberOfChanges) {
@@ -270,14 +305,8 @@ public class Genome {
         int fitness = genome.getFitness();
         int size = genome.getSize();
 
-        Genome temp;
-        temp = Learning.remove_many_harmful_Nodes(genome, parentGraph, numberOfChanges);
-
-
-        temp = Genome.calculateDegreesUndirected(parentGraph.graph, temp);
-        temp.calculateSize();
-        temp.setFitness(FitnessFunctions.calculateFitnessMIN(temp, parentGraph));
-        return temp;
+        Learning.remove_many_harmful_Nodes(genome, parentGraph, numberOfChanges);
+        return genome;
     }
 
     //i feel like java takes a shortcut here and compares object ids

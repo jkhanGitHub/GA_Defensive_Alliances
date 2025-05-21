@@ -10,7 +10,6 @@ public class Recombinations {
     static {
         recombinationIdentifiers.put(0,"OnePointCrossover");
         recombinationIdentifiers.put(1, "ProababilityIntersection");
-        recombinationIdentifiers.put(2,"OnePointCrossoverGenome");
     }
 
 
@@ -26,7 +25,7 @@ public class Recombinations {
 
         for (int k = 0; k < childrenAmount; k++) {
             // Select random crossover point (0 to length-1 inclusive)
-            int crossoverPoint = random.nextInt(a.length);
+            int crossoverPoint = random.nextInt(1,a.length);
 
             // Create offspring array
             int[] child = new int[a.length];

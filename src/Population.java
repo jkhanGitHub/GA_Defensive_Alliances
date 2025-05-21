@@ -320,30 +320,39 @@ public class Population {
                 threads[finalI] = new Thread(() -> {
                     Genome newChild = childrens[finalI];
 
-                    /*
-                    //easiest way to mutate the genome
-                    int[] mutation = Mutations.mutation(mutationrate,newChild);
-                    newChild.setGenome(mutation);
-                    */
+                    //mother always give first part of the Genome and father gives the second part
+                    //calculate degrees
+                    //iterate through changedAllele use update degrees on every int value in changedAllele
+                    for (int x = 0; x < newChild.changedAllele.size(); x++) {
+                        int index = newChild.changedAllele.get(x);
+                        Genome.updateDegreesAndSize(parentGraph.graph, newChild,index);
+                    }
+
 
                     //Mutation
+                    List<Integer> changedAllele;
                     switch (mutation_identifier) {
                         case 0:
-                            //Mutation
-                            int[] mutated = Mutations.mutation(mutationrate, newChild);
-                            newChild.setGenome(mutated);
+                            //Mutation //mutation works on reference so the Genome will already be changed
+                            changedAllele = Mutations.mutation(mutationrate, newChild);
+                            //update Degrees again after Mutation
+                            for (int x = 0; x < changedAllele.size(); x++) {
+                                int index = changedAllele.get(x);
+                                Genome.updateDegreesAndSize(parentGraph.graph, newChild,index);
+                            }
                             break;
                         case 1:
                             //Mutation of vertices with high degree
-                            int[] mutated_high_degree = Mutations.mutation_of_vertices_with_high_degree(mutationrate, newChild);
-                            newChild.setGenome(mutated_high_degree);
+                            changedAllele = Mutations.mutation_of_vertices_with_high_degree(mutationrate, newChild);
+                            //update Degrees again after Mutation
+                            for (int x = 0; x < changedAllele.size(); x++) {
+                                int index = changedAllele.get(x);
+                                Genome.updateDegreesAndSize(parentGraph.graph, newChild,index);
+                            }
                             break;
                         default:
                             throw new IllegalStateException("Unexpected value: " + mutation_identifier);
                     }
-
-                    //calculate degrees
-                    Genome.calculateDegreesUndirected(parentGraph.graph, newChild);
 
                     //calculate size
                     newChild.calculateSize();
@@ -386,24 +395,38 @@ public class Population {
             for (int k = 0; k < childrens.length; k++) {
                 Genome newChild = childrens[k];
 
+                //mother always give first part of the Genome and father gives the second part
+                //calculate degrees
+                //iterate through changedAllele use update degrees on every int value in changedAllele
+                for (int x = 0; x < newChild.changedAllele.size(); x++) {
+                    int index = newChild.changedAllele.get(x);
+                    Genome.updateDegreesAndSize(parentGraph.graph, newChild,index);
+                }
+
                 //Mutation
+                List<Integer> changedAllele;
                 switch (mutation_identifier) {
                     case 0:
-                        //Mutation
-                        int[] mutated = Mutations.mutation(mutationrate, newChild);
-                        newChild.setGenome(mutated);
+                        //Mutation //mutation works on reference so the Genome will already be changed
+                        changedAllele = Mutations.mutation(mutationrate, newChild);
+                        //update Degrees again after Mutation
+                        for (int x = 0; x < changedAllele.size(); x++) {
+                            int index = changedAllele.get(x);
+                            Genome.updateDegreesAndSize(parentGraph.graph, newChild,index);
+                        }
                         break;
                     case 1:
                         //Mutation of vertices with high degree
-                        int[] mutated_high_degree = Mutations.mutation_of_vertices_with_high_degree(mutationrate, newChild);
-                        newChild.setGenome(mutated_high_degree);
+                        changedAllele = Mutations.mutation_of_vertices_with_high_degree(mutationrate, newChild);
+                        //update Degrees again after Mutation
+                        for (int x = 0; x < changedAllele.size(); x++) {
+                            int index = changedAllele.get(x);
+                            Genome.updateDegreesAndSize(parentGraph.graph, newChild,index);
+                        }
                         break;
                     default:
                         throw new IllegalStateException("Unexpected value: " + mutation_identifier);
                 }
-
-                //calculate degrees
-                Genome.calculateDegreesUndirected(parentGraph.graph, newChild);
 
                 //calculate size
                 newChild.calculateSize();
@@ -473,10 +496,11 @@ public class Population {
 
                     //calculate degrees
                     Genome.calculateDegreesUndirected(parentGraph.graph, temp.population[i]);
-                    //calculate fitness
-                    temp.population[i].setFitness(FitnessFunctions.calculateFitnessMIN(temp.population[i], parentGraph));
                     //calculate size
                     temp.population[i].calculateSize();
+                    //calculate fitness
+                    temp.population[i].setFitness(FitnessFunctions.calculateFitnessMIN(temp.population[i], parentGraph));
+
 
                     found = true;
                     counter++;
