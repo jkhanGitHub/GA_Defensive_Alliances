@@ -1,6 +1,4 @@
-import java.util.Dictionary;
-import java.util.Hashtable;
-import java.util.Random;
+import java.util.*;
 
 public class Recombinations {
 
@@ -12,37 +10,13 @@ public class Recombinations {
     static {
         recombinationIdentifiers.put(0,"OnePointCrossover");
         recombinationIdentifiers.put(1, "ProababilityIntersection");
+        recombinationIdentifiers.put(2,"OnePointCrossoverGenome");
     }
 
 
-    public static int[][] onePointCrossover(int[] a, int[] b) {
-        // Validate input arrays
-        if (a.length != b.length) {
-            throw new IllegalArgumentException("Parent arrays must be of equal length");
-        }
+    public static Genome[] onePointCrossover(Genome a, Genome b, int childrenAmount) {
 
-        Random random = new Random();
-        // Select random crossover point (0 to length-1 inclusive)
-        int crossoverPoint = random.nextInt(a.length);
-
-        // Create offspring arrays
-        int[] ab = new int[a.length];
-        int[] ba = new int[a.length];
-
-        // Perform crossover for AB (a head + b tail)
-        System.arraycopy(a, 0, ab, 0, crossoverPoint + 1);
-        System.arraycopy(b, crossoverPoint + 1, ab, crossoverPoint + 1, a.length - (crossoverPoint + 1));
-
-        // Perform crossover for BA (b head + a tail)
-        System.arraycopy(b, 0, ba, 0, crossoverPoint + 1);
-        System.arraycopy(a, crossoverPoint + 1, ba, crossoverPoint + 1, a.length - (crossoverPoint + 1));
-
-        return new int[][]{ab, ba};
-    }
-
-    public static int[][] onePointCrossover(int[] a, int[] b, int childrenAmount) {
-
-        int[][] listOfChildren = new int[childrenAmount][1];
+        Genome[] listOfChildren = new Genome[childrenAmount];
         // Validate input arrays
         if (a.length != b.length) {
             throw new IllegalArgumentException("Parent arrays must be of equal length");
@@ -56,35 +30,37 @@ public class Recombinations {
 
             // Create offspring array
             int[] child = new int[a.length];
-            System.arraycopy(a, 0, child, 0, crossoverPoint + 1);
-            System.arraycopy(b, crossoverPoint + 1, child, crossoverPoint + 1, a.length - (crossoverPoint + 1));
-            listOfChildren[k] = child;
+            System.arraycopy(a.getGenome(), 0, child, 0, crossoverPoint + 1);
+            System.arraycopy(b.getGenome(), crossoverPoint + 1, child, crossoverPoint + 1, a.length - (crossoverPoint + 1));
+            listOfChildren[k] = new Genome(child,a,b,crossoverPoint);
         }
         return listOfChildren;
     }
 
-    static int[][] intersection_with_proabability(int[] genome1, int[] genome2, float proabibility,int childrenAmount) {
-        int[][] listOfChildren = new int[childrenAmount][1];
+    static Genome[] intersection_with_proabability(Genome genome1, Genome genome2, float proabibility,int childrenAmount) {
+        Genome[] listOfChildren = new Genome[childrenAmount];
+        List<Integer> changedAllele = new ArrayList<>();
         //intersection
         for (int k = 0; k < childrenAmount; k++) {
             int[] intersected_array = new int[genome1.length];
             for (int i = 0; i < genome1.length; i++) {
-                if (genome1[i] == genome2[i]) {
+                if (genome1.getGenome()[i] == genome2.getGenome()[i]) {
                     //if (Math.random()<=INTERSECTION_PROBABILITY) //commentn out if its bad
-                    intersected_array[i] = genome1[i];
+                    intersected_array[i] = genome1.getGenome()[i];
                 } else { //probability part of intersection
                     double x = Math.random();
                     if (x <= proabibility) {
                         intersected_array[i] = 1;
+                        changedAllele.add(i);
                     }
                 }
             }
-            listOfChildren[k] = intersected_array;
+            listOfChildren[k] = new Genome(intersected_array,genome1,genome2,changedAllele);
         }
         return listOfChildren;
     }
 
-    static int[][] recombination_with_identifier(int[] genome1, int[] genome2, float proabibility,int childrenAmount, int recombinationIdentifier){
+    static Genome[] recombination_with_identifier(Genome genome1, Genome genome2, float proabibility,int childrenAmount, int recombinationIdentifier){
         switch (recombinationIdentifier) {
             case 0:
                 return onePointCrossover(genome1, genome2, childrenAmount);

@@ -313,12 +313,12 @@ public class Population {
 
         //recombine Parents: Number of parents = POPULATION_SIZE/numberOfContestantsPerRound
         for (int i = 0, j = 1; j < nextGenParents.size(); i = i + 2, j = j + 2) {
-            int[][] geneticCodesOfChildrens = Recombinations.recombination_with_identifier(nextGenParents.get(i).getGenome(), nextGenParents.get(j).getGenome(), proabibility, newChildsPerParents, recombination_identifier);
+            Genome[] childrens = Recombinations.recombination_with_identifier(nextGenParents.get(i), nextGenParents.get(j), proabibility, newChildsPerParents, recombination_identifier);
             Thread[] threads = new Thread[newChildsPerParents];
-            for (int k = 0; k < geneticCodesOfChildrens.length; k++) {
+            for (int k = 0; k < childrens.length; k++) {
                 final int finalI = k;
                 threads[finalI] = new Thread(() -> {
-                    Genome newChild = new Genome(geneticCodesOfChildrens[finalI]);
+                    Genome newChild = childrens[finalI];
 
                     /*
                     //easiest way to mutate the genome
@@ -375,15 +375,16 @@ public class Population {
     }
 
 
+
     static List<Genome> generate_nextChildrenList(int numberOfNodes, OneGenome parentGraph, float mutationrate, float proabibility, int newChildsPerParents, List<Genome> nextGenParents, int mutation_identifier, int recombination_identifier) {
 
         List<Genome> nextGenChildren = Collections.synchronizedList(new LinkedList<>()); // Thread-safe list
 
         //recombine Parents: Number of parents = POPULATION_SIZE/numberOfContestantsPerRound
         for (int i = 0, j = 1; j < nextGenParents.size(); i = i + 2, j = j + 2) {
-            int[][] geneticCodesOfChildrens = Recombinations.recombination_with_identifier(nextGenParents.get(i).getGenome(), nextGenParents.get(j).getGenome(), proabibility, newChildsPerParents, recombination_identifier);
-            for (int k = 0; k < geneticCodesOfChildrens.length; k++) {
-                Genome newChild = new Genome(geneticCodesOfChildrens[k]);
+            Genome[] childrens = Recombinations.recombination_with_identifier(nextGenParents.get(i), nextGenParents.get(j), proabibility, newChildsPerParents, recombination_identifier);
+            for (int k = 0; k < childrens.length; k++) {
+                Genome newChild = childrens[k];
 
                 //Mutation
                 switch (mutation_identifier) {

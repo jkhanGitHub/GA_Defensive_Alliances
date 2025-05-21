@@ -23,6 +23,7 @@ public class Learning {
                 //Experimental from Here ---------------------------------------------------------------------------
                 //calculate the degrees of the mutated genome
                 Genome.calculateDegreesUndirected(Genetic_Algorithm.graph, mutatedGenome);
+                mutatedGenome.setSize(mutatedGenome.size+1);
 
                 //calculate the fitness of the mutated genome
                 int newFitness = FitnessFunctions.calculateFitnessMIN(mutatedGenome, parentGraph);
@@ -30,6 +31,7 @@ public class Learning {
                 //reject the mutated genome if it is worse than the original genome
                 if (oldFitness > newFitness){
                     mutatedGenome.getGenome()[index] = 0;
+                    mutatedGenome.setSize(mutatedGenome.size-1);
                     continue;
                 }
                 //to Here ---------------------------------------------------------------------------

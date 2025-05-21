@@ -38,11 +38,11 @@ The following is an example of a generic evolutionary algorithm:
         selectionMethods.put("Elitism", 5);
     }
 
-    static Dictionary<String, Integer> mutationIdentifiersSwapped = new Hashtable<>();
+    static Dictionary<String, Integer> mutationIdentifiers = new Hashtable<>();
 
     static {
-        mutationIdentifiersSwapped.put("Mutation", 0);
-        mutationIdentifiersSwapped.put("Mutation of vertices with high degree", 1);
+        mutationIdentifiers.put("Mutation", 0);
+        mutationIdentifiers.put("Mutation of vertices with high degree", 1);
     }
 
     public static List<Genome> defensiveAlliances = new ArrayList<>();
@@ -60,7 +60,7 @@ The following is an example of a generic evolutionary algorithm:
 
 
 
-    public static final int AmountOfLearnings = 3;
+    public static final int AmountOfLearnings = 1;
 
     public static final float NODE_EXISTENCE_PROBABILITY = 0.5F;
 
@@ -78,7 +78,7 @@ The following is an example of a generic evolutionary algorithm:
 
     //increase this number to increase the number of children per parent also resulting in bigger population in each generation, only makes sense when making population a list wont be doing that tho xD
     //higher number -< earlier local maximum because of incest
-    public static final int NUMBER_OF_CHILDS_PER_PARENT = 5;
+    public static final int NUMBER_OF_CHILDS_PER_PARENT = 2;
 
     public static final int MULTIPLIER = POPULATION_SIZE / NUMBER_OF_CONTESTANTS_PER_ROUND; //Multiplier for some selection methods which have an average parent output of 1
 
@@ -144,7 +144,7 @@ The following is an example of a generic evolutionary algorithm:
                     PROBABILITY,
                     NUMBER_OF_CHILDS_PER_PARENT,
                     newGenParents,
-                    mutationIdentifiersSwapped.get("Mutation"),
+                    mutationIdentifiers.get("Mutation"),
                     recombinationIdentifiers.get("OnePointCrossoverThreaded"),
                     3,
                     false
@@ -157,7 +157,7 @@ The following is an example of a generic evolutionary algorithm:
             // remove_duplicates is really slow
             // right now it exchanges a duplicate with its complement
             if (++counter % 10 == 0) {
-               Population.population = Population.remove_duplicates_Threaded(NUMBER_OF_NODES, NODE_EXISTENCE_PROBABILITY,PARENT_GRAPH);
+               population = Population.remove_duplicates(population,NUMBER_OF_NODES, NODE_EXISTENCE_PROBABILITY,PARENT_GRAPH);
             }
         }
     }

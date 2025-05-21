@@ -15,12 +15,23 @@ public class Genome {
     //if positiveFitness is OneGenome.worstFitnessPossible, then the  genome is a defensive alliance
     double positiveFitness; //the higher, the better
 
+    Genome mother = null;
+    Genome father = null;
+
+    List<Integer> changedAllele = null;
+
+    int crossoverPoint = 0; //for OnePointcrossover
     Map<Integer, Integer> harmfulNodes;
     int[] genome;
 
     int[] degrees;
 
     int size;
+
+    public void setSize(int size) {
+        this.size = size;
+    }
+
     int length;
 
     public void setFitness(int fitness) {
@@ -66,6 +77,24 @@ public class Genome {
         length = genetic_data.length;
         genome = genetic_data;
         degrees = new int[length];
+    }
+
+    protected Genome(int[] genetic_data, Genome mother, Genome father,int crossoverPoint) {
+        length = genetic_data.length;
+        genome = genetic_data;
+        degrees = new int[length];
+        this.mother = mother;
+        this.father = father;
+        this.crossoverPoint = crossoverPoint;
+    }
+
+    protected Genome(int[] genetic_data, Genome mother, Genome father,List<Integer> changedAllele) {
+        length = genetic_data.length;
+        genome = genetic_data;
+        degrees = new int[length];
+        this.mother = mother;
+        this.father = father;
+        this.changedAllele = changedAllele;
     }
 
 
@@ -217,6 +246,31 @@ public class Genome {
 
         Genome temp;
         temp = Learning.test_high_degree_vertices_mutation(genome, numberOfChanges, parentGraph); //insanely good method wirth even worse operational time(n^3)*(till numberOfChanges Reached)
+        temp = Learning.remove_many_harmful_Nodes(genome, parentGraph, numberOfChanges);
+
+
+        temp = Genome.calculateDegreesUndirected(parentGraph.graph, temp);
+        temp.calculateSize();
+        temp.setFitness(FitnessFunctions.calculateFitnessMIN(temp, parentGraph));
+        return temp;
+    }
+
+    static Genome learn_test(Genome genome, OneGenome parentGraph, int numberOfChanges) {
+        //TODO implement learning
+        int fitness = genome.getFitness();
+        int size = genome.getSize();
+
+        Genome temp;
+        temp = Learning.test_high_degree_vertices_mutation(genome, numberOfChanges, parentGraph); //insanely good method wirth even worse operational time(n^3)*(till numberOfChanges Reached)
+        return temp;
+    }
+
+    static Genome learn_remove(Genome genome, OneGenome parentGraph, int numberOfChanges) {
+        //TODO implement learning
+        int fitness = genome.getFitness();
+        int size = genome.getSize();
+
+        Genome temp;
         temp = Learning.remove_many_harmful_Nodes(genome, parentGraph, numberOfChanges);
 
 
