@@ -130,6 +130,40 @@ public class Population {
         mean_size = calculateMeanSize();
     }
 
+    //used in Genetic Algorithm
+    static Genome[] newGeneration(float mutationrate, float proabibility, int newChildsPerParents, List<Genome> nextGenParents, int mutation_identifier, int recombination_identifier, int amountOfLearners, boolean randomizeLearners) {
+        bestGenomeFromLastGeneration = getPopulation()[0];
+
+        List<Genome> childrenList;
+        childrenList = generate_nextChildrenListThreaded(mutationrate, proabibility, newChildsPerParents, nextGenParents, mutation_identifier, recombination_identifier);
+
+        List<Genome> newGeneration;
+        newGeneration = createListOfNextGeneration_Boltzmann(childrenList);
+
+
+        survivors = getSurvivors(newGeneration);
+        if (!survivors.isEmpty()){
+            survivors_learn(survivors, parentGraph, amountOfLearning,amountOfLearners,randomizeLearners);
+            newGeneration.sort(Comparator.comparingInt(Genome::getFitness).reversed());
+        }
+        newGeneration.sort(Comparator.comparingInt(Genome::getFitness).reversed());
+
+
+        //add Entries to the new population
+        for (int i = 0; i < newGeneration.size(); i++) {
+            population[i] = newGeneration.get(i);
+        }
+
+        generation++;
+        population_fitness = calculate_Population_fitness();
+        mean_fitness = calculate_Mean_fitness();
+        mean_size = calculateMeanSize();
+
+        return population;
+    }
+
+
+    //you can change generate_nextChildrenList to generate_nextChildrenListThreaded if you want to use the threaded version
     static Genome[] newGeneration(float mutationrate, float proabibility, int newChildsPerParents, List<Genome> nextGenParents, int mutation_identifier, int recombination_identifier, boolean activateLearning) {
         bestGenomeFromLastGeneration = getPopulation()[0];
         offspringsFromPreviousGeneration = generate_nextChildrenListThreaded(mutationrate, proabibility, newChildsPerParents, nextGenParents, mutation_identifier, recombination_identifier);
@@ -203,39 +237,6 @@ public class Population {
         mean_size = calculateMeanSize();
     }
 
-    static Genome[] newGeneration(float mutationrate, float proabibility, int newChildsPerParents, List<Genome> nextGenParents, int mutation_identifier, int recombination_identifier, int amountOfLearners, boolean randomizeLearners) {
-        bestGenomeFromLastGeneration = getPopulation()[0];
-        offspringsFromPreviousGeneration = generate_nextChildrenListThreaded(mutationrate, proabibility, newChildsPerParents, nextGenParents, mutation_identifier, recombination_identifier);
-
-        List<Genome> childrenList;
-        childrenList = generate_nextChildrenListThreaded(mutationrate, proabibility, newChildsPerParents, nextGenParents, mutation_identifier, recombination_identifier);
-
-        List<Genome> newGeneration;
-        newGeneration = createListOfNextGeneration_Boltzmann(childrenList);
-
-
-        survivors = getSurvivors(newGeneration);
-        if (!survivors.isEmpty()){
-            survivors_learn(survivors, parentGraph, amountOfLearning,amountOfLearners,randomizeLearners);
-            newGeneration.sort(Comparator.comparingInt(Genome::getFitness).reversed());
-        }
-        newGeneration.sort(Comparator.comparingInt(Genome::getFitness).reversed());
-
-
-        //add Entries to the new population
-        for (int i = 0; i < newGeneration.size(); i++) {
-            population[i] = newGeneration.get(i);
-        }
-
-        generation++;
-        population_fitness = calculate_Population_fitness();
-        mean_fitness = calculate_Mean_fitness();
-        mean_size = calculateMeanSize();
-
-        return population;
-    }
-
-
     static int calculateMeanSize() {
         int sum = 0;
         for (Genome genom :
@@ -306,14 +307,14 @@ public class Population {
         }
     }
 
-    static List<Genome> generate_nextChildrenListThreaded(float mutationrate, float proabibility, int newChildsPerParents, List<Genome> nextGenParents, int mutation_identifier, int recombination_identifier) {
+    static List<Genome> generate_nextChildrenListThreaded(float mutationrate, float probability, int newChildsPerParents, List<Genome> nextGenParents, int mutation_identifier, int recombination_identifier) {
 
         List<Genome> nextGenChildren = Collections.synchronizedList(new LinkedList<>()); // Thread-safe list
         System.out.println(Recombinations.recombinationIdentifiers.get(recombination_identifier));
 
         //recombine Parents: Number of parents = POPULATION_SIZE/numberOfContestantsPerRound
         for (int i = 0, j = 1; j < nextGenParents.size(); i = i + 2, j = j + 2) {
-            Genome[] childrens = Recombinations.recombination_with_identifier(nextGenParents.get(i), nextGenParents.get(j), proabibility, newChildsPerParents, recombination_identifier);
+            Genome[] childrens = Recombinations.recombination_with_identifier(nextGenParents.get(i), nextGenParents.get(j), probability, newChildsPerParents, recombination_identifier);
             Thread[] threads = new Thread[newChildsPerParents];
             for (int k = 0; k < childrens.length; k++) {
                 final int finalI = k;
@@ -323,39 +324,41 @@ public class Population {
                     //mother always give first part of the Genome and father gives the second part
                     //calculate degrees
                     //iterate through changedAllele use update degrees on every int value in changedAllele
-                    for (int x = 0; x < newChild.changedAllele.size(); x++) {
-                        int index = newChild.changedAllele.get(x);
-                        Genome.updateDegreesAndSize(parentGraph.graph, newChild,index);
+                    if (recombination_identifier == 0){
+                        newChild.updateChildDegrees_crossover(parentGraph.graph);
+                    }
+                    if (recombination_identifier == 1) {
+                        for (int x = 0; x < newChild.changedAllele.size(); x++) {
+                            int index = newChild.changedAllele.get(x);
+                            newChild.addNode(parentGraph.graph, index);
+                        }
                     }
 
+                    //test
+                    /*
+                    int degrees[] = new int[newChild.length];
+                    degrees = Arrays.copyOf(newChild.degrees,newChild.length);
+
+                    newChild.degrees = new int[newChild.length];
+                    Genome.calculateDegreesUndirected(parentGraph.graph, newChild);
+                    int t = 0;
+                    t++;
+
+                     */
 
                     //Mutation
-                    List<Integer> changedAllele;
                     switch (mutation_identifier) {
                         case 0:
                             //Mutation //mutation works on reference so the Genome will already be changed
-                            changedAllele = Mutations.mutation(mutationrate, newChild);
-                            //update Degrees again after Mutation
-                            for (int x = 0; x < changedAllele.size(); x++) {
-                                int index = changedAllele.get(x);
-                                Genome.updateDegreesAndSize(parentGraph.graph, newChild,index);
-                            }
+                            Mutations.mutation(mutationrate, newChild, parentGraph.graph);
                             break;
                         case 1:
                             //Mutation of vertices with high degree
-                            changedAllele = Mutations.mutation_of_vertices_with_high_degree(mutationrate, newChild);
-                            //update Degrees again after Mutation
-                            for (int x = 0; x < changedAllele.size(); x++) {
-                                int index = changedAllele.get(x);
-                                Genome.updateDegreesAndSize(parentGraph.graph, newChild,index);
-                            }
+                            Mutations.mutation_of_vertices_with_high_degree(mutationrate, newChild, parentGraph.graph);
                             break;
                         default:
                             throw new IllegalStateException("Unexpected value: " + mutation_identifier);
                     }
-
-                    //calculate size
-                    newChild.calculateSize();
 
                     //calculate fitness
                     int fitnessValue = FitnessFunctions.calculateFitnessMIN(newChild, parentGraph);
@@ -385,7 +388,7 @@ public class Population {
 
 
 
-    static List<Genome> generate_nextChildrenList(int numberOfNodes, OneGenome parentGraph, float mutationrate, float proabibility, int newChildsPerParents, List<Genome> nextGenParents, int mutation_identifier, int recombination_identifier) {
+    static List<Genome> generate_nextChildrenList(float mutationrate, float proabibility, int newChildsPerParents, List<Genome> nextGenParents, int mutation_identifier, int recombination_identifier) {
 
         List<Genome> nextGenChildren = Collections.synchronizedList(new LinkedList<>()); // Thread-safe list
 
@@ -398,38 +401,29 @@ public class Population {
                 //mother always give first part of the Genome and father gives the second part
                 //calculate degrees
                 //iterate through changedAllele use update degrees on every int value in changedAllele
-                for (int x = 0; x < newChild.changedAllele.size(); x++) {
-                    int index = newChild.changedAllele.get(x);
-                    Genome.updateDegreesAndSize(parentGraph.graph, newChild,index);
+                if (recombination_identifier == 0){
+                    newChild.updateChildDegrees_crossover(parentGraph.graph);
+                }
+                if (recombination_identifier == 1) {
+                    for (int x = 0; x < newChild.changedAllele.size(); x++) {
+                        int index = newChild.changedAllele.get(x);
+                        newChild.addNode(parentGraph.graph, index);
+                    }
                 }
 
                 //Mutation
-                List<Integer> changedAllele;
                 switch (mutation_identifier) {
                     case 0:
                         //Mutation //mutation works on reference so the Genome will already be changed
-                        changedAllele = Mutations.mutation(mutationrate, newChild);
-                        //update Degrees again after Mutation
-                        for (int x = 0; x < changedAllele.size(); x++) {
-                            int index = changedAllele.get(x);
-                            Genome.updateDegreesAndSize(parentGraph.graph, newChild,index);
-                        }
+                        Mutations.mutation(mutationrate, newChild,parentGraph.graph);
                         break;
                     case 1:
                         //Mutation of vertices with high degree
-                        changedAllele = Mutations.mutation_of_vertices_with_high_degree(mutationrate, newChild);
-                        //update Degrees again after Mutation
-                        for (int x = 0; x < changedAllele.size(); x++) {
-                            int index = changedAllele.get(x);
-                            Genome.updateDegreesAndSize(parentGraph.graph, newChild,index);
-                        }
+                        Mutations.mutation_of_vertices_with_high_degree(mutationrate, newChild, parentGraph.graph);
                         break;
                     default:
                         throw new IllegalStateException("Unexpected value: " + mutation_identifier);
                 }
-
-                //calculate size
-                newChild.calculateSize();
 
                 //calculate fitness
                 newChild.setFitness(FitnessFunctions.calculateFitnessMIN(newChild, parentGraph));

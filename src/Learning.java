@@ -21,20 +21,17 @@ public class Learning {
             Map.Entry<Integer, Integer> entry = iterator.next();
             int index = entry.getKey();
             if(mutatedGenome.getGenome()[index] == 0){
-                mutatedGenome.getGenome()[index] = 1;
 
                 //Experimental from Here ---------------------------------------------------------------------------
                 //calculate the degrees of the mutated genome
-                Genome.updateDegreesAndSize(parentGraph.graph, mutatedGenome, index);
-                mutatedGenome.setSize(mutatedGenome.size+1);
+                mutatedGenome.addNode(parentGraph.graph, index);
 
                 //calculate the fitness of the mutated genome
                 int newFitness = FitnessFunctions.calculateFitnessMIN(mutatedGenome, parentGraph);
 
                 //reject the mutated genome if it is worse than the original genome
                 if (oldFitness > newFitness){
-                    mutatedGenome.getGenome()[index] = 0;
-                    mutatedGenome.setSize(mutatedGenome.size-1);
+                    mutatedGenome.removeNode(parentGraph.graph, index);
                     continue;
                 }
                 //to Here ---------------------------------------------------------------------------
@@ -86,16 +83,11 @@ public class Learning {
             int value = entry.getValue(); //difference in degrees; degree change after Operation
 
             //remove the node from the subgraph
-            subgraph.getGenome()[key] = 0;
-            changedAllele.add(key);
+            subgraph.removeNode(parent.graph, key);
         }
 
         //Experimental from Here ---------------------------------------------------------------------------
         //calculate the degrees of the mutated genome
-        for (int i = 0; i < changedAllele.size(); i++) {
-            int index = changedAllele.get(i);
-            Genome.updateDegreesAndSize(parent.graph, subgraph, index);
-        }
 
 
         //calculate the fitness of the mutated genome
