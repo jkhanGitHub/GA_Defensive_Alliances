@@ -123,8 +123,9 @@ public class Genome {
     }
 
 
-    void calculateSize() {
+    int calculateSize() {
         size = Arrays.stream(genome).sum();
+        return size;
     }
 
 
@@ -514,6 +515,27 @@ public class Genome {
         }
     }
 
+    boolean testDegreeCalculation(Genome g){
+        //test if degree calculation is correct
+
+        Genome test2 = new Genome(g);
+        System.arraycopy(g.degrees,0,test2.degrees,0,g.length);
+        test2.genome = new int[test2.length];
+        Genome.calculateDegrees_withNeighbourhood(test2);
+        //test if arrays test2.degrees and population[0].degrees are the same
+        boolean same = true;
+        for (int i = 0; i < test2.length; i++) {
+            if (g.degrees[i] != test2.degrees[i]) {
+                same = false;
+                break;
+            }
+        }
+        System.out.println("Test if degrees are the same: " + same);
+
+        return same;
+    }
+
+
     void printParameters() {
         System.out.println("Genome: " + Arrays.toString(genome));
         System.out.println("Degrees: " + Arrays.toString(degrees));
@@ -521,6 +543,7 @@ public class Genome {
         System.out.println("Fitness: " + fitness);
         System.out.println("Positive Fitness: " + positiveFitness);
     }
+
 
 
     public static void main(String[] args) {
@@ -535,6 +558,8 @@ public class Genome {
         // Parent genomes
         int[] motherGenome = {1, 1, 0, 0}; // Nodes 0 and 1
         int[] fatherGenome = {0, 0, 1, 1}; // Nodes 2 and 3
+
+        OneGenome parentGraph = new OneGenome(matrix.length, matrix); // Create a parent graph with 4 nodes
 
         Genome mother = new Genome(motherGenome);
         Genome father = new Genome(fatherGenome);
@@ -571,7 +596,7 @@ public class Genome {
         int[] childGenome = new int[4];
 
         Genome child = Recombinations.onePointCrossoverSingle(mother,father);
-        child.updateChildDegrees_crossover(matrix);
+        child.updateChildDegrees_crossover();
         crossoverPoint = child.crossoverPoint;
         System.out.println(crossoverPoint);
         //Genome child = new Genome(childGenome, mother, father, crossoverPoint);
@@ -582,7 +607,7 @@ public class Genome {
 
 
         Genome child2 = Recombinations.onePointCrossoverSingle(mother,child);
-        child2.updateChildDegrees_crossover(matrix);
+        child2.updateChildDegrees_crossover();
         int[] test2 = new int[child2.length];
         System.arraycopy(child2.degrees,0,test2,0,child2.length);
 
@@ -594,6 +619,10 @@ public class Genome {
         System.out.println(Arrays.toString(test2));
         System.out.println(Arrays.toString(child2.degrees));
         System.out.println("Test Result: " + Arrays.equals(child2.degrees, test2));
+        //check size of child and test
+        System.out.println("Child Size: " + child2.size);
+        System.out.println("Test Size: " + Arrays.stream(test2).sum());
+
     }
 
 }

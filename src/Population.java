@@ -326,7 +326,7 @@ public class Population {
                     //calculate degrees
                     //iterate through changedAllele use update degrees on every int value in changedAllele
                     if (recombination_identifier == 0){
-                        newChild.updateChildDegrees();
+                        newChild.updateChildDegrees_crossover();
                     }
                     if (recombination_identifier == 1) {
                         newChild.updateChildDegrees_intersectionWithProbability();
@@ -400,7 +400,7 @@ public class Population {
                 //calculate degrees
                 //iterate through changedAllele use update degrees on every int value in changedAllele
                 if (recombination_identifier == 0){
-                    newChild.updateChildDegrees();
+                    newChild.updateChildDegrees_crossover();
                 }
                 if (recombination_identifier == 1) {
                     for (int x = 0; x < newChild.changedAllele.size(); x++) {
