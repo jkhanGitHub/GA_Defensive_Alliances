@@ -1,10 +1,8 @@
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 //Represents A connected Component of a graph
@@ -15,6 +13,9 @@ public class OneGenome extends Genome {
     Map<Integer, Integer> getOrderedMapOfHighestDegrees() {
         return orderedMapOfHighestDegrees;
     }
+
+    //list containing the ids of the neighbours of the nodes in the component
+    static Map<Integer,List<Integer>> neighbours = new ConcurrentHashMap<>();
 
     //holds the ids of the nodes in the component
     int[] component;
@@ -30,7 +31,11 @@ public class OneGenome extends Genome {
 
         generate_genome();
 
-        calculateDegreesUndirected(graph, this);
+        initializeNeighbours();
+        calculateDegreesUndirected_Neighborhood(graph, this);
+        finalizeNeighbours();
+
+
         orderedMapOfHighestDegrees();
         calculateWorstFitnessPossible();
     }
@@ -46,9 +51,52 @@ public class OneGenome extends Genome {
         generate_genome();
 
         generate_MiniGraph(adjzMatrix,component);
+
+        initializeNeighbours();
+
+        calculateDegreesUndirected_Neighborhood(graph, this);
+
         orderedMapOfHighestDegrees();
         calculateWorstFitnessPossible();
     }
+
+    static Genome calculateDegreesUndirected_Neighborhood(int[][] matrix, Genome g) {
+        for (int i = 0; i < g.length; i++) {
+            if (g.genome[i] == 1) {
+                for (int j = i + 1; j < g.length; j++) {
+                    if (g.genome[j] == 1 && matrix[i][j] == 1) {
+                        g.degrees[i]++;
+                        g.degrees[j]++;
+
+                        //add the neighbour to the list of neighbours
+                        neighbours.get(i).add(j);
+                        neighbours.get(j).add(i);
+                    }
+                }
+            }
+        }
+        return g;
+    }
+
+    void initializeNeighbours() {
+        for (int i = 0; i < length; i++) {
+            neighbours.put(i, new LinkedList<>());
+        }
+    }
+
+    //after every Neighbourhood is calculated make all the linked Lists to array Lists
+    void finalizeNeighbours() {
+        for (Map.Entry<Integer, List<Integer>> entry : neighbours.entrySet()) {
+            entry.setValue(new ArrayList<>(entry.getValue()));
+        }
+        /*
+        //print the neighbours for debugging
+        for (Map.Entry<Integer, List<Integer>> entry : neighbours.entrySet()) {
+            System.out.println("Node " + entry.getKey() + " Neighbours: " + entry.getValue());
+        }
+         */
+    }
+
 
     void calculateWorstFitnessPossible(){
         worstFitnessPossible = Arrays.stream(degrees).sum();

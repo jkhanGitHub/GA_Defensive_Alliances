@@ -143,6 +143,61 @@ public class Genome {
         return g;
     }
 
+    static Genome calculateDegrees_withNeighbourhood(Genome g) {
+        //iterates over neighbours and calculates the degrees of the genome in an undirected graph
+        for (int i = 0; i < g.length; i++) {
+            if (g.genome[i] == 1){
+                for (int j = 0; j < OneGenome.neighbours.get(i).size(); j++) {
+                    //get the neighbour index from the neighbours list
+                    int neighbourIndex = OneGenome.neighbours.get(i).get(j);
+                    //check if neighbour is also element of the genome if so add to degree
+                    if (g.genome[neighbourIndex] == 1) {
+                        g.degrees[i]++;
+                    }
+                }
+            }
+        }
+        return g;
+    }
+
+
+    void updateChildDegrees_crossover(){
+        Genome child = this;
+
+        // Determine dominant parent and segment bounds
+        Genome dominantParent = (crossoverPoint > (length / 2)) ? mother : father;
+        Genome nonDominantParent = (dominantParent == mother) ? father : mother;
+
+
+        // Copy dominant parent's degrees into child (O(n))
+        System.arraycopy(dominantParent.degrees, 0, child.degrees, 0, child.length);
+        System.arraycopy(dominantParent.genome, 0, child.genome, 0, child.length);
+        child.size = dominantParent.size;
+
+
+
+        // Define non-dominant segment bounds
+        int start = (dominantParent == mother) ? crossoverPoint + 1 : 0;
+        int end = (dominantParent == mother) ? child.genome.length : crossoverPoint + 1;
+
+        // First pass: Add nodes and update degrees for dominant segment neighbors
+
+        for (int i = start; i < end; i++) {
+            if (nonDominantParent.genome[i] != dominantParent.genome[i]) {
+                bitFlip(i);
+            }
+        }
+    }
+
+    void updateChildDegrees_intersectionWithProbability(){
+        Genome child = this;
+
+        //bitflip each allele in genome that is in changedallele
+        for (int i = 0; i < changedAllele.size(); i++) {
+            int index = changedAllele.get(i);
+            bitFlip(index);
+        }
+    }
 
     void updateChildDegrees_crossover(int[][] matrix){
         Genome child = this;
@@ -152,18 +207,10 @@ public class Genome {
         Genome nonDominantParent = (dominantParent == mother) ? father : mother;
 
 
-        /*
-        //test purpose
-        System.arraycopy(mother.getGenome(), 0, child.genome, 0, crossoverPoint + 1);
-        System.arraycopy(father.getGenome(), crossoverPoint + 1, child.genome, crossoverPoint + 1, mother.length - (crossoverPoint + 1));
-        child.calculateSize();
-        */
-
         // Copy dominant parent's degrees into child (O(n))
         System.arraycopy(dominantParent.degrees, 0, child.degrees, 0, child.length);
         System.arraycopy(dominantParent.genome, 0, child.genome, 0, child.length);
         child.size = dominantParent.size;
-
 
 
 
@@ -178,9 +225,30 @@ public class Genome {
                 bitFlip(matrix,i);
             }
         }
+    }
 
-        //test purpose
-        //child.degrees = new int[child.length];calculateDegreesUndirected(matrix,child);
+    void updateChildDegrees_intersectionWithProbability(int[][] matrix){
+        Genome child = this;
+
+        //bitflip each allele in genome that is in changedallele
+        for (int i = 0; i < changedAllele.size(); i++) {
+            int index = changedAllele.get(i);
+            bitFlip(matrix,index);
+        }
+    }
+
+    void updateChildDegrees(){
+        Genome child = this;
+
+        //check if its a onepoint crossover
+        if(crossoverPoint != 0){
+            System.arraycopy(mother.getGenome(), 0, child.genome, 0, crossoverPoint + 1);
+            System.arraycopy(father.getGenome(), crossoverPoint + 1, child.genome, crossoverPoint + 1, mother.length - (crossoverPoint + 1));
+            calculateSize();
+        }
+
+        child.degrees = new int[child.length];
+        calculateDegrees_withNeighbourhood(child);
     }
 
 
@@ -198,7 +266,22 @@ public class Genome {
         degrees[index] = 0;
     }
 
+    void removeNode(int index){
+        genome[index]=0;
+        size--;
+
+        //get the neighbours of the node and decrement their degrees if they are also in the genome
+        for (int i = 0; i < OneGenome.neighbours.get(index).size(); i++) {
+            int neighbourIndex = OneGenome.neighbours.get(index).get(i);
+            if (genome[neighbourIndex] == 1) {
+                degrees[neighbourIndex]--;
+            }
+        }
+        degrees[index] = 0;
+    }
+
     //expects nxn matrix; carefull check if node exists;
+    //functions without int[][] matrix parameter use the neighbourhood instead for calculation which is always faster
     void addNode(int[][] matrix,int index){
 
         int n = length;
@@ -214,6 +297,21 @@ public class Genome {
         }
     }
 
+    void addNode(int index){
+        genome[index]=1;
+        degrees[index] = 0;
+        size++;
+
+        //get the neighbours of the node and add them to the degrees if they are also in the genome
+        for (int i = 0; i < OneGenome.neighbours.get(index).size(); i++) {
+            int neighbourIndex = OneGenome.neighbours.get(index).get(i);
+            if (genome[neighbourIndex] == 1) {
+                degrees[neighbourIndex]++;
+                degrees[index]++;
+            }
+        }
+    }
+
     void bitFlip(int[][] matrix,int index){
         if (genome[index]==1){
             removeNode(matrix,index);
@@ -221,12 +319,22 @@ public class Genome {
         else addNode(matrix,index);
     }
 
-    void bitUpdate(int[][] matrix,int index){
-        if (genome[index]==0){
-            removeNode(matrix,index);
+    void bitFlip(int index){
+        if (genome[index]==1){
+            removeNode(index);
         }
-        else addNode(matrix,index);
+        else addNode(index);
     }
+
+    void bitUpdate(int index){
+        if (genome[index]==0){
+            removeNode(index);
+        }
+        else addNode(index);
+    }
+
+    // end of bit operations
+
 
 
     //calculate the degrees of the genome in a directed graph

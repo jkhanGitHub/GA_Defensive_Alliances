@@ -24,14 +24,14 @@ public class Learning {
 
                 //Experimental from Here ---------------------------------------------------------------------------
                 //calculate the degrees of the mutated genome
-                mutatedGenome.addNode(parentGraph.graph, index);
+                mutatedGenome.addNode(index);
 
                 //calculate the fitness of the mutated genome
                 int newFitness = FitnessFunctions.calculateFitnessMIN(mutatedGenome, parentGraph);
 
                 //reject the mutated genome if it is worse than the original genome
                 if (oldFitness > newFitness){
-                    mutatedGenome.removeNode(parentGraph.graph, index);
+                    mutatedGenome.removeNode(index);
                     continue;
                 }
                 //to Here ---------------------------------------------------------------------------
@@ -83,7 +83,7 @@ public class Learning {
             int value = entry.getValue(); //difference in degrees; degree change after Operation
 
             //remove the node from the subgraph
-            subgraph.removeNode(parent.graph, key);
+            subgraph.removeNode(key);
         }
 
         //Experimental from Here ---------------------------------------------------------------------------

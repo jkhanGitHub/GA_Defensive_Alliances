@@ -13,6 +13,15 @@ public class Mutations {
         }
     }
 
+    protected static void mutation(float mutationrate, Genome mutatedGenome){
+        for (int i=0; i<mutatedGenome.length; i++) {
+            if (Math.random()<=mutationrate) {
+                mutatedGenome.genome[i]=Math.abs(mutatedGenome.genome[i]-1);
+                mutatedGenome.bitFlip(i);
+            }
+        }
+    }
+
 
     //degrees of genome must have been calculated before
     protected static void mutation_of_vertices_with_high_degree(float mutationrate, Genome mutatedGenome, int[][] matrix){
@@ -28,6 +37,23 @@ public class Mutations {
             if (randomValue<=(mutationrate*multiplier)) {
                 mutatedGenome.genome[i]=Math.abs(mutatedGenome.genome[i]-1);
                 mutatedGenome.bitFlip(matrix,i);
+            }
+        }
+    }
+
+    protected static void mutation_of_vertices_with_high_degree(float mutationrate, Genome mutatedGenome){
+        int multiplier = 0;
+        for (int i=0; i<mutatedGenome.length; i++) {
+            if(mutatedGenome.getDegrees()[i]==0){
+                multiplier = 1;
+            }
+            else {
+                multiplier = mutatedGenome.getDegrees()[i];
+            }
+            double randomValue = Math.random();
+            if (randomValue<=(mutationrate*multiplier)) {
+                mutatedGenome.genome[i]=Math.abs(mutatedGenome.genome[i]-1);
+                mutatedGenome.bitFlip(i);
             }
         }
     }

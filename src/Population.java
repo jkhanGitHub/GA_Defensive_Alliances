@@ -5,6 +5,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.*;
+import java.util.stream.IntStream;
 
 //many methods might have unused parameters, these are just there so that the methods can be interchanged in the genetic algorithm
 public class Population {
@@ -79,7 +80,7 @@ public class Population {
             threads[finalI] = new Thread(() -> {
                 population[finalI] = new Genome(numberOFNodes, existenceRate);
                 //calculate degrees
-                Genome.calculateDegreesUndirected(parentGraph.graph, population[finalI]);
+                Genome.calculateDegrees_withNeighbourhood(population[finalI]);
                 //calculate fitness
                 population[finalI].setFitness(FitnessFunctions.calculateFitnessMIN(population[finalI], parentGraph));
             });
@@ -325,13 +326,10 @@ public class Population {
                     //calculate degrees
                     //iterate through changedAllele use update degrees on every int value in changedAllele
                     if (recombination_identifier == 0){
-                        newChild.updateChildDegrees_crossover(parentGraph.graph);
+                        newChild.updateChildDegrees();
                     }
                     if (recombination_identifier == 1) {
-                        for (int x = 0; x < newChild.changedAllele.size(); x++) {
-                            int index = newChild.changedAllele.get(x);
-                            newChild.addNode(parentGraph.graph, index);
-                        }
+                        newChild.updateChildDegrees_intersectionWithProbability();
                     }
 
                     //test
@@ -402,7 +400,7 @@ public class Population {
                 //calculate degrees
                 //iterate through changedAllele use update degrees on every int value in changedAllele
                 if (recombination_identifier == 0){
-                    newChild.updateChildDegrees_crossover(parentGraph.graph);
+                    newChild.updateChildDegrees();
                 }
                 if (recombination_identifier == 1) {
                     for (int x = 0; x < newChild.changedAllele.size(); x++) {
@@ -477,7 +475,9 @@ public class Population {
     static Population remove_duplicates(Population population, int numberOFNodes, float existenceRate, OneGenome parentGraph) {
 
         //remove isolated nodes
-        Population temp = remove_isolated_nodes(population, parentGraph);
+        //Population temp = remove_isolated_nodes(population, parentGraph);
+
+        Population temp = population;
 
         boolean found = false;
         int counter = 0;
@@ -489,7 +489,7 @@ public class Population {
                     temp.population[i] = new Genome(numberOFNodes, existenceRate);
 
                     //calculate degrees
-                    Genome.calculateDegreesUndirected(parentGraph.graph, temp.population[i]);
+                    Genome.calculateDegrees_withNeighbourhood(temp.population[i]);
                     //calculate size
                     temp.population[i].calculateSize();
                     //calculate fitness
@@ -503,34 +503,37 @@ public class Population {
             }
         }
         if (found) {
-            System.out.println("Duplicates found and removed: " + counter);
+            System.out.println("\u001B[35m" + "Duplicates found and removed: " + counter + "\u001B[0m");
         } else {
             System.out.println("No duplicates found");
         }
         return temp;
     }
 
-    static Genome[] remove_duplicates_Threaded(int numberOFNodes, float existenceRate, OneGenome parentGraph) {
+    /*
+    static Population remove_duplicates_Threaded(Population population, int numberOFNodes, float existenceRate, OneGenome parentGraph) {
+
+        Population temp = population;
 
         // Thread-safe map to store updated genomes
         ConcurrentHashMap<Integer, Genome> updatedPopulation = new ConcurrentHashMap<>();
-        ExecutorService executor = Executors.newFixedThreadPool(population.length);
+        ExecutorService executor = Executors.newFixedThreadPool(temp.population.length);
 
 
         AtomicBoolean found = new AtomicBoolean(false);
         AtomicInteger counter = new AtomicInteger();
-        for (int i = 0; i < population.length; i++) {
+        for (int i = 0; i < temp.population.length; i++) {
             final int index = i;
             executor.submit(() -> {
                 //remove isolated nodes
-                population[index] = Genome.removeIsolatedNodes(population[index], parentGraph);
+                temp.population[index] = Genome.removeIsolatedNodes(temp.population[index], parentGraph);
 
                 //loop wont run if i = population.population.length
-                for (int j = index + 1; j < population.length; j++) {
-                    int difference = Genome.difference(population[index], population[j]);
+                for (int j = index + 1; j < temp.population.length; j++) {
+                    int difference = Genome.difference(temp.population[index], temp.population[j]);
                     if (difference == 0) {
                         //create complementary genome
-                        Genome newGenome = new Genome(population[index].getGenome(), true);
+                        Genome newGenome = new Genome(temp.population[index].getGenome(), true);
 
                         //calculate size
                         newGenome.calculateSize();
@@ -557,12 +560,51 @@ public class Population {
 
         for (Map.Entry<Integer, Genome> entry : updatedPopulation.entrySet()) {
             int index = entry.getKey();
-            population[index] = entry.getValue();
+            temp.population[index] = entry.getValue();
         }
         if (found.get()) {
             System.out.println("\u001B[35m" + "Duplicates found and removed: " + counter.get() + "\u001B[0m");
         }
         return population;
+    }*/
+
+    static Population remove_duplicates_Threaded(Population population, int numberOFNodes, float existenceRate, OneGenome parentGraph) {
+        Population temp = population;
+        boolean[] toReplace = new boolean[temp.population.length];
+        final AtomicInteger counter = new AtomicInteger(0);
+
+        // Parallel duplicate detection: Identify genomes to replace
+        IntStream.range(0, temp.population.length - 1).parallel().forEach(i -> {
+            int finalI = i;
+            boolean isDuplicate = IntStream.range(finalI + 1, temp.population.length)
+                    .parallel()
+                    .anyMatch(j -> Genome.difference(temp.population[finalI], temp.population[j]) == 0);
+
+            if (isDuplicate) {
+                toReplace[finalI] = true;
+                counter.incrementAndGet();
+            }
+        });
+
+        // Parallel replacement: Generate new genomes for marked positions
+        IntStream.range(0, temp.population.length).parallel().forEach(i -> {
+            if (toReplace[i]) {
+                Genome newGenome = new Genome(numberOFNodes, existenceRate);
+                Genome.calculateDegrees_withNeighbourhood(newGenome);
+                newGenome.calculateSize();
+                newGenome.setFitness(FitnessFunctions.calculateFitnessMIN(newGenome, parentGraph));
+                temp.population[i] = newGenome;
+            }
+        });
+
+        // Print results
+        int dupCount = counter.get();
+        if (dupCount > 0) {
+            System.out.println("\u001B[35m" + "Duplicates found and removed: " + counter.get() + "\u001B[0m");
+        } else {
+            System.out.println("No duplicates found");
+        }
+        return temp;
     }
 
     static void printStats(Population population) {
