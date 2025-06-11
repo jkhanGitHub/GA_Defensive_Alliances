@@ -403,10 +403,7 @@ public class Population {
                     newChild.updateChildDegrees_crossover();
                 }
                 if (recombination_identifier == 1) {
-                    for (int x = 0; x < newChild.changedAllele.size(); x++) {
-                        int index = newChild.changedAllele.get(x);
-                        newChild.addNode(parentGraph.graph, index);
-                    }
+                    newChild.updateChildDegrees_intersectionWithProbability();
                 }
 
                 //Mutation
