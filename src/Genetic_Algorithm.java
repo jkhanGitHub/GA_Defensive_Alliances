@@ -84,7 +84,7 @@ The following is an example of a generic evolutionary algorithm:
 
     //Explanation of mutation identfieres found in Population.java mutate_Population()
     public static final float MUTATION_RATE = 1/NUMBER_OF_NODES; //mutation rate, 0.01 means 1% chance of mutation per node, 0.1 means 10% chance of mutation per node
-    public static final int NUMBER_OF_ITERATIONS = 100; //number of generations
+    public static final int NUMBER_OF_ITERATIONS = 150; //number of generations
 
     public static final int BREAK_FITNESS = NUMBER_OF_NODES - 2;
 
@@ -111,8 +111,10 @@ The following is an example of a generic evolutionary algorithm:
         if (i > 0) System.out.println("\u001B[31m" + "new Defensive Alliances found: " + i + "\u001B[0m");
     }
 
+
+
     //when using onepointcrossover the parentgraph should not be included in the population!
-    static void geneticAlgorithm(int NUMBER_OF_NODES, float NODE_EXISTENCE_PROBABILITY, int POPULATION_SIZE, int NUMBER_OF_ITERATIONS, int BREAK_FITNESS, OneGenome PARENT_GRAPH) {
+    static void geneticAlgorithm(int NUMBER_OF_NODES, float NODE_EXISTENCE_PROBABILITY, int POPULATION_SIZE, int NUMBER_OF_ITERATIONS, int BREAK_FITNESS, OneGenome PARENT_GRAPH) throws IOException {
         //Generatess first Population and calculates the Fitness of each Genome
         Population population = new Population(POPULATION_SIZE, NUMBER_OF_NODES, NODE_EXISTENCE_PROBABILITY, PARENT_GRAPH);
         population.sort_Population_by_fitness_and_size_reversed();
@@ -123,6 +125,10 @@ The following is an example of a generic evolutionary algorithm:
             Genome.learn(genome,PARENT_GRAPH,10);
         }*/
 
+        //init css file
+        GeneticLogger.initCSV();
+
+
         int counter = 0;
         while (population.generation != NUMBER_OF_ITERATIONS) {
             //adds defensive alliance to a list if it has been found
@@ -130,11 +136,9 @@ The following is an example of a generic evolutionary algorithm:
             //adds the best genome to the list of best genomes
             bestGenomes.put(counter, population.getPopulation()[0]);
 
-            //Print some stats
-            if (population.generation == 1){
-                Population.printStats(population);
-            }
-            else population.printStats();
+            //Print some stats and log to file
+            population.printStats();
+            GeneticLogger.logGeneration();
 
             //change Selection method to whhatever
             //Literatur says that using many different selection methods is better
@@ -168,7 +172,7 @@ The following is an example of a generic evolutionary algorithm:
     }
 
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         try {
             graph = CsvReader.readCsvEdgesToSymmetricalMatrix(FILEPATH, NUMBER_OF_NODES);
         } catch (IOException e) {
@@ -181,6 +185,7 @@ The following is an example of a generic evolutionary algorithm:
         //the first constructor ensures a connected graph
         //PARENT_GRAPH = new OneGenome(pairWithLargestComponent.getKey(), pairWithLargestComponent.getValue(),g.adjMatrix);
         PARENT_GRAPH = new OneGenome(NUMBER_OF_NODES, graph);
+
 
         geneticAlgorithm(NUMBER_OF_NODES, NODE_EXISTENCE_PROBABILITY, POPULATION_SIZE, NUMBER_OF_ITERATIONS, BREAK_FITNESS, PARENT_GRAPH);
 

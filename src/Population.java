@@ -1,4 +1,5 @@
 import java.util.*;
+import  java.io.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -13,7 +14,7 @@ public class Population {
 
     static int amountOfLearning = Genetic_Algorithm.AmountOfLearnings;
 
-    static int generation = 0;
+    static int generation = -1;
 
     static long population_fitness;
 
@@ -609,7 +610,14 @@ public class Population {
         System.out.println("Population fitness: " + population.population_fitness);
         System.out.println("Mean fitness: " + population.mean_fitness);
         System.out.println("Mean size: " + population.mean_size);
-        System.out.println("Population size: " + population.population.length);
+        System.out.println("Population size: " + population.population.length+"\n");
+
+        System.out.println("First Best Fitness in Population: " + population.population[0].getFitness() + " Size: " + population.population[0].getSize());
+        System.out.println("Second Best Fitness in Population: " + population.population[1].getFitness() + " Size: " + population.population[1].getSize());
+        System.out.println("Worst Fitness in Population: " + population.population[population.population.length-1].getFitness() + " Size: " + population.population[population.population.length-1].getSize());
+        System.out.println("Difference between best and second best genome: " + Genome.difference(population.population[0], population.population[1]));
+        System.out.println("---------------------------------------------------------------------------------------------------------------------------------------------------"+'\n');
+
     }
 
     void printStats() {
@@ -628,5 +636,43 @@ public class Population {
         System.out.println("Difference between best and second best genome: " + Genome.difference(population[0], population[1]));
         System.out.println("Genetic Difference between best Genomes of current and past generation: " + Genome.difference(population[0], bestGenomeFromLastGeneration));
         System.out.println("---------------------------------------------------------------------------------------------------------------------------------------------------"+'\n');
+    }
+
+
+    // CSV logging
+    private static final String CSV_HEADER = "generation,population_fitness,mean_fitness,mean_size," +
+            "survivors,offspring,best_fitness,best_size," +
+            "second_fitness,second_size,worst_fitness,worst_size," +
+            "best_second_diff,best_current_vs_last_diff";
+
+    public static void initCSV(String filename) throws IOException {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename))) {
+            writer.write(CSV_HEADER);
+            writer.newLine();
+        }
+    }
+
+    // Call this after each generation's printStats()
+    public static void logGeneration(String filename) throws IOException {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename, true))) {
+            String line = String.format("%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d",
+                    generation,
+                    population_fitness,
+                    mean_fitness,
+                    mean_size,
+                    survivors.size(),
+                    population.length - survivors.size(),
+                    population[0].getFitness(),
+                    population[0].getSize(),
+                    population[1].getFitness(),
+                    population[1].getSize(),
+                    population[population.length-1].getFitness(),
+                    population[population.length-1].getSize(),
+                    Genome.difference(population[0], population[1]),
+                    Genome.difference(population[0], bestGenomeFromLastGeneration)
+            );
+            writer.write(line);
+            writer.newLine();
+        }
     }
 }

@@ -488,7 +488,15 @@ public class Genome {
 
     //i feel like java takes a shortcut here and compares object ids
     //in order to prevent this bullshit we need to copy the arrey?
-    static int difference(Genome a, Genome b) {
+    static int difference(Genome a, Genome b){
+        if (Objects.isNull(a) || Objects.isNull(b)) {
+            return -1; //or throw an exception
+        }
+
+        if(a.equals(b)){
+            return 0;
+        }
+
         int sum = 0;
         for (int i = 0; i < a.length; i++) {
             sum += Math.abs(a.genome[i] - b.genome[i]);
