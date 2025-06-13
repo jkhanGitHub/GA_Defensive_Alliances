@@ -77,9 +77,9 @@ The following is an example of a generic evolutionary algorithm:
 
     //Explanation of mutation identfieres found in Population.java mutate_Population()
     public static final float MUTATION_RATE = 1 / NUMBER_OF_NODES; //mutation rate, 0.01 means 1% chance of mutation per node, 0.1 means 10% chance of mutation per node
-    public static final int NUMBER_OF_ITERATIONS = 20; //number of generations
+    public static final int NUMBER_OF_ITERATIONS = 150; //number of generations
 
-    public static final int BREAK_FITNESS = NUMBER_OF_NODES - 2;
+    public static final int BREAK_FITNESS = Integer.MAX_VALUE;
     public static final float PROBABILITY = 0.5f; //probability of intersection, 0.5 means 50% chance of intersection and 50% chance of crossover
 
 
