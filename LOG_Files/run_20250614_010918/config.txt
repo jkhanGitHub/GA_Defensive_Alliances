@@ -1,0 +1,7 @@
+Graph: lasftm_asia/lastfm_asia_edges.csv
+Nodes: 7624, Population: 2048, Generations: 20
+Node Probability: 0,50, Mutation Rate: 0
+Selection: Tournament (n=4), Children/Parent: 2
+Learning: 5, Recombination Prob: 0,50
+Break Fitness: 2147483647
+Worst Possible Fitness: 55612
