@@ -1,20 +1,57 @@
+import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class GeneticLogger {
+    private static String directory;
     private static String filename;
 
     // Call this once at program start
     public static void initCSV() {
-        // Generate timestamped filename
         String timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        filename = "LOG_Files/Genetic_Algorithm_logs_" + timestamp + ".csv";
+        directory = "LOG_Files/run_" + timestamp + "/";
+        new File(directory).mkdirs();  // Create directory
 
-        // Write header to new file
-        try (java.io.BufferedWriter writer = java.nio.file.Files.newBufferedWriter(
-                java.nio.file.Paths.get(filename),
-                java.nio.charset.StandardCharsets.UTF_8)) {
+        filename = directory + "ga_stats.csv";
 
+        try (BufferedWriter writer = Files.newBufferedWriter(
+                Paths.get(filename),
+                StandardCharsets.UTF_8)) {
+
+            // Write configuration header
+            writer.write("# Genetic Algorithm Configuration");
+            writer.newLine();
+            writer.write("# Graph: " + Genetic_Algorithm.FILEPATH);
+            writer.newLine();
+            writer.write(String.format("# Nodes: %d, Population: %d, Generations: %d",
+                    Genetic_Algorithm.NUMBER_OF_NODES,
+                    Genetic_Algorithm.POPULATION_SIZE,
+                    Genetic_Algorithm.NUMBER_OF_ITERATIONS));
+            writer.newLine();
+            writer.write(String.format("# Node Probability: %.2f, Mutation Rate: %.4f",
+                    Genetic_Algorithm.NODE_EXISTENCE_PROBABILITY,
+                    Genetic_Algorithm.MUTATION_RATE));
+            writer.newLine();
+            writer.write(String.format("# Selection: Tournament (n=%d), Children/Parent: %d",
+                    Genetic_Algorithm.NUMBER_OF_CONTESTANTS_PER_ROUND,
+                    Genetic_Algorithm.NUMBER_OF_CHILDS_PER_PARENT));
+            writer.newLine();
+            writer.write(String.format("# Mutation: Max Remove=%d, Max Add=%d",
+                    Genetic_Algorithm.MAX_NUMBER_OF_NODES_REMOVED_BY_MUTATION,
+                    Genetic_Algorithm.MAXIMUM_NUMBER_OF_ADDITIONAL_MUTATIONS));
+            writer.newLine();
+            writer.write(String.format("# Learning: %d, Recombination Prob: %.2f",
+                    Genetic_Algorithm.AmountOfLearnings,
+                    Genetic_Algorithm.PROBABILITY));
+            writer.newLine();
+            writer.write("# Break Fitness: " + Genetic_Algorithm.BREAK_FITNESS);
+            writer.newLine();
+            writer.newLine();
+
+            // Write CSV header
             writer.write("generation,population_fitness,mean_fitness,mean_size,"
                     + "survivors,offspring,best_fitness,best_size,"
                     + "second_fitness,second_size,worst_fitness,worst_size,"

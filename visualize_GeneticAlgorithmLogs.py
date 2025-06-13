@@ -1,15 +1,53 @@
 import sys
+import os
 import pandas as pd
 import matplotlib.pyplot as plt
 from matplotlib.gridspec import GridSpec
 
-def visualize_ga_results(csv_file, worst_possible_fitness=None):
-    # Load data
-    df = pd.read_csv(csv_file)
+#use csv file 
+def parse_config(csv_file):
+    """Parse configuration from CSV header"""
+    config = {}
+    with open(csv_file, 'r') as f:
+        for line in f:
+            if line.startswith('#'):
+                if ':' in line:
+                    key, value = line.strip('#').split(':', 1)
+                    config[key.strip()] = value.strip()
+            else:
+                break  # Stop at data rows
+    return config
 
-    # Create figure with subplots
-    fig = plt.figure(figsize=(14, 16))
-    gs = GridSpec(4, 1, figure=fig, height_ratios=[2, 1, 1, 1])
+def visualize_ga_results(csv_file, worst_possible_fitness=None):
+    # Create output directory same as CSV location
+    output_dir = os.path.dirname(csv_file)
+
+    # Parse configuration and load data
+    config = parse_config(csv_file)  # Use previous parse_config implementation
+    df = pd.read_csv(csv_file, comment='#')
+
+    # Create figure with configuration box
+    fig = plt.figure(figsize=(14, 18))
+    gs = GridSpec(5, 1, figure=fig, height_ratios=[0.8, 2, 1, 1, 1])
+
+    # Configuration text box
+    ax0 = fig.add_subplot(gs[0])
+    ax0.axis('off')
+    config_text = (
+        f"Graph: {config.get('Graph', 'N/A')}\n"
+        f"Nodes: {config.get('Nodes', 'N/A')}, "
+        f"Population: {config.get('Population', 'N/A')}, "
+        f"Generations: {config.get('Generations', 'N/A')}\n"
+        f"Node Prob: {config.get('Node Probability', 'N/A')}, "
+        f"Mutation Rate: {config.get('Mutation Rate', 'N/A')}\n"
+        f"Selection: {config.get('Selection', 'N/A')}, "
+        f"Children/Parent: {config.get('Children/Parent', 'N/A')}\n"
+        f"Mutation: {config.get('Mutation', 'N/A')}, "
+        f"Learning: {config.get('Learning', 'N/A')}, "
+        f"Recomb Prob: {config.get('Recombination Prob', 'N/A')}"
+    )
+    ax0.text(0.02, 0.5, config_text, fontsize=10, family='monospace',
+             va='center', ha='left', bbox=dict(facecolor='whitesmoke', alpha=0.5))
 
     # Plot 1: Fitness Evolution
     ax1 = fig.add_subplot(gs[0])
@@ -76,9 +114,19 @@ def visualize_ga_results(csv_file, worst_possible_fitness=None):
     ax4.legend()
     ax4.grid(True)
 
+
+    # Save visualization in same directory
     plt.tight_layout()
-    plt.savefig(csv_file.replace('.csv', '_visualization.png'), dpi=150)
-    print(f"Visualization saved to {csv_file.replace('.csv', '_visualization.png')}")
+    viz_file = os.path.join(output_dir, "ga_visualization.png")
+    plt.savefig(viz_file, dpi=150, bbox_inches='tight')
+    print(f"Visualization saved to {viz_file}")
+
+    # Additionally save configuration to text file
+    config_file = os.path.join(output_dir, "config.txt")
+    with open(config_file, 'w') as f:
+        for key, value in config.items():
+            f.write(f"{key}: {value}\n")
+    print(f"Configuration saved to {config_file}")
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
