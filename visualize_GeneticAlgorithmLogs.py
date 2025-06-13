@@ -20,7 +20,7 @@ def visualize_ga_results(csv_file, worst_possible_fitness=None):
 
     if worst_possible_fitness is not None:
         ax1.axhline(y=worst_possible_fitness, color='k', linestyle='-',
-                   label=f'Min Possible ({worst_possible_fitness})')
+                    label=f'Min Possible ({worst_possible_fitness})')
 
     ax1.set_title('Fitness Evolution')
     ax1.set_ylabel('Fitness Score')
@@ -29,12 +29,12 @@ def visualize_ga_results(csv_file, worst_possible_fitness=None):
 
     # Plot 2: Alliance Size Metrics
     ax2 = fig.add_subplot(gs[1])
-    ax2.plot(df['generation'], df['best_size'], 'g-', label='Best Alliance')
-    ax2.plot(df['generation'], df['second_size'], 'b--', label='2nd Best Alliance')
-    ax2.plot(df['generation'], df['mean_size'], 'm:', label='Mean Alliance')
-    ax2.plot(df['generation'], df['worst_size'], 'r-', alpha=0.7, label='Worst Alliance')
+    ax2.plot(df['generation'], df['best_size'], 'g-', label='Best Genome in Alliance')
+    ax2.plot(df['generation'], df['second_size'], 'b--', label='2nd Best Genome in Alliance')
+    ax2.plot(df['generation'], df['mean_size'], 'm:', label='Mean Fitness in Alliance')
+    ax2.plot(df['generation'], df['worst_size'], 'r-', alpha=0.7, label='Worst Genome in Alliance')
     ax2.fill_between(df['generation'], df['best_size'], df['worst_size'],
-                    color='gray', alpha=0.1)
+                     color='gray', alpha=0.1)
 
     ax2.set_title('Alliance Size Evolution')
     ax2.set_ylabel('Alliance Size')
@@ -45,13 +45,12 @@ def visualize_ga_results(csv_file, worst_possible_fitness=None):
     ax3 = fig.add_subplot(gs[2])
     width = 0.35
     ax3.bar(df['generation'], df['survivors'], width, label='Survivors')
-    ax3.bar(df['generation'], df['offspring'], width, bottom=df['survivors'],
-           label='Offspring')
+    ax3.bar(df['generation'], df['offspring'], width, bottom=df['survivors'],label='Offspring')
 
     # Add genetic difference line (scaled to secondary axis)
     ax3_diff = ax3.twinx()
     ax3_diff.plot(df['generation'], df['best_second_diff'], 'k-', alpha=0.7,
-                 label='Best-2nd Diff')
+                  label='Best-2nd Diff')
     ax3_diff.set_ylabel('Genetic Difference', color='k')
 
     ax3.set_title('Population Composition')
@@ -62,13 +61,15 @@ def visualize_ga_results(csv_file, worst_possible_fitness=None):
     # Plot 4: Convergence Metrics
     ax4 = fig.add_subplot(gs[3])
     ax4.plot(df['generation'], df['best_current_vs_last_diff'], 'b-',
-            label='Best vs Previous Gen')
+             label='Best vs Previous Gen')
     ax4.plot(df['generation'], df['best_second_diff'], 'g--',
-            label='Best vs 2nd Best')
+             label='Best vs 2nd Best')
+    ax4.plot(df['generation'], df['best_worst_diff'], 'r-',
+             label='Best vs 2nd Best')
 
     # Highlight convergence threshold
     ax4.axhline(y=0.05, color='r', linestyle=':', alpha=0.7,
-               label='Convergence Threshold')
+                label='Convergence Threshold')
 
     ax4.set_title('Convergence Metrics')
     ax4.set_xlabel('Generation')

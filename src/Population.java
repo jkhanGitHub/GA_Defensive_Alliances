@@ -605,6 +605,17 @@ public class Population {
         return temp;
     }
 
+    //calculate total difference in population
+    static int calculateTotalDifference(Population population) {
+        int totalDifference = 0;
+        for (int i = 0; i < population.population.length - 1; i++) {
+            for (int j = i + 1; j < population.population.length; j++) {
+                totalDifference += Genome.difference(population.population[i], population.population[j]);
+            }
+        }
+        return totalDifference;
+    }
+
     static void printStats(Population population) {
         System.out.println("Generation: " + population.generation);
         System.out.println("Population fitness: " + population.population_fitness);
@@ -616,6 +627,7 @@ public class Population {
         System.out.println("Second Best Fitness in Population: " + population.population[1].getFitness() + " Size: " + population.population[1].getSize());
         System.out.println("Worst Fitness in Population: " + population.population[population.population.length-1].getFitness() + " Size: " + population.population[population.population.length-1].getSize());
         System.out.println("Difference between best and second best genome: " + Genome.difference(population.population[0], population.population[1]));
+        System.out.println("Difference between best and worst best genome: " + Genome.difference(population.population[0], population.population[population.population.length-1]));
         System.out.println("---------------------------------------------------------------------------------------------------------------------------------------------------"+'\n');
 
     }
@@ -634,6 +646,7 @@ public class Population {
         System.out.println("Second Best Fitness in Population: " + population[1].getFitness() + " Size: " + population[1].getSize());
         System.out.println("Worst Fitness in Population: " + population[population.length-1].getFitness() + " Size: " + population[population.length-1].getSize());
         System.out.println("Difference between best and second best genome: " + Genome.difference(population[0], population[1]));
+        System.out.println("Difference between best and worst best genome: " + Genome.difference(population[0], population[population.length-1]));
         System.out.println("Genetic Difference between best Genomes of current and past generation: " + Genome.difference(population[0], bestGenomeFromLastGeneration));
         System.out.println("---------------------------------------------------------------------------------------------------------------------------------------------------"+'\n');
     }

@@ -18,7 +18,7 @@ public class GeneticLogger {
             writer.write("generation,population_fitness,mean_fitness,mean_size,"
                     + "survivors,offspring,best_fitness,best_size,"
                     + "second_fitness,second_size,worst_fitness,worst_size,"
-                    + "best_second_diff,best_current_vs_last_diff");
+                    + "best_second_diff,best_worst_diff,best_current_vs_last_diff");
             writer.newLine();
         } catch (Exception e) {
             System.err.println("CSV initialization failed: " + e.getMessage());
@@ -28,7 +28,7 @@ public class GeneticLogger {
     // Call after each generation
     public static void logGeneration() {
         // Format data row
-        String data = String.format("%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d",
+        String data = String.format("%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d",
                 Population.generation,
                 Population.population_fitness,
                 Population.mean_fitness,
@@ -42,6 +42,7 @@ public class GeneticLogger {
                 Population.population[Population.population.length - 1].getFitness(),
                 Population.population[Population.population.length - 1].getSize(),
                 Genome.difference(Population.population[0], Population.population[1]),
+                Genome.difference(Population.population[0], Population.population[Population.population.length - 1]),
                 Genome.difference(Population.population[0], Population.bestGenomeFromLastGeneration)
         );
 
