@@ -4,10 +4,19 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.math.BigDecimal;
 
 public class GeneticLogger {
     private static String directory;
     private static String filename;
+
+    public static String getOutputDirectory() {
+        return directory;
+    }
+
+    public static String getFilename() {
+        return filename;
+    }
 
     // Call this once at program start
     public static void initCSV() {
@@ -16,6 +25,8 @@ public class GeneticLogger {
         new File(directory).mkdirs();  // Create directory
 
         filename = directory + "ga_stats.csv";
+
+        String scientificMutationRate = new BigDecimal(Genetic_Algorithm.MUTATION_RATE).toString();
 
         try (BufferedWriter writer = Files.newBufferedWriter(
                 Paths.get(filename),
@@ -31,23 +42,21 @@ public class GeneticLogger {
                     Genetic_Algorithm.POPULATION_SIZE,
                     Genetic_Algorithm.NUMBER_OF_ITERATIONS));
             writer.newLine();
-            writer.write(String.format("# Node Probability: %.2f, Mutation Rate: %.4f",
+            writer.write(String.format("# Node Probability: %.2f, Mutation Rate: %s",
                     Genetic_Algorithm.NODE_EXISTENCE_PROBABILITY,
-                    Genetic_Algorithm.MUTATION_RATE));
+                    scientificMutationRate));
             writer.newLine();
             writer.write(String.format("# Selection: Tournament (n=%d), Children/Parent: %d",
                     Genetic_Algorithm.NUMBER_OF_CONTESTANTS_PER_ROUND,
                     Genetic_Algorithm.NUMBER_OF_CHILDS_PER_PARENT));
-            writer.newLine();
-            writer.write(String.format("# Mutation: Max Remove=%d, Max Add=%d",
-                    Genetic_Algorithm.MAX_NUMBER_OF_NODES_REMOVED_BY_MUTATION,
-                    Genetic_Algorithm.MAXIMUM_NUMBER_OF_ADDITIONAL_MUTATIONS));
             writer.newLine();
             writer.write(String.format("# Learning: %d, Recombination Prob: %.2f",
                     Genetic_Algorithm.AmountOfLearnings,
                     Genetic_Algorithm.PROBABILITY));
             writer.newLine();
             writer.write("# Break Fitness: " + Genetic_Algorithm.BREAK_FITNESS);
+            writer.newLine();
+            writer.write("# Worst Possible Fitness: " + OneGenome.worstFitnessPossible);
             writer.newLine();
             writer.newLine();
 
