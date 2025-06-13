@@ -99,9 +99,6 @@ public class Genome {
         this.father = father;
         this.changedAllele = changedAllele;
 
-        //could be either mother or father doesnt matter when it comes to probability Intersection
-        degrees = Arrays.copyOf(mother.degrees, mother.degrees.length);
-        size = mother.size;
     }
 
 
@@ -192,6 +189,10 @@ public class Genome {
 
     void updateChildDegrees_intersectionWithProbability(){
         Genome child = this;
+
+        //could be either mother or father doesnt matter when it comes to probability Intersection
+        child.degrees = Arrays.copyOf(mother.degrees, mother.degrees.length);
+        child.size = mother.size;
 
         //bitflip each allele in genome that is in changedallele
         for (int i = 0; i < changedAllele.size(); i++) {

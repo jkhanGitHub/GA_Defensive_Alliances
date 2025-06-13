@@ -132,6 +132,38 @@ public class Population {
         mean_size = calculateMeanSize();
     }
 
+
+    Population(Population oldGeneration, float mutationrate, float proabibility, int newChildsPerParents, List<Genome> nextGenParents, int mutation_identifier, int recombination_identifier, int amountOfLearners, boolean randomizeLearners) {
+        population = new Genome[oldGeneration.population.length];
+        bestGenomeFromLastGeneration = oldGeneration.getPopulation()[0];
+        offspringsFromPreviousGeneration = generate_nextChildrenListThreaded(mutationrate, proabibility, newChildsPerParents, nextGenParents, mutation_identifier, recombination_identifier);
+
+        List<Genome> childrenList;
+        childrenList = generate_nextChildrenListThreaded(mutationrate, proabibility, newChildsPerParents, nextGenParents, mutation_identifier, recombination_identifier);
+
+        List<Genome> newGeneration;
+        newGeneration = createListOfNextGeneration_Boltzmann(childrenList);
+
+
+        survivors = getSurvivors(newGeneration);
+        if (!survivors.isEmpty()){
+            survivors_learn(survivors, parentGraph, amountOfLearning,amountOfLearners,randomizeLearners);
+            newGeneration.sort(Comparator.comparingInt(Genome::getFitness).reversed());
+        }
+        newGeneration.sort(Comparator.comparingInt(Genome::getFitness).reversed());
+
+
+        //add Entries to the new population
+        for (int i = 0; i < newGeneration.size(); i++) {
+            population[i] = newGeneration.get(i);
+        }
+
+        generation = oldGeneration.getGeneration() + 1;
+        population_fitness = FitnessFunctions.calculate_Population_fitness(this);
+        mean_fitness = FitnessFunctions.calculate_Mean_fitness(this);
+        mean_size = calculateMeanSize();
+    }
+
     //used in Genetic Algorithm
     static Genome[] newGeneration(float mutationrate, float proabibility, int newChildsPerParents, List<Genome> nextGenParents, int mutation_identifier, int recombination_identifier, int amountOfLearners, boolean randomizeLearners) {
         bestGenomeFromLastGeneration = getPopulation()[0];
@@ -205,38 +237,6 @@ public class Population {
 
     static public int calculate_Mean_fitness(){
         return (int) population_fitness/population.length;
-    }
-
-
-    Population(Population oldGeneration, float mutationrate, float proabibility, int newChildsPerParents, List<Genome> nextGenParents, int mutation_identifier, int recombination_identifier, int amountOfLearners, boolean randomizeLearners) {
-        population = new Genome[oldGeneration.population.length];
-        bestGenomeFromLastGeneration = oldGeneration.getPopulation()[0];
-        offspringsFromPreviousGeneration = generate_nextChildrenListThreaded(mutationrate, proabibility, newChildsPerParents, nextGenParents, mutation_identifier, recombination_identifier);
-
-        List<Genome> childrenList;
-        childrenList = generate_nextChildrenListThreaded(mutationrate, proabibility, newChildsPerParents, nextGenParents, mutation_identifier, recombination_identifier);
-
-        List<Genome> newGeneration;
-        newGeneration = createListOfNextGeneration_Boltzmann(childrenList);
-
-
-        survivors = getSurvivors(newGeneration);
-        if (!survivors.isEmpty()){
-            survivors_learn(survivors, parentGraph, amountOfLearning,amountOfLearners,randomizeLearners);
-            newGeneration.sort(Comparator.comparingInt(Genome::getFitness).reversed());
-        }
-        newGeneration.sort(Comparator.comparingInt(Genome::getFitness).reversed());
-
-
-        //add Entries to the new population
-        for (int i = 0; i < newGeneration.size(); i++) {
-            population[i] = newGeneration.get(i);
-        }
-
-        generation = oldGeneration.getGeneration() + 1;
-        population_fitness = FitnessFunctions.calculate_Population_fitness(this);
-        mean_fitness = FitnessFunctions.calculate_Mean_fitness(this);
-        mean_size = calculateMeanSize();
     }
 
     static int calculateMeanSize() {

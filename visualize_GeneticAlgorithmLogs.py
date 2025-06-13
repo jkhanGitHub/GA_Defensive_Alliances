@@ -49,8 +49,7 @@ def visualize_ga_results(csv_file, worst_possible_fitness=None):
 
     # Add genetic difference line (scaled to secondary axis)
     ax3_diff = ax3.twinx()
-    ax3_diff.plot(df['generation'], df['best_second_diff'], 'k-', alpha=0.7,
-                  label='Best-2nd Diff')
+    #ax3_diff.plot(df['generation'], df['best_second_diff'], 'k-', alpha=0.7,label='Best-2nd Diff')
     ax3_diff.set_ylabel('Genetic Difference', color='k')
 
     ax3.set_title('Population Composition')
@@ -65,7 +64,7 @@ def visualize_ga_results(csv_file, worst_possible_fitness=None):
     ax4.plot(df['generation'], df['best_second_diff'], 'g--',
              label='Best vs 2nd Best')
     ax4.plot(df['generation'], df['best_worst_diff'], 'r-',
-             label='Best vs 2nd Best')
+             label='Best vs worst')
 
     # Highlight convergence threshold
     ax4.axhline(y=0.05, color='r', linestyle=':', alpha=0.7,

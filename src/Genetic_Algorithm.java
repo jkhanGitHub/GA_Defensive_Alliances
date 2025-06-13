@@ -22,7 +22,7 @@ The following is an example of a generic evolutionary algorithm:
 
     static {
         recombinationIdentifiers.put("OnePointCrossoverThreaded", 0);
-        recombinationIdentifiers.put("ProababilityIntersectionThreaded", 1);
+        recombinationIdentifiers.put("ProbabilityIntersectionThreaded", 1);
         recombinationIdentifiers.put("OnePointCrossover", 2);
         recombinationIdentifiers.put("ProababilityIntersection", 3);
     }
@@ -57,9 +57,6 @@ The following is an example of a generic evolutionary algorithm:
 
 
 
-
-
-
     public static final int AmountOfLearnings = 5;
 
     public static final float NODE_EXISTENCE_PROBABILITY = 0.5F;
@@ -87,10 +84,10 @@ The following is an example of a generic evolutionary algorithm:
     public static final int NUMBER_OF_ITERATIONS = 150; //number of generations
 
     public static final int BREAK_FITNESS = NUMBER_OF_NODES - 2;
+    public static final float PROBABILITY = 0.5f; //probability of intersection, 0.5 means 50% chance of intersection and 50% chance of crossover
+
 
     public static OneGenome PARENT_GRAPH;
-
-    public static final float PROBABILITY = 0.5f; //probability of intersection, 0.5 means 50% chance of intersection and 50% chance of crossover
 
     final static int UPPER_BOUND_OF_LEARNERS = POPULATION_SIZE / NUMBER_OF_CONTESTANTS_PER_ROUND; //upper bound for ADDITIONAL_amount of genomes to be mutated
     public static int[][] graph;
@@ -156,7 +153,6 @@ The following is an example of a generic evolutionary algorithm:
                     mutationIdentifiers.get("Mutation"),
                     recombinationIdentifiers.get("OnePointCrossoverThreaded"),
                     true
-
             );
 
             //remove isolated nodes from population, implemented inside remove_duplicates
