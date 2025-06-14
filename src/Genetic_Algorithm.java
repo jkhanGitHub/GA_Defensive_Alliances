@@ -135,6 +135,8 @@ The following is an example of a generic evolutionary algorithm:
 
 
         GeneticLogger.initCSV(cfg);
+        redirectConsoleOutput();
+
         int counter = 0;
 
         while (population.generation != NUMBER_OF_ITERATIONS) {
@@ -165,6 +167,7 @@ The following is an example of a generic evolutionary algorithm:
                 );
             }
         }
+        resetConsoleOutput();
     }
 
     static void geneticAlgorithm(
@@ -198,6 +201,8 @@ The following is an example of a generic evolutionary algorithm:
 
         //init css file
         GeneticLogger.initCSV(cfg);
+        redirectConsoleOutput();
+
         int counter = 0;
 
 
@@ -241,14 +246,33 @@ The following is an example of a generic evolutionary algorithm:
                 population = Population.remove_duplicates_Threaded(population, NUMBER_OF_NODES, NODE_EXISTENCE_PROBABILITY, parentGraph);
             }
         }
+        resetConsoleOutput();
+    }
+
+
+    // Add this at the very beginning
+    private static PrintStream originalOut = System.out;
+    private static PrintStream originalErr = System.err;
+
+    public static void redirectConsoleOutput() {
+        try {
+            PrintStream logStream = new PrintStream(new FileOutputStream(GeneticLogger.getOutputDirectory() + "console_output.log"));
+            System.setOut(logStream);
+            System.setErr(logStream);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void resetConsoleOutput() {
+        System.setOut(originalOut);
+        System.setErr(originalErr);
     }
 
 
     public static void main(String[] args) throws IOException {
 
-        // Add this at the very beginning
         // Load configuration with exception handling
-
         try {
             cfg = ConfigLoader.load("run_config.properties");
         } catch (Exception e) {

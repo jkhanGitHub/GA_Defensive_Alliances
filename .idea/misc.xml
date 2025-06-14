@@ -11,7 +11,5 @@
       </list>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_18" project-jdk-name="18" project-jdk-type="JavaSDK">
-    <output url="file://$PROJECT_DIR$" />
-  </component>
+  <component name="ProjectRootManager" version="2" project-jdk-name="Python 3.9 (Genetic_defensive_alliances)" project-jdk-type="Python SDK" />
 </project>
