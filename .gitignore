@@ -1,3 +1,16 @@
+# Ignore directories
+deezer_europe/
+git_web_ml/
+lasftm_asia/
+twitch/
+twitch_gamers/
+venv/
+env/
+
+#ignore Files 
+*.class
+*.jar
+
 ### IntelliJ IDEA ###
 out/
 !**/src/main/**/out/
