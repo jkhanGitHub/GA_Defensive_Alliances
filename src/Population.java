@@ -287,6 +287,7 @@ public class Population {
          * @learnerAmount is the amount of survivors that are going to learn.
          * @randomizeLearners true results in the learners being picked at random.
          * @randomizeLearners false results in the best survivors learning. since the list should be sorted.
+         * @learnerAmount can be greater than the amount of survivors, in this case all survivors will learn.
          */
         Thread[] threads = new Thread[learnerAmount];
 
