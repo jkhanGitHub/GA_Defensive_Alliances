@@ -1,7 +1,8 @@
 
 # Genetic Algorithm Runner
 
-This project is a Java-based Genetic Algorithm implementation with CSV logging and an optional Python-based result visualization. It’s configured for both Windows (`.bat` scripts) and Unix-like systems (`.sh` scripts).
+This project is a Java-based Genetic Algorithm implementation to find Defensive Alliances in Graphs. Also CSV logging and an optional Python-based result visualization is implemented. It’s configured for both Windows (`.bat` scripts) and Unix-like systems (`.sh` scripts).
+It uses a .properties file as run_config. It can be used single Threaded and Multithreaded.
 
 ---
 

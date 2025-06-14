@@ -1,6 +1,2 @@
 TODO
-change Logger to taking the json file arguments in init method
-
-repair shell script
-
-outputfile as text file in the same directory as the png and csv ?????
+rewrite so that one can use the single threaded methods instead of the multithreaded methods
