@@ -1,0 +1,11 @@
+Graph: lastfm_asia/lastfm_asia_edges.csv
+Nodes: 7624, Population: 4096, Generations: 150
+Node Probability: 0,50, Mutation Rate: 0.000130999993416480720043182373046875
+Selection Method: Stochastic Universal Sampling (n=4)
+Recombination Method: OnePointCrossoverThreaded, Intersection Prob: 0,50
+Mutation Method: Mutation, Children/Parent: 2
+Activate Learning: true
+Amount of Learners: 5
+Randomize Learners: true
+Break Fitness: 2147483647
+Worst Possible Fitness: 55612

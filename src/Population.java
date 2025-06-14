@@ -106,7 +106,7 @@ public class Population {
 
     Population(Population oldGeneration, float mutationrate, float proabibility, int newChildsPerParents, List<Genome> nextGenParents, int mutation_identifier, int recombination_identifier, boolean activateLearning) {
         population = new Genome[oldGeneration.population.length];
-        bestGenomeFromLastGeneration = oldGeneration.getPopulation()[0];
+        bestGenomeFromLastGeneration = new Genome(oldGeneration.getPopulation()[0]);
         offspringsFromPreviousGeneration = generate_nextChildrenListThreaded(mutationrate, proabibility, newChildsPerParents, nextGenParents, mutation_identifier, recombination_identifier);
 
         List<Genome> newGeneration;
@@ -135,7 +135,7 @@ public class Population {
 
     Population(Population oldGeneration, float mutationrate, float proabibility, int newChildsPerParents, List<Genome> nextGenParents, int mutation_identifier, int recombination_identifier, int amountOfLearners, boolean randomizeLearners) {
         population = new Genome[oldGeneration.population.length];
-        bestGenomeFromLastGeneration = oldGeneration.getPopulation()[0];
+        bestGenomeFromLastGeneration = new Genome(oldGeneration.getPopulation()[0]);
         offspringsFromPreviousGeneration = generate_nextChildrenListThreaded(mutationrate, proabibility, newChildsPerParents, nextGenParents, mutation_identifier, recombination_identifier);
 
         List<Genome> childrenList;
@@ -166,7 +166,7 @@ public class Population {
 
     //used in Genetic Algorithm
     static Genome[] newGeneration(float mutationrate, float proabibility, int newChildsPerParents, List<Genome> nextGenParents, int mutation_identifier, int recombination_identifier,boolean activateLearning, int amountOfLearners, boolean randomizeLearners) {
-        bestGenomeFromLastGeneration = getPopulation()[0];
+        bestGenomeFromLastGeneration = new Genome(population[0]);
 
         List<Genome> childrenList;
         childrenList = generate_nextChildrenListThreaded(mutationrate, proabibility, newChildsPerParents, nextGenParents, mutation_identifier, recombination_identifier);
@@ -201,7 +201,7 @@ public class Population {
 
     //you can change generate_nextChildrenList to generate_nextChildrenListThreaded if you want to use the threaded version
     static Genome[] newGeneration(float mutationrate, float proabibility, int newChildsPerParents, List<Genome> nextGenParents, int mutation_identifier, int recombination_identifier, boolean activateLearning) {
-        bestGenomeFromLastGeneration = getPopulation()[0];
+        bestGenomeFromLastGeneration = new Genome(population[0]);
         offspringsFromPreviousGeneration = generate_nextChildrenListThreaded(mutationrate, proabibility, newChildsPerParents, nextGenParents, mutation_identifier, recombination_identifier);
 
         List<Genome> newGeneration;

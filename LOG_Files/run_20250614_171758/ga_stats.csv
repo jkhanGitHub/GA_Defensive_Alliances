@@ -1,0 +1,19 @@
+# Genetic Algorithm Configuration
+# Graph: lastfm_asia/lastfm_asia_edges.csv
+# Nodes: 7624, Population: 4096, Generations: 5
+# Node Probability: 0,50, Mutation Rate: 0.000130999993416480720043182373046875
+# Selection Method: Stochastic Universal Sampling (n=4)
+# Recombination Method: OnePointCrossoverThreaded, Intersection Prob: 0,50
+# Mutation Method: Mutation, Children/Parent: 2
+# Activate Learning: true
+# Amount of Learners: 5
+# Randomize Learners: true
+# Break Fitness: 2147483647
+# Worst Possible Fitness: 55612
+
+generation,population_fitness,mean_fitness,mean_size,survivors,offspring,best_fitness,best_size,second_fitness,second_size,worst_fitness,worst_size,best_second_diff,best_worst_diff,best_current_vs_last_diff
+0,-7977724,-1947,3812,0,4096,-1272,3913,-1291,3923,-2799,3711,3780,3806,-1
+1,-7650440,-1867,3820,3305,791,-1272,3913,-1281,3867,-2133,3783,3830,3837,0
+2,-7360598,-1797,3827,3184,912,-1272,3913,-1280,3879,-2004,3765,3822,3774,0
+3,-7168872,-1750,3832,3314,782,-1220,3872,-1225,3869,-1928,3791,3783,3773,3827
+4,-6992116,-1707,3836,3314,782,-1121,3872,-1225,3869,-1870,3801,3785,3805,0

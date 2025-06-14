@@ -1,0 +1,3165 @@
+Generation: 0
+Population fitness: -7966971
+Mean fitness: -1945
+Mean size: 3811
+Population size: 4096
+
+Amount of Genomes that survived: 0
+Amount of Accepted Children: 4096
+
+First Best Fitness in Population: -1285 Size: 3933
+Second Best Fitness in Population: -1351 Size: 3908
+Worst Fitness in Population: -2644 Size: 3703
+Difference between best and second best genome: 3747
+Difference between best and worst best genome: 3800
+Genetic Difference between best Genomes of current and past generation: -1
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Linear Rank Selection
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+Generation: 1
+Population fitness: -7425897
+Mean fitness: -1812
+Mean size: 3821
+Population size: 4096
+
+Amount of Genomes that survived: 3156
+Amount of Accepted Children: 940
+
+First Best Fitness in Population: -1153 Size: 3864
+Second Best Fitness in Population: -1219 Size: 3876
+Worst Fitness in Population: -2093 Size: 3797
+Difference between best and second best genome: 3822
+Difference between best and worst best genome: 3819
+Genetic Difference between best Genomes of current and past generation: 3777
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Stochastic Universal Sampling
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+Generation: 2
+Population fitness: -7087024
+Mean fitness: -1730
+Mean size: 3825
+Population size: 4096
+
+Amount of Genomes that survived: 3323
+Amount of Accepted Children: 773
+
+First Best Fitness in Population: -1153 Size: 3864
+Second Best Fitness in Population: -1157 Size: 3863
+Worst Fitness in Population: -1970 Size: 3798
+Difference between best and second best genome: 157
+Difference between best and worst best genome: 3740
+Genetic Difference between best Genomes of current and past generation: 0
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Roulette Wheel Selection
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+Generation: 3
+Population fitness: -6793039
+Mean fitness: -1658
+Mean size: 3828
+Population size: 4096
+
+Amount of Genomes that survived: 3322
+Amount of Accepted Children: 774
+
+First Best Fitness in Population: -1079 Size: 3863
+Second Best Fitness in Population: -1130 Size: 3879
+Worst Fitness in Population: -1876 Size: 3865
+Difference between best and second best genome: 3830
+Difference between best and worst best genome: 3820
+Genetic Difference between best Genomes of current and past generation: 165
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Tournament Selection Elimination
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+Generation: 4
+Population fitness: -6444032
+Mean fitness: -1573
+Mean size: 3834
+Population size: 4096
+
+Amount of Genomes that survived: 3150
+Amount of Accepted Children: 946
+
+First Best Fitness in Population: -1036 Size: 3863
+Second Best Fitness in Population: -1130 Size: 3879
+Worst Fitness in Population: -1808 Size: 3839
+Difference between best and second best genome: 3830
+Difference between best and worst best genome: 3814
+Genetic Difference between best Genomes of current and past generation: 3790
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Linear Rank Selection
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+Generation: 5
+Population fitness: -6166229
+Mean fitness: -1505
+Mean size: 3839
+Population size: 4096
+
+Amount of Genomes that survived: 3213
+Amount of Accepted Children: 883
+
+First Best Fitness in Population: -993 Size: 3863
+Second Best Fitness in Population: -1077 Size: 3904
+Worst Fitness in Population: -1694 Size: 3798
+Difference between best and second best genome: 3841
+Difference between best and worst best genome: 3733
+Genetic Difference between best Genomes of current and past generation: 0
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Roulette Wheel Selection
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+Generation: 6
+Population fitness: -5962788
+Mean fitness: -1455
+Mean size: 3843
+Population size: 4096
+
+Amount of Genomes that survived: 3358
+Amount of Accepted Children: 738
+
+First Best Fitness in Population: -993 Size: 3863
+Second Best Fitness in Population: -1028 Size: 3864
+Worst Fitness in Population: -1646 Size: 3912
+Difference between best and second best genome: 171
+Difference between best and worst best genome: 3745
+Genetic Difference between best Genomes of current and past generation: 0
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Stochastic Universal Sampling
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+Generation: 7
+Population fitness: -5783243
+Mean fitness: -1411
+Mean size: 3845
+Population size: 4096
+
+Amount of Genomes that survived: 3382
+Amount of Accepted Children: 714
+
+First Best Fitness in Population: -958 Size: 3863
+Second Best Fitness in Population: -982 Size: 3800
+Worst Fitness in Population: -1592 Size: 3839
+Difference between best and second best genome: 3786
+Difference between best and worst best genome: 3810
+Genetic Difference between best Genomes of current and past generation: 0
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Stochastic Universal Sampling
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+Generation: 8
+Population fitness: -5608139
+Mean fitness: -1369
+Mean size: 3848
+Population size: 4096
+
+Amount of Genomes that survived: 3389
+Amount of Accepted Children: 707
+
+First Best Fitness in Population: -958 Size: 3863
+Second Best Fitness in Population: -982 Size: 3800
+Worst Fitness in Population: -1520 Size: 3816
+Difference between best and second best genome: 3786
+Difference between best and worst best genome: 3819
+Genetic Difference between best Genomes of current and past generation: 0
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Roulette Wheel Selection
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+Generation: 9
+Population fitness: -5450155
+Mean fitness: -1330
+Mean size: 3852
+Population size: 4096
+
+Amount of Genomes that survived: 3377
+Amount of Accepted Children: 719
+
+First Best Fitness in Population: -958 Size: 3863
+Second Best Fitness in Population: -963 Size: 3801
+Worst Fitness in Population: -1484 Size: 3831
+Difference between best and second best genome: 3793
+Difference between best and worst best genome: 3794
+Genetic Difference between best Genomes of current and past generation: 0
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Roulette Wheel Selection
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+[35mDuplicates found and removed: 1[0m
+Generation: 10
+Population fitness: -5304393
+Mean fitness: -1295
+Mean size: 3855
+Population size: 4096
+
+Amount of Genomes that survived: 3419
+Amount of Accepted Children: 677
+
+First Best Fitness in Population: -925 Size: 3863
+Second Best Fitness in Population: -929 Size: 3929
+Worst Fitness in Population: -1446 Size: 3818
+Difference between best and second best genome: 3790
+Difference between best and worst best genome: 3794
+Genetic Difference between best Genomes of current and past generation: 0
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Stochastic Universal Sampling
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+Generation: 11
+Population fitness: -5164983
+Mean fitness: -1260
+Mean size: 3858
+Population size: 4096
+
+Amount of Genomes that survived: 3439
+Amount of Accepted Children: 657
+
+First Best Fitness in Population: -879 Size: 3929
+Second Best Fitness in Population: -885 Size: 3873
+Worst Fitness in Population: -1398 Size: 3811
+Difference between best and second best genome: 3729
+Difference between best and worst best genome: 3748
+Genetic Difference between best Genomes of current and past generation: 3786
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Linear Rank Selection
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+Generation: 12
+Population fitness: -5008069
+Mean fitness: -1222
+Mean size: 3862
+Population size: 4096
+
+Amount of Genomes that survived: 3319
+Amount of Accepted Children: 777
+
+First Best Fitness in Population: -879 Size: 3929
+Second Best Fitness in Population: -879 Size: 3933
+Worst Fitness in Population: -1367 Size: 3862
+Difference between best and second best genome: 3792
+Difference between best and worst best genome: 3840
+Genetic Difference between best Genomes of current and past generation: 0
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Tournament Selection Elimination
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+Generation: 13
+Population fitness: -4849148
+Mean fitness: -1183
+Mean size: 3865
+Population size: 4096
+
+Amount of Genomes that survived: 3291
+Amount of Accepted Children: 805
+
+First Best Fitness in Population: -831 Size: 3969
+Second Best Fitness in Population: -879 Size: 3929
+Worst Fitness in Population: -1328 Size: 3881
+Difference between best and second best genome: 3742
+Difference between best and worst best genome: 3852
+Genetic Difference between best Genomes of current and past generation: 3790
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Stochastic Universal Sampling
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+Generation: 14
+Population fitness: -4735596
+Mean fitness: -1156
+Mean size: 3868
+Population size: 4096
+
+Amount of Genomes that survived: 3482
+Amount of Accepted Children: 614
+
+First Best Fitness in Population: -829 Size: 3929
+Second Best Fitness in Population: -831 Size: 3969
+Worst Fitness in Population: -1263 Size: 3836
+Difference between best and second best genome: 3742
+Difference between best and worst best genome: 3740
+Genetic Difference between best Genomes of current and past generation: 3742
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Roulette Wheel Selection
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+Generation: 15
+Population fitness: -4631627
+Mean fitness: -1130
+Mean size: 3870
+Population size: 4096
+
+Amount of Genomes that survived: 3493
+Amount of Accepted Children: 603
+
+First Best Fitness in Population: -807 Size: 3969
+Second Best Fitness in Population: -824 Size: 3878
+Worst Fitness in Population: -1256 Size: 3752
+Difference between best and second best genome: 3850
+Difference between best and worst best genome: 3713
+Genetic Difference between best Genomes of current and past generation: 3742
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Tournament Selection Elimination
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+Generation: 16
+Population fitness: -4490900
+Mean fitness: -1096
+Mean size: 3874
+Population size: 4096
+
+Amount of Genomes that survived: 3306
+Amount of Accepted Children: 790
+
+First Best Fitness in Population: -762 Size: 3969
+Second Best Fitness in Population: -800 Size: 3929
+Worst Fitness in Population: -1198 Size: 3871
+Difference between best and second best genome: 3738
+Difference between best and worst best genome: 3798
+Genetic Difference between best Genomes of current and past generation: 3751
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Stochastic Universal Sampling
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+Generation: 17
+Population fitness: -4394945
+Mean fitness: -1072
+Mean size: 3877
+Population size: 4096
+
+Amount of Genomes that survived: 3527
+Amount of Accepted Children: 569
+
+First Best Fitness in Population: -762 Size: 3969
+Second Best Fitness in Population: -768 Size: 3908
+Worst Fitness in Population: -1200 Size: 3864
+Difference between best and second best genome: 3838
+Difference between best and worst best genome: 3837
+Genetic Difference between best Genomes of current and past generation: 0
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Stochastic Universal Sampling
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+Generation: 18
+Population fitness: -4301123
+Mean fitness: -1050
+Mean size: 3880
+Population size: 4096
+
+Amount of Genomes that survived: 3519
+Amount of Accepted Children: 577
+
+First Best Fitness in Population: -745 Size: 3908
+Second Best Fitness in Population: -756 Size: 3881
+Worst Fitness in Population: -1156 Size: 3925
+Difference between best and second best genome: 1465
+Difference between best and worst best genome: 3764
+Genetic Difference between best Genomes of current and past generation: 3836
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Roulette Wheel Selection
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+Generation: 19
+Population fitness: -4218640
+Mean fitness: -1029
+Mean size: 3883
+Population size: 4096
+
+Amount of Genomes that survived: 3558
+Amount of Accepted Children: 538
+
+First Best Fitness in Population: -701 Size: 3908
+Second Best Fitness in Population: -740 Size: 3969
+Worst Fitness in Population: -1137 Size: 3792
+Difference between best and second best genome: 3834
+Difference between best and worst best genome: 3815
+Genetic Difference between best Genomes of current and past generation: 0
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Linear Rank Selection
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+[35mDuplicates found and removed: 4[0m
+Generation: 20
+Population fitness: -4124023
+Mean fitness: -1006
+Mean size: 3886
+Population size: 4096
+
+Amount of Genomes that survived: 3464
+Amount of Accepted Children: 632
+
+First Best Fitness in Population: -701 Size: 3908
+Second Best Fitness in Population: -714 Size: 3881
+Worst Fitness in Population: -1118 Size: 3888
+Difference between best and second best genome: 1465
+Difference between best and worst best genome: 3806
+Genetic Difference between best Genomes of current and past generation: 0
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Tournament Selection Elimination
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+Generation: 21
+Population fitness: -4021138
+Mean fitness: -981
+Mean size: 3889
+Population size: 4096
+
+Amount of Genomes that survived: 3376
+Amount of Accepted Children: 720
+
+First Best Fitness in Population: -699 Size: 3881
+Second Best Fitness in Population: -701 Size: 3908
+Worst Fitness in Population: -1127 Size: 3896
+Difference between best and second best genome: 1463
+Difference between best and worst best genome: 2455
+Genetic Difference between best Genomes of current and past generation: 3807
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Roulette Wheel Selection
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+Generation: 22
+Population fitness: -3947507
+Mean fitness: -963
+Mean size: 3891
+Population size: 4096
+
+Amount of Genomes that survived: 3572
+Amount of Accepted Children: 524
+
+First Best Fitness in Population: -699 Size: 3881
+Second Best Fitness in Population: -701 Size: 3908
+Worst Fitness in Population: -1075 Size: 3938
+Difference between best and second best genome: 1463
+Difference between best and worst best genome: 3119
+Genetic Difference between best Genomes of current and past generation: 0
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Stochastic Universal Sampling
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+Generation: 23
+Population fitness: -3872984
+Mean fitness: -945
+Mean size: 3893
+Population size: 4096
+
+Amount of Genomes that survived: 3572
+Amount of Accepted Children: 524
+
+First Best Fitness in Population: -690 Size: 3947
+Second Best Fitness in Population: -699 Size: 3881
+Worst Fitness in Population: -1043 Size: 3937
+Difference between best and second best genome: 3777
+Difference between best and worst best genome: 3774
+Genetic Difference between best Genomes of current and past generation: 3777
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Roulette Wheel Selection
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+Generation: 24
+Population fitness: -3804544
+Mean fitness: -928
+Mean size: 3895
+Population size: 4096
+
+Amount of Genomes that survived: 3607
+Amount of Accepted Children: 489
+
+First Best Fitness in Population: -663 Size: 3947
+Second Best Fitness in Population: -665 Size: 3906
+Worst Fitness in Population: -1015 Size: 3861
+Difference between best and second best genome: 3719
+Difference between best and worst best genome: 3784
+Genetic Difference between best Genomes of current and past generation: 0
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Roulette Wheel Selection
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+Generation: 25
+Population fitness: -3738389
+Mean fitness: -912
+Mean size: 3897
+Population size: 4096
+
+Amount of Genomes that survived: 3613
+Amount of Accepted Children: 483
+
+First Best Fitness in Population: -663 Size: 3947
+Second Best Fitness in Population: -665 Size: 3906
+Worst Fitness in Population: -989 Size: 3910
+Difference between best and second best genome: 3719
+Difference between best and worst best genome: 3803
+Genetic Difference between best Genomes of current and past generation: 0
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Stochastic Universal Sampling
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+Generation: 26
+Population fitness: -3672157
+Mean fitness: -896
+Mean size: 3899
+Population size: 4096
+
+Amount of Genomes that survived: 3586
+Amount of Accepted Children: 510
+
+First Best Fitness in Population: -640 Size: 3947
+Second Best Fitness in Population: -641 Size: 3881
+Worst Fitness in Population: -975 Size: 3931
+Difference between best and second best genome: 3771
+Difference between best and worst best genome: 3782
+Genetic Difference between best Genomes of current and past generation: 0
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Roulette Wheel Selection
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+Generation: 27
+Population fitness: -3608949
+Mean fitness: -881
+Mean size: 3901
+Population size: 4096
+
+Amount of Genomes that survived: 3646
+Amount of Accepted Children: 450
+
+First Best Fitness in Population: -609 Size: 3881
+Second Best Fitness in Population: -617 Size: 3947
+Worst Fitness in Population: -980 Size: 3854
+Difference between best and second best genome: 3769
+Difference between best and worst best genome: 3803
+Genetic Difference between best Genomes of current and past generation: 3769
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Tournament Selection Elimination
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+Generation: 28
+Population fitness: -3531591
+Mean fitness: -862
+Mean size: 3903
+Population size: 4096
+
+Amount of Genomes that survived: 3482
+Amount of Accepted Children: 614
+
+First Best Fitness in Population: -594 Size: 3947
+Second Best Fitness in Population: -609 Size: 3881
+Worst Fitness in Population: -941 Size: 3903
+Difference between best and second best genome: 3769
+Difference between best and worst best genome: 3713
+Genetic Difference between best Genomes of current and past generation: 3753
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Tournament Selection Elimination
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+Generation: 29
+Population fitness: -3457861
+Mean fitness: -844
+Mean size: 3905
+Population size: 4096
+
+Amount of Genomes that survived: 3519
+Amount of Accepted Children: 577
+
+First Best Fitness in Population: -594 Size: 3947
+Second Best Fitness in Population: -609 Size: 3881
+Worst Fitness in Population: -926 Size: 3934
+Difference between best and second best genome: 3769
+Difference between best and worst best genome: 3459
+Genetic Difference between best Genomes of current and past generation: 3801
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Linear Rank Selection
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+[35mDuplicates found and removed: 3[0m
+Generation: 30
+Population fitness: -3392551
+Mean fitness: -828
+Mean size: 3907
+Population size: 4096
+
+Amount of Genomes that survived: 3585
+Amount of Accepted Children: 511
+
+First Best Fitness in Population: -585 Size: 3881
+Second Best Fitness in Population: -593 Size: 3931
+Worst Fitness in Population: -923 Size: 3926
+Difference between best and second best genome: 1699
+Difference between best and worst best genome: 3817
+Genetic Difference between best Genomes of current and past generation: 3767
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Tournament Selection Elimination
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+Generation: 31
+Population fitness: -3324149
+Mean fitness: -811
+Mean size: 3910
+Population size: 4096
+
+Amount of Genomes that survived: 3521
+Amount of Accepted Children: 575
+
+First Best Fitness in Population: -574 Size: 3931
+Second Best Fitness in Population: -581 Size: 3906
+Worst Fitness in Population: -883 Size: 3835
+Difference between best and second best genome: 299
+Difference between best and worst best genome: 3772
+Genetic Difference between best Genomes of current and past generation: 3810
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Stochastic Universal Sampling
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+Generation: 32
+Population fitness: -3272332
+Mean fitness: -798
+Mean size: 3911
+Population size: 4096
+
+Amount of Genomes that survived: 3684
+Amount of Accepted Children: 412
+
+First Best Fitness in Population: -574 Size: 3931
+Second Best Fitness in Population: -581 Size: 3906
+Worst Fitness in Population: -867 Size: 3893
+Difference between best and second best genome: 299
+Difference between best and worst best genome: 3788
+Genetic Difference between best Genomes of current and past generation: 0
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Linear Rank Selection
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+Generation: 33
+Population fitness: -3211948
+Mean fitness: -784
+Mean size: 3912
+Population size: 4096
+
+Amount of Genomes that survived: 3610
+Amount of Accepted Children: 486
+
+First Best Fitness in Population: -568 Size: 3931
+Second Best Fitness in Population: -573 Size: 3906
+Worst Fitness in Population: -865 Size: 3895
+Difference between best and second best genome: 299
+Difference between best and worst best genome: 3805
+Genetic Difference between best Genomes of current and past generation: 0
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Roulette Wheel Selection
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+Generation: 34
+Population fitness: -3165793
+Mean fitness: -772
+Mean size: 3913
+Population size: 4096
+
+Amount of Genomes that survived: 3742
+Amount of Accepted Children: 354
+
+First Best Fitness in Population: -560 Size: 3906
+Second Best Fitness in Population: -568 Size: 3931
+Worst Fitness in Population: -852 Size: 3861
+Difference between best and second best genome: 299
+Difference between best and worst best genome: 3760
+Genetic Difference between best Genomes of current and past generation: 299
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Tournament Selection Elimination
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+Generation: 35
+Population fitness: -3103798
+Mean fitness: -757
+Mean size: 3915
+Population size: 4096
+
+Amount of Genomes that survived: 3568
+Amount of Accepted Children: 528
+
+First Best Fitness in Population: -542 Size: 3906
+Second Best Fitness in Population: -568 Size: 3931
+Worst Fitness in Population: -823 Size: 3846
+Difference between best and second best genome: 305
+Difference between best and worst best genome: 3810
+Genetic Difference between best Genomes of current and past generation: 3713
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Stochastic Universal Sampling
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+Generation: 36
+Population fitness: -3057403
+Mean fitness: -746
+Mean size: 3916
+Population size: 4096
+
+Amount of Genomes that survived: 3715
+Amount of Accepted Children: 381
+
+First Best Fitness in Population: -542 Size: 3906
+Second Best Fitness in Population: -558 Size: 3918
+Worst Fitness in Population: -815 Size: 3927
+Difference between best and second best genome: 1103
+Difference between best and worst best genome: 3784
+Genetic Difference between best Genomes of current and past generation: 0
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Stochastic Universal Sampling
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+Generation: 37
+Population fitness: -3013498
+Mean fitness: -735
+Mean size: 3917
+Population size: 4096
+
+Amount of Genomes that survived: 3724
+Amount of Accepted Children: 372
+
+First Best Fitness in Population: -519 Size: 3906
+Second Best Fitness in Population: -538 Size: 3931
+Worst Fitness in Population: -804 Size: 3931
+Difference between best and second best genome: 303
+Difference between best and worst best genome: 3810
+Genetic Difference between best Genomes of current and past generation: 0
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Roulette Wheel Selection
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+Generation: 38
+Population fitness: -2969576
+Mean fitness: -724
+Mean size: 3919
+Population size: 4096
+
+Amount of Genomes that survived: 3728
+Amount of Accepted Children: 368
+
+First Best Fitness in Population: -519 Size: 3906
+Second Best Fitness in Population: -538 Size: 3931
+Worst Fitness in Population: -805 Size: 3914
+Difference between best and second best genome: 303
+Difference between best and worst best genome: 3718
+Genetic Difference between best Genomes of current and past generation: 0
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Stochastic Universal Sampling
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+Generation: 39
+Population fitness: -2927686
+Mean fitness: -714
+Mean size: 3920
+Population size: 4096
+
+Amount of Genomes that survived: 3772
+Amount of Accepted Children: 324
+
+First Best Fitness in Population: -519 Size: 3906
+Second Best Fitness in Population: -536 Size: 3899
+Worst Fitness in Population: -793 Size: 3909
+Difference between best and second best genome: 783
+Difference between best and worst best genome: 3811
+Genetic Difference between best Genomes of current and past generation: 0
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Stochastic Universal Sampling
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+[35mDuplicates found and removed: 8[0m
+Generation: 40
+Population fitness: -2887337
+Mean fitness: -704
+Mean size: 3921
+Population size: 4096
+
+Amount of Genomes that survived: 3783
+Amount of Accepted Children: 313
+
+First Best Fitness in Population: -519 Size: 3906
+Second Best Fitness in Population: -536 Size: 3899
+Worst Fitness in Population: -777 Size: 3925
+Difference between best and second best genome: 783
+Difference between best and worst best genome: 3763
+Genetic Difference between best Genomes of current and past generation: 0
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Roulette Wheel Selection
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+Generation: 41
+Population fitness: -2849995
+Mean fitness: -695
+Mean size: 3921
+Population size: 4096
+
+Amount of Genomes that survived: 3795
+Amount of Accepted Children: 301
+
+First Best Fitness in Population: -519 Size: 3906
+Second Best Fitness in Population: -536 Size: 3899
+Worst Fitness in Population: -777 Size: 3935
+Difference between best and second best genome: 783
+Difference between best and worst best genome: 3603
+Genetic Difference between best Genomes of current and past generation: 0
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Roulette Wheel Selection
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+Generation: 42
+Population fitness: -2811250
+Mean fitness: -686
+Mean size: 3922
+Population size: 4096
+
+Amount of Genomes that survived: 3789
+Amount of Accepted Children: 307
+
+First Best Fitness in Population: -519 Size: 3906
+Second Best Fitness in Population: -522 Size: 3895
+Worst Fitness in Population: -748 Size: 3884
+Difference between best and second best genome: 983
+Difference between best and worst best genome: 3780
+Genetic Difference between best Genomes of current and past generation: 0
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Roulette Wheel Selection
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+Generation: 43
+Population fitness: -2775397
+Mean fitness: -677
+Mean size: 3923
+Population size: 4096
+
+Amount of Genomes that survived: 3793
+Amount of Accepted Children: 303
+
+First Best Fitness in Population: -495 Size: 3895
+Second Best Fitness in Population: -519 Size: 3906
+Worst Fitness in Population: -741 Size: 3899
+Difference between best and second best genome: 981
+Difference between best and worst best genome: 1183
+Genetic Difference between best Genomes of current and past generation: 981
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Linear Rank Selection
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+Generation: 44
+Population fitness: -2734853
+Mean fitness: -667
+Mean size: 3925
+Population size: 4096
+
+Amount of Genomes that survived: 3727
+Amount of Accepted Children: 369
+
+First Best Fitness in Population: -495 Size: 3895
+Second Best Fitness in Population: -511 Size: 3887
+Worst Fitness in Population: -735 Size: 3952
+Difference between best and second best genome: 3780
+Difference between best and worst best genome: 3796
+Genetic Difference between best Genomes of current and past generation: 0
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Linear Rank Selection
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+Generation: 45
+Population fitness: -2696231
+Mean fitness: -658
+Mean size: 3926
+Population size: 4096
+
+Amount of Genomes that survived: 3753
+Amount of Accepted Children: 343
+
+First Best Fitness in Population: -495 Size: 3895
+Second Best Fitness in Population: -495 Size: 3899
+Worst Fitness in Population: -730 Size: 3974
+Difference between best and second best genome: 222
+Difference between best and worst best genome: 3762
+Genetic Difference between best Genomes of current and past generation: 0
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Roulette Wheel Selection
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+Generation: 46
+Population fitness: -2662938
+Mean fitness: -650
+Mean size: 3926
+Population size: 4096
+
+Amount of Genomes that survived: 3837
+Amount of Accepted Children: 259
+
+First Best Fitness in Population: -495 Size: 3895
+Second Best Fitness in Population: -495 Size: 3899
+Worst Fitness in Population: -714 Size: 3915
+Difference between best and second best genome: 222
+Difference between best and worst best genome: 3067
+Genetic Difference between best Genomes of current and past generation: 0
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Roulette Wheel Selection
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+Generation: 47
+Population fitness: -2630086
+Mean fitness: -642
+Mean size: 3927
+Population size: 4096
+
+Amount of Genomes that survived: 3813
+Amount of Accepted Children: 283
+
+First Best Fitness in Population: -472 Size: 3895
+Second Best Fitness in Population: -483 Size: 3899
+Worst Fitness in Population: -699 Size: 3995
+Difference between best and second best genome: 220
+Difference between best and worst best genome: 3070
+Genetic Difference between best Genomes of current and past generation: 0
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Roulette Wheel Selection
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+Generation: 48
+Population fitness: -2598344
+Mean fitness: -634
+Mean size: 3927
+Population size: 4096
+
+Amount of Genomes that survived: 3833
+Amount of Accepted Children: 263
+
+First Best Fitness in Population: -461 Size: 3899
+Second Best Fitness in Population: -472 Size: 3895
+Worst Fitness in Population: -692 Size: 3907
+Difference between best and second best genome: 228
+Difference between best and worst best genome: 3727
+Genetic Difference between best Genomes of current and past generation: 228
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Tournament Selection Elimination
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+Generation: 49
+Population fitness: -2557917
+Mean fitness: -624
+Mean size: 3928
+Population size: 4096
+
+Amount of Genomes that survived: 3723
+Amount of Accepted Children: 373
+
+First Best Fitness in Population: -461 Size: 3899
+Second Best Fitness in Population: -462 Size: 3863
+Worst Fitness in Population: -683 Size: 3915
+Difference between best and second best genome: 3716
+Difference between best and worst best genome: 3443
+Genetic Difference between best Genomes of current and past generation: 3728
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Linear Rank Selection
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+[35mDuplicates found and removed: 7[0m
+Generation: 50
+Population fitness: -2520980
+Mean fitness: -615
+Mean size: 3929
+Population size: 4096
+
+Amount of Genomes that survived: 3744
+Amount of Accepted Children: 352
+
+First Best Fitness in Population: -432 Size: 3925
+Second Best Fitness in Population: -449 Size: 3890
+Worst Fitness in Population: -675 Size: 3969
+Difference between best and second best genome: 1403
+Difference between best and worst best genome: 3440
+Genetic Difference between best Genomes of current and past generation: 761
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Tournament Selection Elimination
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+Generation: 51
+Population fitness: -2481577
+Mean fitness: -605
+Mean size: 3930
+Population size: 4096
+
+Amount of Genomes that survived: 3729
+Amount of Accepted Children: 367
+
+First Best Fitness in Population: -432 Size: 3925
+Second Best Fitness in Population: -444 Size: 3927
+Worst Fitness in Population: -670 Size: 3849
+Difference between best and second best genome: 3712
+Difference between best and worst best genome: 3681
+Genetic Difference between best Genomes of current and past generation: 3708
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Linear Rank Selection
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+Generation: 52
+Population fitness: -2447129
+Mean fitness: -597
+Mean size: 3931
+Population size: 4096
+
+Amount of Genomes that survived: 3806
+Amount of Accepted Children: 290
+
+First Best Fitness in Population: -432 Size: 3925
+Second Best Fitness in Population: -444 Size: 3927
+Worst Fitness in Population: -665 Size: 3879
+Difference between best and second best genome: 3712
+Difference between best and worst best genome: 1856
+Genetic Difference between best Genomes of current and past generation: 0
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Linear Rank Selection
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+Generation: 53
+Population fitness: -2414334
+Mean fitness: -589
+Mean size: 3931
+Population size: 4096
+
+Amount of Genomes that survived: 3810
+Amount of Accepted Children: 286
+
+First Best Fitness in Population: -425 Size: 3927
+Second Best Fitness in Population: -432 Size: 3925
+Worst Fitness in Population: -644 Size: 3883
+Difference between best and second best genome: 3712
+Difference between best and worst best genome: 3817
+Genetic Difference between best Genomes of current and past generation: 3712
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Stochastic Universal Sampling
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+Generation: 54
+Population fitness: -2384604
+Mean fitness: -582
+Mean size: 3932
+Population size: 4096
+
+Amount of Genomes that survived: 3856
+Amount of Accepted Children: 240
+
+First Best Fitness in Population: -415 Size: 3927
+Second Best Fitness in Population: -421 Size: 3863
+Worst Fitness in Population: -637 Size: 4020
+Difference between best and second best genome: 3699
+Difference between best and worst best genome: 3696
+Genetic Difference between best Genomes of current and past generation: 0
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Stochastic Universal Sampling
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+Generation: 55
+Population fitness: -2354769
+Mean fitness: -574
+Mean size: 3932
+Population size: 4096
+
+Amount of Genomes that survived: 3856
+Amount of Accepted Children: 240
+
+First Best Fitness in Population: -413 Size: 3924
+Second Best Fitness in Population: -415 Size: 3927
+Worst Fitness in Population: -641 Size: 3879
+Difference between best and second best genome: 3689
+Difference between best and worst best genome: 3397
+Genetic Difference between best Genomes of current and past generation: 3689
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Stochastic Universal Sampling
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+Generation: 56
+Population fitness: -2325581
+Mean fitness: -567
+Mean size: 3932
+Population size: 4096
+
+Amount of Genomes that survived: 3849
+Amount of Accepted Children: 247
+
+First Best Fitness in Population: -408 Size: 3938
+Second Best Fitness in Population: -413 Size: 3924
+Worst Fitness in Population: -630 Size: 3919
+Difference between best and second best genome: 3677
+Difference between best and worst best genome: 3784
+Genetic Difference between best Genomes of current and past generation: 3677
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Roulette Wheel Selection
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+Generation: 57
+Population fitness: -2296761
+Mean fitness: -560
+Mean size: 3932
+Population size: 4096
+
+Amount of Genomes that survived: 3852
+Amount of Accepted Children: 244
+
+First Best Fitness in Population: -385 Size: 3899
+Second Best Fitness in Population: -408 Size: 3938
+Worst Fitness in Population: -634 Size: 3909
+Difference between best and second best genome: 3739
+Difference between best and worst best genome: 1456
+Genetic Difference between best Genomes of current and past generation: 3739
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Roulette Wheel Selection
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+Generation: 58
+Population fitness: -2268993
+Mean fitness: -553
+Mean size: 3932
+Population size: 4096
+
+Amount of Genomes that survived: 3849
+Amount of Accepted Children: 247
+
+First Best Fitness in Population: -385 Size: 3899
+Second Best Fitness in Population: -408 Size: 3938
+Worst Fitness in Population: -617 Size: 3979
+Difference between best and second best genome: 3739
+Difference between best and worst best genome: 3647
+Genetic Difference between best Genomes of current and past generation: 0
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Linear Rank Selection
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+Generation: 59
+Population fitness: -2236875
+Mean fitness: -546
+Mean size: 3933
+Population size: 4096
+
+Amount of Genomes that survived: 3800
+Amount of Accepted Children: 296
+
+First Best Fitness in Population: -376 Size: 3899
+Second Best Fitness in Population: -395 Size: 3924
+Worst Fitness in Population: -602 Size: 3884
+Difference between best and second best genome: 902
+Difference between best and worst best genome: 2824
+Genetic Difference between best Genomes of current and past generation: 0
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Stochastic Universal Sampling
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+[35mDuplicates found and removed: 3[0m
+Generation: 60
+Population fitness: -2207782
+Mean fitness: -539
+Mean size: 3933
+Population size: 4096
+
+Amount of Genomes that survived: 3845
+Amount of Accepted Children: 251
+
+First Best Fitness in Population: -376 Size: 3899
+Second Best Fitness in Population: -383 Size: 3924
+Worst Fitness in Population: -596 Size: 3931
+Difference between best and second best genome: 906
+Difference between best and worst best genome: 2351
+Genetic Difference between best Genomes of current and past generation: 0
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Stochastic Universal Sampling
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+Generation: 61
+Population fitness: -2177559
+Mean fitness: -531
+Mean size: 3933
+Population size: 4096
+
+Amount of Genomes that survived: 3843
+Amount of Accepted Children: 253
+
+First Best Fitness in Population: -376 Size: 3899
+Second Best Fitness in Population: -383 Size: 3924
+Worst Fitness in Population: -586 Size: 3880
+Difference between best and second best genome: 906
+Difference between best and worst best genome: 3647
+Genetic Difference between best Genomes of current and past generation: 0
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Tournament Selection Elimination
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+Generation: 62
+Population fitness: -2141535
+Mean fitness: -522
+Mean size: 3933
+Population size: 4096
+
+Amount of Genomes that survived: 3754
+Amount of Accepted Children: 342
+
+First Best Fitness in Population: -376 Size: 3899
+Second Best Fitness in Population: -383 Size: 3924
+Worst Fitness in Population: -583 Size: 3939
+Difference between best and second best genome: 906
+Difference between best and worst best genome: 3097
+Genetic Difference between best Genomes of current and past generation: 2747
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Tournament Selection Elimination
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+Generation: 63
+Population fitness: -2103951
+Mean fitness: -513
+Mean size: 3933
+Population size: 4096
+
+Amount of Genomes that survived: 3735
+Amount of Accepted Children: 361
+
+First Best Fitness in Population: -373 Size: 3940
+Second Best Fitness in Population: -376 Size: 3899
+Worst Fitness in Population: -574 Size: 3899
+Difference between best and second best genome: 3775
+Difference between best and worst best genome: 3706
+Genetic Difference between best Genomes of current and past generation: 3754
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Roulette Wheel Selection
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+Generation: 64
+Population fitness: -2074508
+Mean fitness: -506
+Mean size: 3933
+Population size: 4096
+
+Amount of Genomes that survived: 3823
+Amount of Accepted Children: 273
+
+First Best Fitness in Population: -373 Size: 3940
+Second Best Fitness in Population: -376 Size: 3899
+Worst Fitness in Population: -557 Size: 3875
+Difference between best and second best genome: 3775
+Difference between best and worst best genome: 3180
+Genetic Difference between best Genomes of current and past generation: 0
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Tournament Selection Elimination
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+Generation: 65
+Population fitness: -2037349
+Mean fitness: -497
+Mean size: 3933
+Population size: 4096
+
+Amount of Genomes that survived: 3744
+Amount of Accepted Children: 352
+
+First Best Fitness in Population: -371 Size: 3972
+Second Best Fitness in Population: -373 Size: 3940
+Worst Fitness in Population: -549 Size: 3998
+Difference between best and second best genome: 3669
+Difference between best and worst best genome: 3284
+Genetic Difference between best Genomes of current and past generation: 3079
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Tournament Selection Elimination
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+Generation: 66
+Population fitness: -1998950
+Mean fitness: -488
+Mean size: 3932
+Population size: 4096
+
+Amount of Genomes that survived: 3709
+Amount of Accepted Children: 387
+
+First Best Fitness in Population: -363 Size: 3899
+Second Best Fitness in Population: -368 Size: 3910
+Worst Fitness in Population: -547 Size: 3856
+Difference between best and second best genome: 1096
+Difference between best and worst best genome: 3715
+Genetic Difference between best Genomes of current and past generation: 1092
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Linear Rank Selection
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+Generation: 67
+Population fitness: -1966886
+Mean fitness: -480
+Mean size: 3931
+Population size: 4096
+
+Amount of Genomes that survived: 3760
+Amount of Accepted Children: 336
+
+First Best Fitness in Population: -363 Size: 3899
+Second Best Fitness in Population: -363 Size: 3978
+Worst Fitness in Population: -533 Size: 3977
+Difference between best and second best genome: 2430
+Difference between best and worst best genome: 3749
+Genetic Difference between best Genomes of current and past generation: 0
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Stochastic Universal Sampling
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+Generation: 68
+Population fitness: -1937777
+Mean fitness: -473
+Mean size: 3930
+Population size: 4096
+
+Amount of Genomes that survived: 3819
+Amount of Accepted Children: 277
+
+First Best Fitness in Population: -360 Size: 4069
+Second Best Fitness in Population: -363 Size: 3899
+Worst Fitness in Population: -528 Size: 3967
+Difference between best and second best genome: 3549
+Difference between best and worst best genome: 3702
+Genetic Difference between best Genomes of current and past generation: 3549
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Linear Rank Selection
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+Generation: 69
+Population fitness: -1903514
+Mean fitness: -464
+Mean size: 3929
+Population size: 4096
+
+Amount of Genomes that survived: 3728
+Amount of Accepted Children: 368
+
+First Best Fitness in Population: -352 Size: 3899
+Second Best Fitness in Population: -353 Size: 3924
+Worst Fitness in Population: -517 Size: 3965
+Difference between best and second best genome: 1096
+Difference between best and worst best genome: 2060
+Genetic Difference between best Genomes of current and past generation: 3549
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Stochastic Universal Sampling
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+[35mDuplicates found and removed: 14[0m
+Generation: 70
+Population fitness: -1873326
+Mean fitness: -457
+Mean size: 3929
+Population size: 4096
+
+Amount of Genomes that survived: 3803
+Amount of Accepted Children: 293
+
+First Best Fitness in Population: -347 Size: 3978
+Second Best Fitness in Population: -349 Size: 3913
+Worst Fitness in Population: -534 Size: 3984
+Difference between best and second best genome: 2230
+Difference between best and worst best genome: 3675
+Genetic Difference between best Genomes of current and past generation: 2422
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Stochastic Universal Sampling
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+Generation: 71
+Population fitness: -1846552
+Mean fitness: -450
+Mean size: 3929
+Population size: 4096
+
+Amount of Genomes that survived: 3813
+Amount of Accepted Children: 283
+
+First Best Fitness in Population: -338 Size: 3978
+Second Best Fitness in Population: -348 Size: 3938
+Worst Fitness in Population: -511 Size: 3939
+Difference between best and second best genome: 2411
+Difference between best and worst best genome: 3420
+Genetic Difference between best Genomes of current and past generation: 0
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Tournament Selection Elimination
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+Generation: 72
+Population fitness: -1811153
+Mean fitness: -442
+Mean size: 3928
+Population size: 4096
+
+Amount of Genomes that survived: 3661
+Amount of Accepted Children: 435
+
+First Best Fitness in Population: -329 Size: 3920
+Second Best Fitness in Population: -338 Size: 3978
+Worst Fitness in Population: -489 Size: 3879
+Difference between best and second best genome: 2354
+Difference between best and worst best genome: 1213
+Genetic Difference between best Genomes of current and past generation: 3786
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Tournament Selection Elimination
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+Generation: 73
+Population fitness: -1774417
+Mean fitness: -433
+Mean size: 3927
+Population size: 4096
+
+Amount of Genomes that survived: 3641
+Amount of Accepted Children: 455
+
+First Best Fitness in Population: -329 Size: 3920
+Second Best Fitness in Population: -329 Size: 3978
+Worst Fitness in Population: -481 Size: 3945
+Difference between best and second best genome: 2356
+Difference between best and worst best genome: 3005
+Genetic Difference between best Genomes of current and past generation: 2290
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Stochastic Universal Sampling
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+Generation: 74
+Population fitness: -1747525
+Mean fitness: -426
+Mean size: 3926
+Population size: 4096
+
+Amount of Genomes that survived: 3782
+Amount of Accepted Children: 314
+
+First Best Fitness in Population: -318 Size: 3912
+Second Best Fitness in Population: -320 Size: 3978
+Worst Fitness in Population: -468 Size: 3933
+Difference between best and second best genome: 2240
+Difference between best and worst best genome: 1201
+Genetic Difference between best Genomes of current and past generation: 1636
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Stochastic Universal Sampling
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+Generation: 75
+Population fitness: -1720587
+Mean fitness: -420
+Mean size: 3925
+Population size: 4096
+
+Amount of Genomes that survived: 3773
+Amount of Accepted Children: 323
+
+First Best Fitness in Population: -308 Size: 3912
+Second Best Fitness in Population: -320 Size: 3978
+Worst Fitness in Population: -466 Size: 3867
+Difference between best and second best genome: 2238
+Difference between best and worst best genome: 997
+Genetic Difference between best Genomes of current and past generation: 0
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Linear Rank Selection
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+Generation: 76
+Population fitness: -1690392
+Mean fitness: -412
+Mean size: 3925
+Population size: 4096
+
+Amount of Genomes that survived: 3656
+Amount of Accepted Children: 440
+
+First Best Fitness in Population: -308 Size: 3912
+Second Best Fitness in Population: -314 Size: 3978
+Worst Fitness in Population: -453 Size: 3948
+Difference between best and second best genome: 2236
+Difference between best and worst best genome: 3668
+Genetic Difference between best Genomes of current and past generation: 0
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Roulette Wheel Selection
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+Generation: 77
+Population fitness: -1664540
+Mean fitness: -406
+Mean size: 3924
+Population size: 4096
+
+Amount of Genomes that survived: 3745
+Amount of Accepted Children: 351
+
+First Best Fitness in Population: -308 Size: 3912
+Second Best Fitness in Population: -311 Size: 3990
+Worst Fitness in Population: -454 Size: 3951
+Difference between best and second best genome: 3549
+Difference between best and worst best genome: 3567
+Genetic Difference between best Genomes of current and past generation: 0
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Tournament Selection Elimination
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+Generation: 78
+Population fitness: -1633105
+Mean fitness: -398
+Mean size: 3923
+Population size: 4096
+
+Amount of Genomes that survived: 3605
+Amount of Accepted Children: 491
+
+First Best Fitness in Population: -298 Size: 3883
+Second Best Fitness in Population: -308 Size: 3912
+Worst Fitness in Population: -446 Size: 3910
+Difference between best and second best genome: 306
+Difference between best and worst best genome: 1520
+Genetic Difference between best Genomes of current and past generation: 3799
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Tournament Selection Elimination
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+Generation: 79
+Population fitness: -1602089
+Mean fitness: -391
+Mean size: 3923
+Population size: 4096
+
+Amount of Genomes that survived: 3584
+Amount of Accepted Children: 512
+
+First Best Fitness in Population: -298 Size: 3883
+Second Best Fitness in Population: -304 Size: 3969
+Worst Fitness in Population: -426 Size: 3969
+Difference between best and second best genome: 954
+Difference between best and worst best genome: 3647
+Genetic Difference between best Genomes of current and past generation: 3693
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Roulette Wheel Selection
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+[35mDuplicates found and removed: 18[0m
+Generation: 80
+Population fitness: -1578592
+Mean fitness: -385
+Mean size: 3923
+Population size: 4096
+
+Amount of Genomes that survived: 3724
+Amount of Accepted Children: 372
+
+First Best Fitness in Population: -294 Size: 3969
+Second Best Fitness in Population: -295 Size: 3978
+Worst Fitness in Population: -430 Size: 3932
+Difference between best and second best genome: 2322
+Difference between best and worst best genome: 3598
+Genetic Difference between best Genomes of current and past generation: 948
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Tournament Selection Elimination
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+Generation: 81
+Population fitness: -1549053
+Mean fitness: -378
+Mean size: 3923
+Population size: 4096
+
+Amount of Genomes that survived: 3558
+Amount of Accepted Children: 538
+
+First Best Fitness in Population: -279 Size: 3969
+Second Best Fitness in Population: -284 Size: 3943
+Worst Fitness in Population: -415 Size: 3930
+Difference between best and second best genome: 973
+Difference between best and worst best genome: 1026
+Genetic Difference between best Genomes of current and past generation: 919
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Roulette Wheel Selection
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+Generation: 82
+Population fitness: -1526749
+Mean fitness: -372
+Mean size: 3922
+Population size: 4096
+
+Amount of Genomes that survived: 3717
+Amount of Accepted Children: 379
+
+First Best Fitness in Population: -267 Size: 3943
+Second Best Fitness in Population: -276 Size: 3990
+Worst Fitness in Population: -407 Size: 3915
+Difference between best and second best genome: 3538
+Difference between best and worst best genome: 1519
+Genetic Difference between best Genomes of current and past generation: 975
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Tournament Selection Elimination
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+Generation: 83
+Population fitness: -1498001
+Mean fitness: -365
+Mean size: 3922
+Population size: 4096
+
+Amount of Genomes that survived: 3576
+Amount of Accepted Children: 520
+
+First Best Fitness in Population: -267 Size: 3943
+Second Best Fitness in Population: -276 Size: 3990
+Worst Fitness in Population: -404 Size: 3912
+Difference between best and second best genome: 3538
+Difference between best and worst best genome: 1265
+Genetic Difference between best Genomes of current and past generation: 1158
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Linear Rank Selection
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+Generation: 84
+Population fitness: -1473933
+Mean fitness: -359
+Mean size: 3922
+Population size: 4096
+
+Amount of Genomes that survived: 3639
+Amount of Accepted Children: 457
+
+First Best Fitness in Population: -267 Size: 3943
+Second Best Fitness in Population: -270 Size: 3990
+Worst Fitness in Population: -398 Size: 3883
+Difference between best and second best genome: 3534
+Difference between best and worst best genome: 1082
+Genetic Difference between best Genomes of current and past generation: 0
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Tournament Selection Elimination
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+Generation: 85
+Population fitness: -1447435
+Mean fitness: -353
+Mean size: 3922
+Population size: 4096
+
+Amount of Genomes that survived: 3570
+Amount of Accepted Children: 526
+
+First Best Fitness in Population: -260 Size: 3990
+Second Best Fitness in Population: -267 Size: 3943
+Worst Fitness in Population: -381 Size: 3951
+Difference between best and second best genome: 3530
+Difference between best and worst best genome: 3590
+Genetic Difference between best Genomes of current and past generation: 3567
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Tournament Selection Elimination
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+Generation: 86
+Population fitness: -1421661
+Mean fitness: -347
+Mean size: 3922
+Population size: 4096
+
+Amount of Genomes that survived: 3578
+Amount of Accepted Children: 518
+
+First Best Fitness in Population: -253 Size: 3990
+Second Best Fitness in Population: -255 Size: 3943
+Worst Fitness in Population: -388 Size: 3973
+Difference between best and second best genome: 3532
+Difference between best and worst best genome: 3643
+Genetic Difference between best Genomes of current and past generation: 3520
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Linear Rank Selection
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+Generation: 87
+Population fitness: -1397586
+Mean fitness: -341
+Mean size: 3922
+Population size: 4096
+
+Amount of Genomes that survived: 3611
+Amount of Accepted Children: 485
+
+First Best Fitness in Population: -247 Size: 3990
+Second Best Fitness in Population: -255 Size: 3943
+Worst Fitness in Population: -369 Size: 3956
+Difference between best and second best genome: 3530
+Difference between best and worst best genome: 3540
+Genetic Difference between best Genomes of current and past generation: 0
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Tournament Selection Elimination
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+Generation: 88
+Population fitness: -1372350
+Mean fitness: -335
+Mean size: 3922
+Population size: 4096
+
+Amount of Genomes that survived: 3569
+Amount of Accepted Children: 527
+
+First Best Fitness in Population: -232 Size: 3990
+Second Best Fitness in Population: -255 Size: 3943
+Worst Fitness in Population: -365 Size: 3908
+Difference between best and second best genome: 3532
+Difference between best and worst best genome: 3535
+Genetic Difference between best Genomes of current and past generation: 3548
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Linear Rank Selection
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+Generation: 89
+Population fitness: -1349002
+Mean fitness: -329
+Mean size: 3922
+Population size: 4096
+
+Amount of Genomes that survived: 3595
+Amount of Accepted Children: 501
+
+First Best Fitness in Population: -232 Size: 3990
+Second Best Fitness in Population: -255 Size: 3943
+Worst Fitness in Population: -365 Size: 3916
+Difference between best and second best genome: 3532
+Difference between best and worst best genome: 3539
+Genetic Difference between best Genomes of current and past generation: 0
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Tournament Selection Elimination
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+[35mDuplicates found and removed: 24[0m
+Generation: 90
+Population fitness: -1324235
+Mean fitness: -323
+Mean size: 3922
+Population size: 4096
+
+Amount of Genomes that survived: 3573
+Amount of Accepted Children: 523
+
+First Best Fitness in Population: -232 Size: 3990
+Second Best Fitness in Population: -249 Size: 3930
+Worst Fitness in Population: -352 Size: 3942
+Difference between best and second best genome: 3549
+Difference between best and worst best genome: 3552
+Genetic Difference between best Genomes of current and past generation: 3563
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Roulette Wheel Selection
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+Generation: 91
+Population fitness: -1304460
+Mean fitness: -318
+Mean size: 3922
+Population size: 4096
+
+Amount of Genomes that survived: 3702
+Amount of Accepted Children: 394
+
+First Best Fitness in Population: -215 Size: 3990
+Second Best Fitness in Population: -244 Size: 3926
+Worst Fitness in Population: -356 Size: 3938
+Difference between best and second best genome: 3498
+Difference between best and worst best genome: 3558
+Genetic Difference between best Genomes of current and past generation: 0
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Stochastic Universal Sampling
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+Generation: 92
+Population fitness: -1283522
+Mean fitness: -313
+Mean size: 3922
+Population size: 4096
+
+Amount of Genomes that survived: 3688
+Amount of Accepted Children: 408
+
+First Best Fitness in Population: -215 Size: 3990
+Second Best Fitness in Population: -244 Size: 3926
+Worst Fitness in Population: -352 Size: 3937
+Difference between best and second best genome: 3498
+Difference between best and worst best genome: 3522
+Genetic Difference between best Genomes of current and past generation: 0
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Roulette Wheel Selection
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+Generation: 93
+Population fitness: -1263752
+Mean fitness: -308
+Mean size: 3923
+Population size: 4096
+
+Amount of Genomes that survived: 3714
+Amount of Accepted Children: 382
+
+First Best Fitness in Population: -215 Size: 3990
+Second Best Fitness in Population: -236 Size: 3911
+Worst Fitness in Population: -336 Size: 3909
+Difference between best and second best genome: 3475
+Difference between best and worst best genome: 3679
+Genetic Difference between best Genomes of current and past generation: 0
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Tournament Selection Elimination
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+Generation: 94
+Population fitness: -1238190
+Mean fitness: -302
+Mean size: 3923
+Population size: 4096
+
+Amount of Genomes that survived: 3537
+Amount of Accepted Children: 559
+
+First Best Fitness in Population: -215 Size: 3990
+Second Best Fitness in Population: -227 Size: 3935
+Worst Fitness in Population: -336 Size: 3915
+Difference between best and second best genome: 3527
+Difference between best and worst best genome: 3518
+Genetic Difference between best Genomes of current and past generation: 3537
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Linear Rank Selection
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+Generation: 95
+Population fitness: -1215462
+Mean fitness: -296
+Mean size: 3923
+Population size: 4096
+
+Amount of Genomes that survived: 3629
+Amount of Accepted Children: 467
+
+First Best Fitness in Population: -215 Size: 3990
+Second Best Fitness in Population: -227 Size: 3935
+Worst Fitness in Population: -322 Size: 3897
+Difference between best and second best genome: 3527
+Difference between best and worst best genome: 3475
+Genetic Difference between best Genomes of current and past generation: 0
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Tournament Selection Elimination
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+Generation: 96
+Population fitness: -1190620
+Mean fitness: -290
+Mean size: 3923
+Population size: 4096
+
+Amount of Genomes that survived: 3547
+Amount of Accepted Children: 549
+
+First Best Fitness in Population: -210 Size: 3990
+Second Best Fitness in Population: -220 Size: 3935
+Worst Fitness in Population: -316 Size: 3913
+Difference between best and second best genome: 3525
+Difference between best and worst best genome: 3462
+Genetic Difference between best Genomes of current and past generation: 3538
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Tournament Selection Elimination
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+Generation: 97
+Population fitness: -1165254
+Mean fitness: -284
+Mean size: 3923
+Population size: 4096
+
+Amount of Genomes that survived: 3549
+Amount of Accepted Children: 547
+
+First Best Fitness in Population: -210 Size: 3990
+Second Best Fitness in Population: -210 Size: 3935
+Worst Fitness in Population: -312 Size: 3904
+Difference between best and second best genome: 3523
+Difference between best and worst best genome: 3508
+Genetic Difference between best Genomes of current and past generation: 3519
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Linear Rank Selection
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+Generation: 98
+Population fitness: -1142447
+Mean fitness: -278
+Mean size: 3924
+Population size: 4096
+
+Amount of Genomes that survived: 3576
+Amount of Accepted Children: 520
+
+First Best Fitness in Population: -210 Size: 3990
+Second Best Fitness in Population: -210 Size: 3935
+Worst Fitness in Population: -305 Size: 3895
+Difference between best and second best genome: 3523
+Difference between best and worst best genome: 3526
+Genetic Difference between best Genomes of current and past generation: 0
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Linear Rank Selection
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+Generation: 99
+Population fitness: -1120075
+Mean fitness: -273
+Mean size: 3924
+Population size: 4096
+
+Amount of Genomes that survived: 3599
+Amount of Accepted Children: 497
+
+First Best Fitness in Population: -210 Size: 3990
+Second Best Fitness in Population: -210 Size: 3935
+Worst Fitness in Population: -297 Size: 3892
+Difference between best and second best genome: 3523
+Difference between best and worst best genome: 3634
+Genetic Difference between best Genomes of current and past generation: 0
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Roulette Wheel Selection
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+[35mDuplicates found and removed: 18[0m
+Generation: 100
+Population fitness: -1100760
+Mean fitness: -268
+Mean size: 3925
+Population size: 4096
+
+Amount of Genomes that survived: 3667
+Amount of Accepted Children: 429
+
+First Best Fitness in Population: -201 Size: 3990
+Second Best Fitness in Population: -207 Size: 3944
+Worst Fitness in Population: -292 Size: 3923
+Difference between best and second best genome: 3514
+Difference between best and worst best genome: 3552
+Genetic Difference between best Genomes of current and past generation: 0
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Stochastic Universal Sampling
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+Generation: 101
+Population fitness: -1083167
+Mean fitness: -264
+Mean size: 3925
+Population size: 4096
+
+Amount of Genomes that survived: 3699
+Amount of Accepted Children: 397
+
+First Best Fitness in Population: -197 Size: 3961
+Second Best Fitness in Population: -199 Size: 3935
+Worst Fitness in Population: -288 Size: 3932
+Difference between best and second best genome: 510
+Difference between best and worst best genome: 455
+Genetic Difference between best Genomes of current and past generation: 3531
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Tournament Selection Elimination
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+Generation: 102
+Population fitness: -1061409
+Mean fitness: -259
+Mean size: 3925
+Population size: 4096
+
+Amount of Genomes that survived: 3547
+Amount of Accepted Children: 549
+
+First Best Fitness in Population: -188 Size: 3961
+Second Best Fitness in Population: -192 Size: 3990
+Worst Fitness in Population: -282 Size: 3936
+Difference between best and second best genome: 3531
+Difference between best and worst best genome: 632
+Genetic Difference between best Genomes of current and past generation: 528
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Linear Rank Selection
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+Generation: 103
+Population fitness: -1042664
+Mean fitness: -254
+Mean size: 3925
+Population size: 4096
+
+Amount of Genomes that survived: 3612
+Amount of Accepted Children: 484
+
+First Best Fitness in Population: -177 Size: 3961
+Second Best Fitness in Population: -190 Size: 3935
+Worst Fitness in Population: -280 Size: 3898
+Difference between best and second best genome: 522
+Difference between best and worst best genome: 1856
+Genetic Difference between best Genomes of current and past generation: 0
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Stochastic Universal Sampling
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+Generation: 104
+Population fitness: -1026111
+Mean fitness: -250
+Mean size: 3925
+Population size: 4096
+
+Amount of Genomes that survived: 3697
+Amount of Accepted Children: 399
+
+First Best Fitness in Population: -167 Size: 3961
+Second Best Fitness in Population: -185 Size: 3949
+Worst Fitness in Population: -272 Size: 3921
+Difference between best and second best genome: 170
+Difference between best and worst best genome: 632
+Genetic Difference between best Genomes of current and past generation: 0
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Stochastic Universal Sampling
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+Generation: 105
+Population fitness: -1010606
+Mean fitness: -246
+Mean size: 3926
+Population size: 4096
+
+Amount of Genomes that survived: 3724
+Amount of Accepted Children: 372
+
+First Best Fitness in Population: -167 Size: 3961
+Second Best Fitness in Population: -183 Size: 3935
+Worst Fitness in Population: -268 Size: 3926
+Difference between best and second best genome: 528
+Difference between best and worst best genome: 615
+Genetic Difference between best Genomes of current and past generation: 0
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Roulette Wheel Selection
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+Generation: 106
+Population fitness: -995446
+Mean fitness: -243
+Mean size: 3926
+Population size: 4096
+
+Amount of Genomes that survived: 3729
+Amount of Accepted Children: 367
+
+First Best Fitness in Population: -167 Size: 3961
+Second Best Fitness in Population: -173 Size: 3935
+Worst Fitness in Population: -264 Size: 3948
+Difference between best and second best genome: 522
+Difference between best and worst best genome: 726
+Genetic Difference between best Genomes of current and past generation: 0
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Stochastic Universal Sampling
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+Generation: 107
+Population fitness: -980587
+Mean fitness: -239
+Mean size: 3926
+Population size: 4096
+
+Amount of Genomes that survived: 3728
+Amount of Accepted Children: 368
+
+First Best Fitness in Population: -167 Size: 3961
+Second Best Fitness in Population: -173 Size: 3935
+Worst Fitness in Population: -262 Size: 3925
+Difference between best and second best genome: 522
+Difference between best and worst best genome: 876
+Genetic Difference between best Genomes of current and past generation: 0
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Stochastic Universal Sampling
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+Generation: 108
+Population fitness: -965965
+Mean fitness: -235
+Mean size: 3926
+Population size: 4096
+
+Amount of Genomes that survived: 3728
+Amount of Accepted Children: 368
+
+First Best Fitness in Population: -167 Size: 3961
+Second Best Fitness in Population: -173 Size: 3935
+Worst Fitness in Population: -256 Size: 3980
+Difference between best and second best genome: 522
+Difference between best and worst best genome: 1250
+Genetic Difference between best Genomes of current and past generation: 0
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Tournament Selection Elimination
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+Generation: 109
+Population fitness: -948190
+Mean fitness: -231
+Mean size: 3926
+Population size: 4096
+
+Amount of Genomes that survived: 3580
+Amount of Accepted Children: 516
+
+First Best Fitness in Population: -167 Size: 3961
+Second Best Fitness in Population: -172 Size: 3949
+Worst Fitness in Population: -252 Size: 3907
+Difference between best and second best genome: 160
+Difference between best and worst best genome: 1028
+Genetic Difference between best Genomes of current and past generation: 388
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Roulette Wheel Selection
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+[35mDuplicates found and removed: 20[0m
+Generation: 110
+Population fitness: -934743
+Mean fitness: -228
+Mean size: 3927
+Population size: 4096
+
+Amount of Genomes that survived: 3747
+Amount of Accepted Children: 349
+
+First Best Fitness in Population: -167 Size: 3961
+Second Best Fitness in Population: -172 Size: 3949
+Worst Fitness in Population: -252 Size: 3935
+Difference between best and second best genome: 160
+Difference between best and worst best genome: 779
+Genetic Difference between best Genomes of current and past generation: 0
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Tournament Selection Elimination
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+Generation: 111
+Population fitness: -918597
+Mean fitness: -224
+Mean size: 3927
+Population size: 4096
+
+Amount of Genomes that survived: 3605
+Amount of Accepted Children: 491
+
+First Best Fitness in Population: -164 Size: 3949
+Second Best Fitness in Population: -167 Size: 3961
+Worst Fitness in Population: -246 Size: 3931
+Difference between best and second best genome: 164
+Difference between best and worst best genome: 887
+Genetic Difference between best Genomes of current and past generation: 507
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Tournament Selection Elimination
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+Generation: 112
+Population fitness: -902623
+Mean fitness: -220
+Mean size: 3927
+Population size: 4096
+
+Amount of Genomes that survived: 3638
+Amount of Accepted Children: 458
+
+First Best Fitness in Population: -160 Size: 3961
+Second Best Fitness in Population: -162 Size: 3942
+Worst Fitness in Population: -246 Size: 3983
+Difference between best and second best genome: 293
+Difference between best and worst best genome: 815
+Genetic Difference between best Genomes of current and past generation: 503
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Linear Rank Selection
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+Generation: 113
+Population fitness: -888183
+Mean fitness: -216
+Mean size: 3927
+Population size: 4096
+
+Amount of Genomes that survived: 3682
+Amount of Accepted Children: 414
+
+First Best Fitness in Population: -157 Size: 3961
+Second Best Fitness in Population: -159 Size: 3964
+Worst Fitness in Population: -235 Size: 3914
+Difference between best and second best genome: 371
+Difference between best and worst best genome: 661
+Genetic Difference between best Genomes of current and past generation: 0
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Stochastic Universal Sampling
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+Generation: 114
+Population fitness: -875135
+Mean fitness: -213
+Mean size: 3927
+Population size: 4096
+
+Amount of Genomes that survived: 3745
+Amount of Accepted Children: 351
+
+First Best Fitness in Population: -154 Size: 3942
+Second Best Fitness in Population: -157 Size: 3961
+Worst Fitness in Population: -236 Size: 3934
+Difference between best and second best genome: 293
+Difference between best and worst best genome: 996
+Genetic Difference between best Genomes of current and past generation: 293
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Stochastic Universal Sampling
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+Generation: 115
+Population fitness: -862220
+Mean fitness: -210
+Mean size: 3928
+Population size: 4096
+
+Amount of Genomes that survived: 3754
+Amount of Accepted Children: 342
+
+First Best Fitness in Population: -153 Size: 3942
+Second Best Fitness in Population: -157 Size: 3961
+Worst Fitness in Population: -229 Size: 3915
+Difference between best and second best genome: 289
+Difference between best and worst best genome: 321
+Genetic Difference between best Genomes of current and past generation: 0
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Linear Rank Selection
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+Generation: 116
+Population fitness: -848721
+Mean fitness: -207
+Mean size: 3928
+Population size: 4096
+
+Amount of Genomes that survived: 3692
+Amount of Accepted Children: 404
+
+First Best Fitness in Population: -153 Size: 3942
+Second Best Fitness in Population: -156 Size: 3964
+Worst Fitness in Population: -230 Size: 3930
+Difference between best and second best genome: 472
+Difference between best and worst best genome: 716
+Genetic Difference between best Genomes of current and past generation: 0
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Tournament Selection Elimination
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+Generation: 117
+Population fitness: -833439
+Mean fitness: -203
+Mean size: 3928
+Population size: 4096
+
+Amount of Genomes that survived: 3620
+Amount of Accepted Children: 476
+
+First Best Fitness in Population: -147 Size: 3942
+Second Best Fitness in Population: -156 Size: 3947
+Worst Fitness in Population: -224 Size: 3920
+Difference between best and second best genome: 335
+Difference between best and worst best genome: 528
+Genetic Difference between best Genomes of current and past generation: 639
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Stochastic Universal Sampling
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+Generation: 118
+Population fitness: -821085
+Mean fitness: -200
+Mean size: 3928
+Population size: 4096
+
+Amount of Genomes that survived: 3753
+Amount of Accepted Children: 343
+
+First Best Fitness in Population: -147 Size: 3942
+Second Best Fitness in Population: -150 Size: 3961
+Worst Fitness in Population: -222 Size: 3901
+Difference between best and second best genome: 289
+Difference between best and worst best genome: 421
+Genetic Difference between best Genomes of current and past generation: 0
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Linear Rank Selection
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+Generation: 119
+Population fitness: -807729
+Mean fitness: -197
+Mean size: 3928
+Population size: 4096
+
+Amount of Genomes that survived: 3695
+Amount of Accepted Children: 401
+
+First Best Fitness in Population: -147 Size: 3942
+Second Best Fitness in Population: -149 Size: 3921
+Worst Fitness in Population: -215 Size: 3928
+Difference between best and second best genome: 604
+Difference between best and worst best genome: 509
+Genetic Difference between best Genomes of current and past generation: 0
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Tournament Selection Elimination
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+[35mDuplicates found and removed: 20[0m
+Generation: 120
+Population fitness: -792475
+Mean fitness: -193
+Mean size: 3928
+Population size: 4096
+
+Amount of Genomes that survived: 3602
+Amount of Accepted Children: 494
+
+First Best Fitness in Population: -147 Size: 3942
+Second Best Fitness in Population: -149 Size: 3921
+Worst Fitness in Population: -217 Size: 3945
+Difference between best and second best genome: 604
+Difference between best and worst best genome: 352
+Genetic Difference between best Genomes of current and past generation: 332
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Linear Rank Selection
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+Generation: 121
+Population fitness: -780363
+Mean fitness: -190
+Mean size: 3929
+Population size: 4096
+
+Amount of Genomes that survived: 3719
+Amount of Accepted Children: 377
+
+First Best Fitness in Population: -143 Size: 3942
+Second Best Fitness in Population: -146 Size: 3921
+Worst Fitness in Population: -212 Size: 3923
+Difference between best and second best genome: 602
+Difference between best and worst best genome: 531
+Genetic Difference between best Genomes of current and past generation: 0
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Linear Rank Selection
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+Generation: 122
+Population fitness: -767441
+Mean fitness: -187
+Mean size: 3929
+Population size: 4096
+
+Amount of Genomes that survived: 3707
+Amount of Accepted Children: 389
+
+First Best Fitness in Population: -143 Size: 3942
+Second Best Fitness in Population: -146 Size: 3921
+Worst Fitness in Population: -206 Size: 3926
+Difference between best and second best genome: 602
+Difference between best and worst best genome: 498
+Genetic Difference between best Genomes of current and past generation: 0
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Tournament Selection Elimination
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+Generation: 123
+Population fitness: -753180
+Mean fitness: -183
+Mean size: 3929
+Population size: 4096
+
+Amount of Genomes that survived: 3645
+Amount of Accepted Children: 451
+
+First Best Fitness in Population: -141 Size: 3936
+Second Best Fitness in Population: -143 Size: 3942
+Worst Fitness in Population: -204 Size: 3936
+Difference between best and second best genome: 539
+Difference between best and worst best genome: 501
+Genetic Difference between best Genomes of current and past generation: 555
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Linear Rank Selection
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+Generation: 124
+Population fitness: -740615
+Mean fitness: -180
+Mean size: 3929
+Population size: 4096
+
+Amount of Genomes that survived: 3700
+Amount of Accepted Children: 396
+
+First Best Fitness in Population: -140 Size: 3944
+Second Best Fitness in Population: -141 Size: 3936
+Worst Fitness in Population: -198 Size: 3933
+Difference between best and second best genome: 469
+Difference between best and worst best genome: 280
+Genetic Difference between best Genomes of current and past generation: 469
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Tournament Selection Elimination
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+Generation: 125
+Population fitness: -726565
+Mean fitness: -177
+Mean size: 3930
+Population size: 4096
+
+Amount of Genomes that survived: 3608
+Amount of Accepted Children: 488
+
+First Best Fitness in Population: -136 Size: 3964
+Second Best Fitness in Population: -139 Size: 3961
+Worst Fitness in Population: -196 Size: 3899
+Difference between best and second best genome: 373
+Difference between best and worst best genome: 920
+Genetic Difference between best Genomes of current and past generation: 668
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Tournament Selection Elimination
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+Generation: 126
+Population fitness: -714002
+Mean fitness: -174
+Mean size: 3930
+Population size: 4096
+
+Amount of Genomes that survived: 3663
+Amount of Accepted Children: 433
+
+First Best Fitness in Population: -136 Size: 3964
+Second Best Fitness in Population: -138 Size: 3936
+Worst Fitness in Population: -194 Size: 3890
+Difference between best and second best genome: 529
+Difference between best and worst best genome: 907
+Genetic Difference between best Genomes of current and past generation: 476
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Linear Rank Selection
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+Generation: 127
+Population fitness: -702389
+Mean fitness: -171
+Mean size: 3930
+Population size: 4096
+
+Amount of Genomes that survived: 3721
+Amount of Accepted Children: 375
+
+First Best Fitness in Population: -136 Size: 3964
+Second Best Fitness in Population: -136 Size: 3961
+Worst Fitness in Population: -188 Size: 3943
+Difference between best and second best genome: 366
+Difference between best and worst best genome: 1258
+Genetic Difference between best Genomes of current and past generation: 0
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Linear Rank Selection
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+Generation: 128
+Population fitness: -691488
+Mean fitness: -168
+Mean size: 3931
+Population size: 4096
+
+Amount of Genomes that survived: 3706
+Amount of Accepted Children: 390
+
+First Best Fitness in Population: -130 Size: 3964
+Second Best Fitness in Population: -135 Size: 3946
+Worst Fitness in Population: -184 Size: 3950
+Difference between best and second best genome: 375
+Difference between best and worst best genome: 575
+Genetic Difference between best Genomes of current and past generation: 0
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Tournament Selection Elimination
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+Generation: 129
+Population fitness: -679953
+Mean fitness: -166
+Mean size: 3931
+Population size: 4096
+
+Amount of Genomes that survived: 3624
+Amount of Accepted Children: 472
+
+First Best Fitness in Population: -130 Size: 3964
+Second Best Fitness in Population: -133 Size: 3929
+Worst Fitness in Population: -184 Size: 3922
+Difference between best and second best genome: 500
+Difference between best and worst best genome: 543
+Genetic Difference between best Genomes of current and past generation: 398
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Roulette Wheel Selection
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+[35mDuplicates found and removed: 35[0m
+Generation: 130
+Population fitness: -671007
+Mean fitness: -163
+Mean size: 3931
+Population size: 4096
+
+Amount of Genomes that survived: 3803
+Amount of Accepted Children: 293
+
+First Best Fitness in Population: -129 Size: 3944
+Second Best Fitness in Population: -130 Size: 3964
+Worst Fitness in Population: -181 Size: 3920
+Difference between best and second best genome: 368
+Difference between best and worst best genome: 412
+Genetic Difference between best Genomes of current and past generation: 368
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Stochastic Universal Sampling
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+Generation: 131
+Population fitness: -662606
+Mean fitness: -161
+Mean size: 3932
+Population size: 4096
+
+Amount of Genomes that survived: 3774
+Amount of Accepted Children: 322
+
+First Best Fitness in Population: -124 Size: 3968
+Second Best Fitness in Population: -128 Size: 3937
+Worst Fitness in Population: -181 Size: 3923
+Difference between best and second best genome: 350
+Difference between best and worst best genome: 423
+Genetic Difference between best Genomes of current and past generation: 357
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Tournament Selection Elimination
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+Generation: 132
+Population fitness: -652221
+Mean fitness: -159
+Mean size: 3932
+Population size: 4096
+
+Amount of Genomes that survived: 3620
+Amount of Accepted Children: 476
+
+First Best Fitness in Population: -118 Size: 3968
+Second Best Fitness in Population: -121 Size: 3937
+Worst Fitness in Population: -175 Size: 3908
+Difference between best and second best genome: 342
+Difference between best and worst best genome: 700
+Genetic Difference between best Genomes of current and past generation: 522
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Tournament Selection Elimination
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+Generation: 133
+Population fitness: -642872
+Mean fitness: -156
+Mean size: 3932
+Population size: 4096
+
+Amount of Genomes that survived: 3672
+Amount of Accepted Children: 424
+
+First Best Fitness in Population: -116 Size: 3937
+Second Best Fitness in Population: -118 Size: 3968
+Worst Fitness in Population: -171 Size: 3961
+Difference between best and second best genome: 344
+Difference between best and worst best genome: 721
+Genetic Difference between best Genomes of current and past generation: 680
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Linear Rank Selection
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+Generation: 134
+Population fitness: -634368
+Mean fitness: -154
+Mean size: 3933
+Population size: 4096
+
+Amount of Genomes that survived: 3731
+Amount of Accepted Children: 365
+
+First Best Fitness in Population: -114 Size: 3937
+Second Best Fitness in Population: -118 Size: 3968
+Worst Fitness in Population: -171 Size: 3907
+Difference between best and second best genome: 354
+Difference between best and worst best genome: 1444
+Genetic Difference between best Genomes of current and past generation: 0
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Roulette Wheel Selection
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+Generation: 135
+Population fitness: -626809
+Mean fitness: -153
+Mean size: 3933
+Population size: 4096
+
+Amount of Genomes that survived: 3780
+Amount of Accepted Children: 316
+
+First Best Fitness in Population: -114 Size: 3937
+Second Best Fitness in Population: -114 Size: 3968
+Worst Fitness in Population: -169 Size: 3929
+Difference between best and second best genome: 348
+Difference between best and worst best genome: 379
+Genetic Difference between best Genomes of current and past generation: 0
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Linear Rank Selection
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+Generation: 136
+Population fitness: -618558
+Mean fitness: -151
+Mean size: 3933
+Population size: 4096
+
+Amount of Genomes that survived: 3732
+Amount of Accepted Children: 364
+
+First Best Fitness in Population: -109 Size: 3979
+Second Best Fitness in Population: -114 Size: 3937
+Worst Fitness in Population: -166 Size: 3943
+Difference between best and second best genome: 699
+Difference between best and worst best genome: 724
+Genetic Difference between best Genomes of current and past generation: 699
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Tournament Selection Elimination
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+Generation: 137
+Population fitness: -608984
+Mean fitness: -148
+Mean size: 3934
+Population size: 4096
+
+Amount of Genomes that survived: 3654
+Amount of Accepted Children: 442
+
+First Best Fitness in Population: -109 Size: 3979
+Second Best Fitness in Population: -110 Size: 3968
+Worst Fitness in Population: -161 Size: 3891
+Difference between best and second best genome: 707
+Difference between best and worst best genome: 920
+Genetic Difference between best Genomes of current and past generation: 768
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Tournament Selection Elimination
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+Generation: 138
+Population fitness: -599868
+Mean fitness: -146
+Mean size: 3934
+Population size: 4096
+
+Amount of Genomes that survived: 3673
+Amount of Accepted Children: 423
+
+First Best Fitness in Population: -109 Size: 3979
+Second Best Fitness in Population: -109 Size: 3945
+Worst Fitness in Population: -160 Size: 3933
+Difference between best and second best genome: 698
+Difference between best and worst best genome: 735
+Genetic Difference between best Genomes of current and past generation: 639
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Tournament Selection Elimination
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+Generation: 139
+Population fitness: -590244
+Mean fitness: -144
+Mean size: 3934
+Population size: 4096
+
+Amount of Genomes that survived: 3659
+Amount of Accepted Children: 437
+
+First Best Fitness in Population: -105 Size: 3979
+Second Best Fitness in Population: -109 Size: 3945
+Worst Fitness in Population: -158 Size: 3941
+Difference between best and second best genome: 704
+Difference between best and worst best genome: 736
+Genetic Difference between best Genomes of current and past generation: 519
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Linear Rank Selection
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+[35mDuplicates found and removed: 42[0m
+Generation: 140
+Population fitness: -581650
+Mean fitness: -142
+Mean size: 3934
+Population size: 4096
+
+Amount of Genomes that survived: 3707
+Amount of Accepted Children: 389
+
+First Best Fitness in Population: -103 Size: 3975
+Second Best Fitness in Population: -105 Size: 3979
+Worst Fitness in Population: -154 Size: 3931
+Difference between best and second best genome: 66
+Difference between best and worst best genome: 887
+Genetic Difference between best Genomes of current and past generation: 66
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Linear Rank Selection
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+Generation: 141
+Population fitness: -573279
+Mean fitness: -139
+Mean size: 3935
+Population size: 4096
+
+Amount of Genomes that survived: 3672
+Amount of Accepted Children: 424
+
+First Best Fitness in Population: -103 Size: 3975
+Second Best Fitness in Population: -105 Size: 3979
+Worst Fitness in Population: -157 Size: 3922
+Difference between best and second best genome: 66
+Difference between best and worst best genome: 752
+Genetic Difference between best Genomes of current and past generation: 0
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Stochastic Universal Sampling
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+Generation: 142
+Population fitness: -565159
+Mean fitness: -137
+Mean size: 3935
+Population size: 4096
+
+Amount of Genomes that survived: 3756
+Amount of Accepted Children: 340
+
+First Best Fitness in Population: -103 Size: 3975
+Second Best Fitness in Population: -104 Size: 3941
+Worst Fitness in Population: -152 Size: 3939
+Difference between best and second best genome: 492
+Difference between best and worst best genome: 661
+Genetic Difference between best Genomes of current and past generation: 0
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Tournament Selection Elimination
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+Generation: 143
+Population fitness: -555871
+Mean fitness: -135
+Mean size: 3936
+Population size: 4096
+
+Amount of Genomes that survived: 3671
+Amount of Accepted Children: 425
+
+First Best Fitness in Population: -99 Size: 3979
+Second Best Fitness in Population: -101 Size: 3951
+Worst Fitness in Population: -149 Size: 3923
+Difference between best and second best genome: 844
+Difference between best and worst best genome: 850
+Genetic Difference between best Genomes of current and past generation: 764
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Tournament Selection Elimination
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+Generation: 144
+Population fitness: -545544
+Mean fitness: -133
+Mean size: 3936
+Population size: 4096
+
+Amount of Genomes that survived: 3639
+Amount of Accepted Children: 457
+
+First Best Fitness in Population: -94 Size: 3951
+Second Best Fitness in Population: -97 Size: 3975
+Worst Fitness in Population: -147 Size: 3930
+Difference between best and second best genome: 774
+Difference between best and worst best genome: 1081
+Genetic Difference between best Genomes of current and past generation: 459
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Roulette Wheel Selection
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+Generation: 145
+Population fitness: -537619
+Mean fitness: -131
+Mean size: 3937
+Population size: 4096
+
+Amount of Genomes that survived: 3736
+Amount of Accepted Children: 360
+
+First Best Fitness in Population: -94 Size: 3951
+Second Best Fitness in Population: -96 Size: 3979
+Worst Fitness in Population: -145 Size: 3932
+Difference between best and second best genome: 778
+Difference between best and worst best genome: 449
+Genetic Difference between best Genomes of current and past generation: 0
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Stochastic Universal Sampling
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+Generation: 146
+Population fitness: -529150
+Mean fitness: -129
+Mean size: 3937
+Population size: 4096
+
+Amount of Genomes that survived: 3740
+Amount of Accepted Children: 356
+
+First Best Fitness in Population: -94 Size: 3951
+Second Best Fitness in Population: -96 Size: 3979
+Worst Fitness in Population: -143 Size: 3939
+Difference between best and second best genome: 778
+Difference between best and worst best genome: 355
+Genetic Difference between best Genomes of current and past generation: 0
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Linear Rank Selection
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+Generation: 147
+Population fitness: -520256
+Mean fitness: -127
+Mean size: 3937
+Population size: 4096
+
+Amount of Genomes that survived: 3683
+Amount of Accepted Children: 413
+
+First Best Fitness in Population: -91 Size: 3979
+Second Best Fitness in Population: -94 Size: 3951
+Worst Fitness in Population: -141 Size: 3907
+Difference between best and second best genome: 786
+Difference between best and worst best genome: 788
+Genetic Difference between best Genomes of current and past generation: 786
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Linear Rank Selection
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+Generation: 148
+Population fitness: -510876
+Mean fitness: -124
+Mean size: 3938
+Population size: 4096
+
+Amount of Genomes that survived: 3651
+Amount of Accepted Children: 445
+
+First Best Fitness in Population: -91 Size: 3979
+Second Best Fitness in Population: -94 Size: 3951
+Worst Fitness in Population: -138 Size: 3944
+Difference between best and second best genome: 786
+Difference between best and worst best genome: 636
+Genetic Difference between best Genomes of current and past generation: 0
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Roulette Wheel Selection
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+Generation: 149
+Population fitness: -502892
+Mean fitness: -122
+Mean size: 3938
+Population size: 4096
+
+Amount of Genomes that survived: 3753
+Amount of Accepted Children: 343
+
+First Best Fitness in Population: -91 Size: 3979
+Second Best Fitness in Population: -91 Size: 3940
+Worst Fitness in Population: -134 Size: 3926
+Difference between best and second best genome: 489
+Difference between best and worst best genome: 881
+Genetic Difference between best Genomes of current and past generation: 0
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Selection method: Linear Rank Selection
+Selected parents: 1024
+amount of new children: 1024
+OnePointCrossover
+[35mDuplicates found and removed: 44[0m

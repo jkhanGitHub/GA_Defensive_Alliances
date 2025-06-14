@@ -103,7 +103,7 @@ The following is an example of a generic evolutionary algorithm:
         int i = 0;
         while (i < population.getPopulation().length && population.getPopulation()[i].getFitness() > 0) {
             if (!defensiveAlliances.contains(population.getPopulation()[i])) {
-                Genome g = population.getPopulation()[i];
+                Genome g = new Genome(population.getPopulation()[i]);
                 //g = Genome.removeIsolatedNodes(population.getPopulation()[i], PARENT_GRAPH);
                 defensiveAlliances.add(g);
             }
