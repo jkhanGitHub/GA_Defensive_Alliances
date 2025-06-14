@@ -25,6 +25,7 @@ This project is a Java-based Genetic Algorithm implementation with CSV logging a
 
 - **Java JDK 8+**
 - **Python 3.x**
+    pip install wheel
   - `pandas`
   - `matplotlib`
 
