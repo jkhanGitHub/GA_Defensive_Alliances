@@ -1,7 +1,7 @@
 import java.io.IOException;
 import java.util.*;
-import java.util.concurrent.TimeUnit;
 import java.io.*;
+import java.util.Properties;
 
 public class Genetic_Algorithm {
 
@@ -20,6 +20,7 @@ The following is an example of a generic evolutionary algorithm:
     8. Return to 2
      */
 
+    static Config cfg;
     static Dictionary<String, Integer> recombinationIdentifiers = new Hashtable<>();
 
     static {
@@ -61,6 +62,12 @@ The following is an example of a generic evolutionary algorithm:
 
     public static final float NODE_EXISTENCE_PROBABILITY = 0.5F;
 
+    static boolean activateLearning = true; //if true, survivors will learn
+
+    static int AMOUNT_OF_lEARNERS = 10; //amount of survivors that learn, this is only used when activateLearning is true
+
+    static boolean randomizeLearners = true; //if true, the learners will be randomly selected from the survivors, otherwise the first AMOUNT_OF_lEARNERS survivors will learn
+
 
     //recombine Parents: Number of parents = POPULATION_SIZE/numberOfContestantsPerRound
     //Number of children = number of parents*NUMBER_OF_CHILDS_PER_PARENT
@@ -80,7 +87,7 @@ The following is an example of a generic evolutionary algorithm:
     public static final int NUMBER_OF_ITERATIONS = 150; //number of generations
 
     public static final int BREAK_FITNESS = Integer.MAX_VALUE;
-    public static final float PROBABILITY = 0.5f; //probability of intersection, 0.5 means 50% chance of intersection and 50% chance of crossover
+    public static final float Intersection_PROBABILITY = 0.5f; //probability of intersection, 0.5 means 50% chance of intersection and 50% chance of crossover
 
 
     public static OneGenome PARENT_GRAPH;
@@ -96,7 +103,8 @@ The following is an example of a generic evolutionary algorithm:
         int i = 0;
         while (i < population.getPopulation().length && population.getPopulation()[i].getFitness() > 0) {
             if (!defensiveAlliances.contains(population.getPopulation()[i])) {
-                Genome g = Genome.removeIsolatedNodes(population.getPopulation()[i], PARENT_GRAPH);
+                Genome g = population.getPopulation()[i];
+                //g = Genome.removeIsolatedNodes(population.getPopulation()[i], PARENT_GRAPH);
                 defensiveAlliances.add(g);
             }
             i++;
@@ -105,9 +113,81 @@ The following is an example of a generic evolutionary algorithm:
     }
 
     //when using onepointcrossover the parentgraph should not be included in the population!
-    static void geneticAlgorithm(int NUMBER_OF_NODES, float NODE_EXISTENCE_PROBABILITY, int POPULATION_SIZE, int NUMBER_OF_ITERATIONS, int BREAK_FITNESS, OneGenome PARENT_GRAPH) throws IOException {
+    // GeneticAlgorithm.java: updated method signature
+    static void geneticAlgorithm(
+            int NUMBER_OF_NODES,
+            float NODE_EXISTENCE_PROBABILITY,
+            int POPULATION_SIZE,
+            int NUMBER_OF_ITERATIONS,
+            int BREAK_FITNESS,
+            int numberOfContestantsPerRound,
+            float mutationRate,
+            OneGenome parentGraph,
+            int recombinationMethod,
+            int numberOfChildsPerParent,
+            float intersectionProbability,
+            int selectionMethod,
+            int mutationMethod,
+            boolean activateLearning
+    ) throws IOException {
+        Population population = new Population(POPULATION_SIZE, NUMBER_OF_NODES, NODE_EXISTENCE_PROBABILITY, parentGraph);
+        population.sort_Population_by_fitness_and_size_reversed();
+
+
+        GeneticLogger.initCSV(cfg);
+        int counter = 0;
+
+        while (population.generation != NUMBER_OF_ITERATIONS) {
+            addDefensiveAlliance(population);
+            bestGenomes.put(counter, population.getPopulation()[0]);
+            population.printStats();
+            GeneticLogger.logGeneration();
+            List<Genome> newGenParents = Selection.select_SelectionMethod(
+                    population,
+                    numberOfContestantsPerRound,
+                    selectionMethod
+            );
+            Population.population = Population.newGeneration(
+                    mutationRate,
+                    intersectionProbability,
+                    numberOfChildsPerParent,
+                    newGenParents,
+                    mutationMethod,
+                    recombinationMethod,
+                    activateLearning
+            );
+            if (++counter % 10 == 0) {
+                population = Population.remove_duplicates_Threaded(
+                        population,
+                        NUMBER_OF_NODES,
+                        NODE_EXISTENCE_PROBABILITY,
+                        parentGraph
+                );
+            }
+        }
+    }
+
+    static void geneticAlgorithm(
+            int NUMBER_OF_NODES,
+            float NODE_EXISTENCE_PROBABILITY,
+            int POPULATION_SIZE,
+            int NUMBER_OF_ITERATIONS,
+            int BREAK_FITNESS,
+            int numberOfContestantsPerRound,
+            float mutationrate,
+            OneGenome parentGraph,
+            int recombinationMethod,
+            int numberOfChildsPerParent,
+            float intersection_probability,
+            int selectionMethod,
+            int mutationMethod,
+            boolean activateLearning,
+            int amountOfLearners,
+            boolean randomizeLearners
+
+    ) throws IOException {
         //Generatess first Population and calculates the Fitness of each Genome
-        Population population = new Population(POPULATION_SIZE, NUMBER_OF_NODES, NODE_EXISTENCE_PROBABILITY, PARENT_GRAPH);
+        Population population = new Population(POPULATION_SIZE, NUMBER_OF_NODES, NODE_EXISTENCE_PROBABILITY, parentGraph);
         population.sort_Population_by_fitness_and_size_reversed();
 
         /*
@@ -117,10 +197,10 @@ The following is an example of a generic evolutionary algorithm:
         }*/
 
         //init css file
-        GeneticLogger.initCSV();
-
-
+        GeneticLogger.initCSV(cfg);
         int counter = 0;
+
+
         while (population.generation != NUMBER_OF_ITERATIONS) {
             //adds defensive alliance to a list if it has been found
             addDefensiveAlliance(population);
@@ -135,18 +215,20 @@ The following is an example of a generic evolutionary algorithm:
             //Literatur says that using many different selection methods is better
             List<Genome> newGenParents = Selection.select_SelectionMethod(
                     population,
-                    NUMBER_OF_CONTESTANTS_PER_ROUND,
-                    random.nextInt(Selection.IMPLEMENTED_SELECTION_METHODS));// since i dont want elitism to be selected or exponential_rankedselection
+                    numberOfContestantsPerRound,
+                    random.nextInt(Selection.IMPLEMENTED_SELECTION_METHODS));// selectionMethod if you want to use a specific selection method, otherwise random
 
             //create new population
             Population.population = Population.newGeneration(
-                    MUTATION_RATE,
-                    PROBABILITY,
-                    NUMBER_OF_CHILDS_PER_PARENT,
+                    mutationrate,
+                    intersection_probability,
+                    numberOfChildsPerParent,
                     newGenParents,
-                    mutationIdentifiers.get("Mutation"),
-                    recombinationIdentifiers.get("OnePointCrossoverThreaded"),
-                    true
+                    mutationMethod,
+                    recombinationMethod,
+                    activateLearning,
+                    amountOfLearners,
+                    randomizeLearners
             );
 
             //remove isolated nodes from population, implemented inside remove_duplicates
@@ -156,19 +238,33 @@ The following is an example of a generic evolutionary algorithm:
             // remove_duplicates is really slow
             // right now it exchanges a duplicate with its complement
             if (++counter % 10 == 0) {
-                population = Population.remove_duplicates_Threaded(population, NUMBER_OF_NODES, NODE_EXISTENCE_PROBABILITY, PARENT_GRAPH);
+                population = Population.remove_duplicates_Threaded(population, NUMBER_OF_NODES, NODE_EXISTENCE_PROBABILITY, parentGraph);
             }
         }
     }
 
 
     public static void main(String[] args) throws IOException {
+
         // Add this at the very beginning
+        // Load configuration with exception handling
+
+        try {
+            cfg = ConfigLoader.load("run_config.properties");
+        } catch (Exception e) {
+            System.err.println("ERROR: Failed to load configuration: " + e.getMessage());
+            e.printStackTrace();
+            return;
+        }
+
         System.setOut(new PrintStream(System.out, true, "UTF-8"));
+
+        String filePath = FILEPATH;
+        int numberOfNodes = cfg.NUMBER_OF_NODES;
 
 
         try {
-            graph = CsvReader.readCsvEdgesToSymmetricalMatrix(FILEPATH, NUMBER_OF_NODES);
+            graph = CsvReader.readCsvEdgesToSymmetricalMatrix(filePath, numberOfNodes);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -178,13 +274,56 @@ The following is an example of a generic evolutionary algorithm:
 
         //the first constructor ensures a connected graph
         //PARENT_GRAPH = new OneGenome(pairWithLargestComponent.getKey(), pairWithLargestComponent.getValue(),g.adjMatrix);
-        PARENT_GRAPH = new OneGenome(NUMBER_OF_NODES, graph);
+        OneGenome parentGraph = new OneGenome(numberOfNodes, graph);
 
 
-        geneticAlgorithm(NUMBER_OF_NODES, NODE_EXISTENCE_PROBABILITY, POPULATION_SIZE, NUMBER_OF_ITERATIONS, BREAK_FITNESS, PARENT_GRAPH);
+        // Map method strings to IDs
+        int selectionId = selectionMethods.get(cfg.SELECTION_METHOD);
+        int recombId = recombinationIdentifiers.get(cfg.RECOMBINATION_METHOD);
+        int mutId = mutationIdentifiers.get(cfg.MUTATION_METHOD);
 
-        //doesnt work right now
-        //PythonCaller.callPythonVisualization(GeneticLogger.getOutputDirectory()+"ga_stats.csv");
+        if(cfg.CAPPED_LEARNING){
+            geneticAlgorithm(
+                    cfg.NUMBER_OF_NODES,
+                    cfg.NODE_EXISTENCE_PROBABILITY,
+                    cfg.POPULATION_SIZE,
+                    cfg.NUMBER_OF_ITERATIONS,
+                    cfg.BREAK_FITNESS,
+                    cfg.NUMBER_OF_CONTESTANTS_PER_ROUND,
+                    cfg.MUTATION_RATE,
+                    parentGraph,
+                    recombId,
+                    cfg.NUMBER_OF_CHILDS_PER_PARENT,
+                    cfg.INTERSECTION_PROBABILITY,
+                    selectionId,
+                    mutId,
+                    cfg.ACTIVATE_LEARNING,
+                    cfg.AMOUNT_OF_lEARNERS,
+                    cfg.RANDOMIZE_LEARNERS
+            );
+        }
+        else {
+            // Run GA without capped amount of learners
+            // Invoke GA with full signature
+            geneticAlgorithm(
+                    cfg.NUMBER_OF_NODES,
+                    cfg.NODE_EXISTENCE_PROBABILITY,
+                    cfg.POPULATION_SIZE,
+                    cfg.NUMBER_OF_ITERATIONS,
+                    cfg.BREAK_FITNESS,
+                    cfg.NUMBER_OF_CONTESTANTS_PER_ROUND,
+                    cfg.MUTATION_RATE,
+                    parentGraph,
+                    recombId,
+                    cfg.NUMBER_OF_CHILDS_PER_PARENT,
+                    cfg.INTERSECTION_PROBABILITY,
+                    selectionId,
+                    mutId,
+                    cfg.ACTIVATE_LEARNING
+            );
+        }
+
+
 
         // At end of execution
         String csvPath = GeneticLogger.getOutputDirectory() + "ga_stats.csv";

@@ -52,7 +52,7 @@ public class GeneticLogger {
             writer.newLine();
             writer.write(String.format("# Learning: %d, Recombination Prob: %.2f",
                     Genetic_Algorithm.AmountOfLearnings,
-                    Genetic_Algorithm.PROBABILITY));
+                    Genetic_Algorithm.Intersection_PROBABILITY));
             writer.newLine();
             writer.write("# Break Fitness: " + Genetic_Algorithm.BREAK_FITNESS);
             writer.newLine();
@@ -68,6 +68,67 @@ public class GeneticLogger {
             writer.newLine();
         } catch (Exception e) {
             System.err.println("CSV initialization failed: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Initialize CSV logging using values from Config.
+     * @param cfg Configuration object containing all GA parameters
+     */
+    public static void initCSV(Config cfg) {
+        String timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        directory = "LOG_Files/run_" + timestamp + "/";
+        new File(directory).mkdirs();
+        filename = directory + "ga_stats.csv";
+
+        boolean activateCappedLearning = cfg.CAPPED_LEARNING;
+
+        // Prepare scientific notation for mutation rate if needed
+        String scientificMutationRate = new BigDecimal(cfg.MUTATION_RATE).toString();
+
+        try (BufferedWriter writer = Files.newBufferedWriter(
+                Paths.get(filename),
+                StandardCharsets.UTF_8)) {
+
+            // Configuration header
+            writer.write("# Genetic Algorithm Configuration"); writer.newLine();
+            writer.write("# Graph: " + cfg.FILEPATH); writer.newLine();
+            writer.write(String.format("# Nodes: %d, Population: %d, Generations: %d",
+                    cfg.NUMBER_OF_NODES,
+                    cfg.POPULATION_SIZE,
+                    cfg.NUMBER_OF_ITERATIONS)); writer.newLine();
+            writer.write(String.format("# Node Probability: %.2f, Mutation Rate: %s",
+                    cfg.NODE_EXISTENCE_PROBABILITY,
+                    scientificMutationRate)); writer.newLine();
+            writer.write(String.format("# Selection Method: %s (n=%d)",
+                    cfg.SELECTION_METHOD,
+                    cfg.NUMBER_OF_CONTESTANTS_PER_ROUND)); writer.newLine();
+            writer.write(String.format("# Recombination Method: %s, Intersection Prob: %.2f",
+                    cfg.RECOMBINATION_METHOD,
+                    cfg.INTERSECTION_PROBABILITY)); writer.newLine();
+            writer.write(String.format("# Mutation Method: %s, Children/Parent: %d",
+                    cfg.MUTATION_METHOD,
+                    cfg.NUMBER_OF_CHILDS_PER_PARENT)); writer.newLine();
+            writer.write("# Activate Learning: " + cfg.ACTIVATE_LEARNING); writer.newLine();
+
+            if(activateCappedLearning){
+                writer.write("# Amount of Learners: " + cfg.AMOUNT_OF_LEARNINGS); writer.newLine();
+                writer.write("# Randomize Learners: " + cfg.RANDOMIZE_LEARNERS); writer.newLine();
+            }
+
+            writer.write("# Break Fitness: " + cfg.BREAK_FITNESS); writer.newLine();
+            writer.write("# Worst Possible Fitness: " + OneGenome.worstFitnessPossible); writer.newLine();
+            writer.newLine();
+
+            // CSV header row
+            writer.write("generation,population_fitness,mean_fitness,mean_size,"
+                    + "survivors,offspring,best_fitness,best_size,"
+                    + "second_fitness,second_size,worst_fitness,worst_size,"
+                    + "best_second_diff,best_worst_diff,best_current_vs_last_diff");
+            writer.newLine();
+        } catch (Exception e) {
+            System.err.println("CSV initialization failed: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 

@@ -54,25 +54,10 @@ echo Step 3/3: Running visualization...
 echo CSV file: "!CSV_PATH!"
 echo Project directory: "%SCRIPT_DIR%"
 
-:: Verify Python script exists
-echo Checking for Python script:
-dir "%SCRIPT_DIR%\visualize_GeneticAlgorithmLogs.py"
-
-if not exist "%SCRIPT_DIR%\visualize_GeneticAlgorithmLogs.py" (
-    echo ERROR: Python script not found. Creating valid placeholder...
-    
-    :: Create PROPER Python script
-    (
-        echo import sys
-        echo print("Placeholder visualization script")
-        echo print(f"Received CSV file: {sys.argv[1]}")
-        echo # Add your visualization code here
-    ) > "%SCRIPT_DIR%\visualize_ga.py"
-)
-
 
 :: Run with explicit path
 echo Executing Python...
+echo ----------------------------------------
 python "%SCRIPT_DIR%\visualize_GeneticAlgorithmLogs.py" "!CSV_PATH!"
 
 :: 6. Keep window open

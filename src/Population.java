@@ -165,7 +165,7 @@ public class Population {
     }
 
     //used in Genetic Algorithm
-    static Genome[] newGeneration(float mutationrate, float proabibility, int newChildsPerParents, List<Genome> nextGenParents, int mutation_identifier, int recombination_identifier, int amountOfLearners, boolean randomizeLearners) {
+    static Genome[] newGeneration(float mutationrate, float proabibility, int newChildsPerParents, List<Genome> nextGenParents, int mutation_identifier, int recombination_identifier,boolean activateLearning, int amountOfLearners, boolean randomizeLearners) {
         bestGenomeFromLastGeneration = getPopulation()[0];
 
         List<Genome> childrenList;
@@ -176,9 +176,11 @@ public class Population {
 
 
         survivors = getSurvivors(newGeneration);
-        if (!survivors.isEmpty()){
-            survivors_learn(survivors, parentGraph, amountOfLearning,amountOfLearners,randomizeLearners);
-            newGeneration.sort(Comparator.comparingInt(Genome::getFitness).reversed());
+        if (activateLearning) {
+            if (!survivors.isEmpty()){
+                survivors_learn(survivors, parentGraph, amountOfLearning,amountOfLearners,randomizeLearners);
+                newGeneration.sort(Comparator.comparingInt(Genome::getFitness).reversed());
+            }
         }
         newGeneration.sort(Comparator.comparingInt(Genome::getFitness).reversed());
 
