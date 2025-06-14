@@ -67,6 +67,14 @@ pip install -r requirements.txt
 
 ### Unix/macOS (via `run_GeneticAlgorithm.sh`)
 
+0. (Optional but recommended: USE Virtual enviroment venv)
+
+  ```bash
+    python3 -m venv path/to/venv
+    source path/to/venv/bin/activate
+    python3 -m pip install -r requirements.txt
+    
+
 1. Make sure the script is executable:
 
    ```bash
