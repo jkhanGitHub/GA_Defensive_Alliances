@@ -1,3 +1,4 @@
 TODO
 rewrite so that one can use the single threaded methods instead of the multithreaded methods
 fix intersection_probability (optional since it sucks anyway)
+get rid of selection method in Genetic LOgger and config
