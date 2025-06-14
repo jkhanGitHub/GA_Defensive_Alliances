@@ -73,7 +73,8 @@ pip install -r requirements.txt
     python3 -m venv path/to/venv
     source path/to/venv/bin/activate
     python3 -m pip install -r requirements.txt
-    
+    ```
+
 
 1. Make sure the script is executable:
 
@@ -88,6 +89,12 @@ pip install -r requirements.txt
    ```
 
    - Same workflow: compile, run GA, capture CSV path, run Python visualization
+
+3. (deactivate venv when used)
+
+  ```bash
+  deactivate
+  ```
 
 ---
 
