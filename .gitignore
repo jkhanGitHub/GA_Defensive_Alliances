@@ -10,7 +10,7 @@ env/
 #ignore Files 
 *.class
 *.jar
-run_config.properties
+*.properties
 
 ### IntelliJ IDEA ###
 out/
