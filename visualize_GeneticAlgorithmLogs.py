@@ -96,15 +96,15 @@ def visualize_ga_results(csv_file):
 
     # Plot 2: Alliance Size Metrics
     ax2 = plt.subplot(gs[2])
-    ax2.plot(df['generation'], df['best_size'], 'g-', label='Best Alliance')
-    ax2.plot(df['generation'], df['second_size'], 'b--', label='2nd Best Alliance')
-    ax2.plot(df['generation'], df['mean_size'], 'm:', label='Mean Alliance')
-    ax2.plot(df['generation'], df['worst_size'], 'r-', alpha=0.7, label='Worst Alliance')
+    ax2.plot(df['generation'], df['best_size'], 'g-', label='Best Genome')
+    ax2.plot(df['generation'], df['second_size'], 'b--', label='2nd Best Genome')
+    ax2.plot(df['generation'], df['mean_size'], 'm:', label='Mean Size')
+    ax2.plot(df['generation'], df['worst_size'], 'r-', alpha=0.7, label='Worst Genome')
     ax2.fill_between(df['generation'], df['best_size'], df['worst_size'],
                      color='gray', alpha=0.1)
 
     ax2.set_title('Alliance Size Evolution', fontsize=12, pad=10)
-    ax2.set_ylabel('Alliance Size')
+    ax2.set_ylabel('Genome Sizes')
     ax2.legend()
     ax2.grid(True)
 
@@ -115,11 +115,7 @@ def visualize_ga_results(csv_file):
     ax3.bar(df['generation'], df['offspring'], width, bottom=df['survivors'],
             label='Offspring')
 
-    # Add genetic difference line (scaled to secondary axis)
-    ax3_diff = ax3.twinx()
-    ax3_diff.plot(df['generation'], df['best_second_diff'], 'k-', alpha=0.7,
-                  label='Best-2nd Diff')
-    ax3_diff.set_ylabel('Genetic Difference', color='k')
+    
 
     ax3.set_title('Population Composition', fontsize=12, pad=10)
     ax3.set_ylabel('Count')
