@@ -24,10 +24,8 @@ The following is an example of a generic evolutionary algorithm:
     static Dictionary<String, Integer> recombinationIdentifiers = new Hashtable<>();
 
     static {
-        recombinationIdentifiers.put("OnePointCrossoverThreaded", 0);
-        recombinationIdentifiers.put("ProbabilityIntersectionThreaded", 1);
-        recombinationIdentifiers.put("OnePointCrossover", 2);
-        recombinationIdentifiers.put("ProababilityIntersection", 3);
+        recombinationIdentifiers.put("OnePointCrossover", 0);
+        recombinationIdentifiers.put("ProbabilityIntersection", 1);
     }
 
     static Dictionary<String, Integer> selectionMethods = new Hashtable<>();
@@ -147,8 +145,8 @@ The following is an example of a generic evolutionary algorithm:
             List<Genome> newGenParents = Selection.select_SelectionMethod(
                     population,
                     numberOfContestantsPerRound,
-                    selectionMethod
-            );
+                    random.nextInt(Selection.IMPLEMENTED_SELECTION_METHODS)); // selectionMethod if you want to use a specific selection method, otherwise random
+            
             Population.population = Population.newGeneration(
                     mutationRate,
                     intersectionProbability,
