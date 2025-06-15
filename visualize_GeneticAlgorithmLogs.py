@@ -152,13 +152,6 @@ def visualize_ga_results(csv_file):
     plt.savefig(viz_file, dpi=150)
     print(f"Visualization saved to {viz_file}")
 
-    # Additionally save configuration to text file
-    config_file = os.path.join(output_dir, "config.txt")
-    with open(config_file, 'w') as f:
-        for key, value in config.items():
-            f.write(f"{key}: {value}\n")
-    print(f"Configuration saved to {config_file}")
-
 
 if __name__ == "__main__":
     main()

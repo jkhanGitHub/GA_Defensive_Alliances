@@ -319,7 +319,7 @@ The following is an example of a generic evolutionary algorithm:
                     selectionId,
                     mutId,
                     cfg.ACTIVATE_LEARNING,
-                    cfg.AMOUNT_OF_lEARNERS,
+                    cfg.AMOUNT_OF_LEARNERS,
                     cfg.RANDOMIZE_LEARNERS
             );
         }
@@ -347,6 +347,7 @@ The following is an example of a generic evolutionary algorithm:
 
 
         // At end of execution
+        cfg.writeToFile(GeneticLogger.getOutputDirectory() +"runConfiguration.txt");
         String csvPath = GeneticLogger.getOutputDirectory() + "ga_stats.csv";
         System.out.println("CSV_PATH:" + csvPath);  // Special marker for batch file
     }

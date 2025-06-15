@@ -1,4 +1,9 @@
 import java.util.Properties;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 public class Config {
     public String FILEPATH;
@@ -18,7 +23,7 @@ public class Config {
     public boolean ACTIVATE_LEARNING;
 
     public boolean CAPPED_LEARNING;
-    public int AMOUNT_OF_lEARNERS;
+    public int AMOUNT_OF_LEARNERS;
     public boolean RANDOMIZE_LEARNERS;
 
 
@@ -38,9 +43,48 @@ public class Config {
         SELECTION_METHOD = props.getProperty("SELECTION_METHOD");
         MUTATION_METHOD = props.getProperty("MUTATION_METHOD");
         ACTIVATE_LEARNING = Boolean.parseBoolean(props.getProperty("ACTIVATE_LEARNING"));
-        AMOUNT_OF_lEARNERS = Integer.parseInt(props.getProperty("AMOUNT_OF_lEARNERS"));
+        AMOUNT_OF_LEARNERS = Integer.parseInt(props.getProperty("AMOUNT_OF_LEARNERS"));
         RANDOMIZE_LEARNERS = Boolean.parseBoolean(props.getProperty("RANDOMIZE_LEARNERS"));
         CAPPED_LEARNING = Boolean.parseBoolean(props.getProperty("CAPPED_LEARNING"));
     }
+
+
+    public void writeToFile(String outputPath) throws IOException {
+        Path filePath = Paths.get(outputPath);
+        
+        try (BufferedWriter writer = Files.newBufferedWriter(filePath)) {
+            writer.write("Genetic Algorithm Configuration");
+            writer.newLine();
+            writer.write("=".repeat(80));
+            writer.newLine();
+            writer.newLine();
+            
+            writeField(writer, "FILEPATH", FILEPATH);
+            writeField(writer, "NUMBER_OF_NODES", NUMBER_OF_NODES);
+            writeField(writer, "POPULATION_SIZE", POPULATION_SIZE);
+            writeField(writer, "NODE_EXISTENCE_PROBABILITY", NODE_EXISTENCE_PROBABILITY);
+            writeField(writer, "NUMBER_OF_CONTESTANTS_PER_ROUND", NUMBER_OF_CONTESTANTS_PER_ROUND);
+            writeField(writer, "NUMBER_OF_CHILDS_PER_PARENT", NUMBER_OF_CHILDS_PER_PARENT);
+            writeField(writer, "MUTATION_RATE", MUTATION_RATE);
+            writeField(writer, "NUMBER_OF_ITERATIONS", NUMBER_OF_ITERATIONS);
+            writeField(writer, "BREAK_FITNESS", BREAK_FITNESS);
+            writeField(writer, "INTERSECTION_PROBABILITY", INTERSECTION_PROBABILITY);
+            writeField(writer, "RECOMBINATION_METHOD", RECOMBINATION_METHOD);
+            writeField(writer, "SELECTION_METHOD", SELECTION_METHOD);
+            writeField(writer, "MUTATION_METHOD", MUTATION_METHOD);
+            writeField(writer, "ACTIVATE_LEARNING", ACTIVATE_LEARNING);
+            writeField(writer, "AMOUNT_OF_LEARNINGS", AMOUNT_OF_LEARNINGS);
+            writeField(writer, "CAPPED_LEARNING", CAPPED_LEARNING);
+            writeField(writer, "AMOUNT_OF_LEARNERS", AMOUNT_OF_LEARNERS);
+            writeField(writer, "RANDOMIZE_LEARNERS", RANDOMIZE_LEARNERS);
+        }
+    }
+
+    private void writeField(BufferedWriter writer, String name, Object value) throws IOException {
+        String formattedName = String.format("%-" + 40 + "s", name);
+        writer.write(formattedName + " : " + value);
+        writer.newLine();
+    }
+
 }
 
