@@ -70,7 +70,6 @@ The following is an example of a generic evolutionary algorithm:
     //recombine Parents: Number of parents = POPULATION_SIZE/numberOfContestantsPerRound
     //Number of children = number of parents*NUMBER_OF_CHILDS_PER_PARENT
     //new population will take over the best from last generation + all new children
-    //WARNING: IF NUMBER OF PARENTS IS >= Number of children then the whole population will be replaced
     // new nodes in next population is (NUMBER_OF_CONTESTANTS_PER_ROUND/NUMBER_OF_CHILDS_PER_PARENT) in percent
     public static final int NUMBER_OF_CONTESTANTS_PER_ROUND = (int) Math.pow(2, 2); // only 1 winner -< lower number ensures more worse parents and probably more diversity
 
