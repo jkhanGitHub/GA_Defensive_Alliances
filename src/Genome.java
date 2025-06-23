@@ -80,6 +80,7 @@ public class Genome {
         length = genetic_data.length;
         genome = genetic_data;
         degrees = new int[length];
+        calculateSize();
     }
 
     protected Genome(int[] genetic_data, Genome mother, Genome father, int crossoverPoint) {
@@ -544,6 +545,37 @@ public class Genome {
         return same;
     }
 
+    List<Genome> getConnectedSubgraphs(OneGenome parentGraph){
+        // goes through the neighbourhood of parentGraph and checks for all Neighbours inside the genome
+        List<Genome> connectedSubgraphs = new ArrayList<>();
+        boolean[] checked = new boolean[length];
+        for (int i = 0; i < genome.length; i++) {
+            if (genome[i] == 1 && !checked[i]) {
+                //Create empty genome subgraph
+                Genome subgraph = new Genome(new int[length]);
+                Queue<Integer> queue = new LinkedList<>();
+                queue.add(i);
+                checked[i] = true;
+
+                while (!queue.isEmpty()) {
+                    int currentNode = queue.poll();
+                    subgraph.genome[currentNode] = 1;
+                    subgraph.degrees[currentNode] = this.degrees[currentNode];
+                    subgraph.size++;
+
+                    for (int neighbour : OneGenome.neighbours.get(currentNode)) {
+                        if (genome[neighbour] == 1 && !checked[neighbour]) {
+                            queue.add(neighbour);
+                            checked[neighbour] = true;
+                        }
+                    }
+                }
+                connectedSubgraphs.add(subgraph);
+            }
+        }
+        return connectedSubgraphs;
+    }
+
 
     void printParameters() {
         System.out.println("Genome: " + Arrays.toString(genome));
@@ -551,22 +583,42 @@ public class Genome {
         System.out.println("Size: " + size);
         System.out.println("Fitness: " + fitness);
         System.out.println("Positive Fitness: " + positiveFitness);
+        System.out.println();
+    }
+
+    //for storing all found DA in File
+    String info() {
+        String result = 
+                //"Genome: " + Arrays.toString(genome) + "\n" +
+                //"Degrees: " + Arrays.toString(degrees) + "\n" +
+                "Size: " + size + "\n" +
+                "Fitness: " + fitness + "\n" +
+                "Positive Fitness: " + positiveFitness + "\n\n";
+        return result;
     }
 
 
 
     public static void main(String[] args) {
         // Test adjacency matrix (undirected graph)
+        // Example matrix 10x10
         int[][] matrix = {
-                {0, 1, 1, 0},
-                {1, 0, 1, 0},
-                {1, 1, 0, 1},
-                {0, 0, 1, 0}
+                {0, 1, 0, 0, 1, 0, 0, 0, 0, 0},
+                {1, 0, 1, 0, 0, 1, 0, 0, 0, 0},
+                {0, 1, 0, 1, 0, 0, 1, 0, 0, 0},
+                {0, 0, 1, 0, 1, 0, 0, 1, 0, 0},
+                {1, 0, 0, 1, 0, 1, 0, 0, 1, 0},
+                {0, 1, 0, 0, 1, 0, 1, 0, 0, 1},
+                {0, 0, 1, 0, 0, 1, 0, 1, 1 ,1},
+                {0 ,0 ,0 ,1 ,0 ,0 ,1 ,0 ,1 ,1},
+                {0 ,0 ,0 ,0 ,1 ,1 ,1 ,1 ,0 ,1},
+                {0 ,0 ,0 ,0 ,0 ,1 ,1 ,1 ,1 ,2}
         };
 
+
         // Parent genomes
-        int[] motherGenome = {1, 1, 0, 0}; // Nodes 0 and 1
-        int[] fatherGenome = {0, 0, 1, 1}; // Nodes 2 and 3
+        int[] motherGenome = {0, 1, 0, 0, 0, 1, 0, 1, 1, 0}; // Nodes 0 and 1
+        int[] fatherGenome = {1, 0, 1, 1, 0 , 0, 0, 0, 1, 1}; // Nodes 2 and 3
 
         OneGenome parentGraph = new OneGenome(matrix.length, matrix); // Create a parent graph with 4 nodes
 
@@ -624,13 +676,31 @@ public class Genome {
         child2.degrees = new int[child2.length];Genome.calculateDegreesUndirected(matrix,child2);
 
         // Expected degrees for child genome [1, 1, 1, 1]
-        int[] expectedDegrees = {2, 2, 3, 1}; // Correct degrees for full connectivity
         System.out.println(Arrays.toString(test2));
         System.out.println(Arrays.toString(child2.degrees));
         System.out.println("Test Result: " + Arrays.equals(child2.degrees, test2));
         //check size of child and test
         System.out.println("Child Size: " + child2.size);
         System.out.println("Test Size: " + Arrays.stream(test2).sum());
+
+        //print child2 genome
+        System.out.println("Child Genome: " + Arrays.toString(child2.genome));
+        //print degrees of child2
+        System.out.println("Child Degrees: " + Arrays.toString(child2.degrees));
+        //print size of child2
+        System.out.println("Child Size: " + child2.size);
+        //pint all subgraphs of the child genome
+        List<Genome> connectedSubgraphs = child2.getConnectedSubgraphs(parentGraph);
+        System.out.println("Connected Subgraphs: ");
+        for (Genome subgraph : connectedSubgraphs) {
+            subgraph.printParameters();
+        }
+        //print parent neighbourhoods
+        System.out.println("Parent Neighbours: ");
+        for (int i = 0; i < parentGraph.neighbours.size(); i++)
+        {
+            System.out.println("Node " + i + " Neighbours: " + OneGenome.neighbours.get(i));
+        }
 
     }
 

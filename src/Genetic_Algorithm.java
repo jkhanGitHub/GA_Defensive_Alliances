@@ -96,18 +96,41 @@ The following is an example of a generic evolutionary algorithm:
 
     static Random random = new Random();
 
-    static void addDefensiveAlliance(Population population) {
-        int i = 0;
-        while (i < population.getPopulation().length && population.getPopulation()[i].getFitness() > 0) {
-            if (!defensiveAlliances.contains(population.getPopulation()[i])) {
-                Genome g = new Genome(population.getPopulation()[i]);
-                //g = Genome.removeIsolatedNodes(population.getPopulation()[i], PARENT_GRAPH);
+    static boolean addDefensiveAlliance(Population population, OneGenome parentGraph, int SIZE_OF_DEFENSIVE_ALLIANCE) {
+        int x = 0;
+        for (int i = 0; (i < population.getPopulation().length && population.getPopulation()[i].getFitness() > 0); i++) {
+            Genome g = population.getPopulation()[i];
+            //if the genome is already in the defensive alliances, skip it
+            if (!defensiveAlliances.contains(g)) {
                 defensiveAlliances.add(g);
+                // all conected components of a DA are also a DA by definition
+                List<Genome> connectedComponents = g.getConnectedSubgraphs(parentGraph);
+
+                //calculate fitness of each connected component
+                for (Genome component : connectedComponents) {
+                    FitnessFunctions.calculateFitnessMIN(component, parentGraph, SIZE_OF_DEFENSIVE_ALLIANCE);
+                }
+
+                //sort connectedComponents by fitness
+                connectedComponents.sort(Comparator.comparingInt(Genome::getFitness).reversed());
+                defensiveAlliances.addAll(connectedComponents);
+
+                //add defensive alliances to the population by replacing worst genomes
+                for (int j = 0; j < connectedComponents.size(); j++) {
+                    Genome da = connectedComponents.get(j);
+                    population.population[population.getPopulation().length - 1 - j] = da;
+                    x++;
+                }
             }
-            i++;
         }
-        if (i > 0) System.out.println("\u001B[31m" + "new Defensive Alliances found: " + i + "\u001B[0m");
+
+        if (x>0){
+            System.out.println("\u001B[31m" + "new Defensive Alliances found: " + x + "\u001B[0m"); 
+            return true;
+        }
+        return false;         
     }
+        
 
     //when using onepointcrossover the parentgraph should not be included in the population!
     // GeneticAlgorithm.java: updated method signature
@@ -128,20 +151,25 @@ The following is an example of a generic evolutionary algorithm:
             int mutationMethod,
             boolean activateLearning
     ) throws IOException {
+
         Population population = new Population(POPULATION_SIZE, NUMBER_OF_NODES, NODE_EXISTENCE_PROBABILITY, parentGraph, SIZE_OF_DEFENSIVE_ALLIANCE);
         population.sort_Population_by_fitness_and_size_reversed();
+
+
+        int counter = 0;
 
 
         GeneticLogger.initCSV(cfg);
         redirectConsoleOutput();
 
-        int counter = 0;
+        //adds the best genome to the list of best genomes
+        bestGenomes.put(counter, population.getPopulation()[0]);
 
-        while (population.generation != NUMBER_OF_ITERATIONS) {
-            addDefensiveAlliance(population);
-            bestGenomes.put(counter, population.getPopulation()[0]);
-            population.printStats();
-            GeneticLogger.logGeneration();
+        //Print some stats and log to file
+        population.printStats();
+        GeneticLogger.logGeneration();
+
+        while ((population.generation != NUMBER_OF_ITERATIONS) && (population.getPopulation()[0].getFitness() < BREAK_FITNESS)) {
             List<Genome> newGenParents = Selection.select_SelectionMethod(
                     population,
                     numberOfContestantsPerRound,
@@ -157,6 +185,10 @@ The following is an example of a generic evolutionary algorithm:
                     activateLearning,
                     SIZE_OF_DEFENSIVE_ALLIANCE
             );
+
+            //adds defensive alliance to a list if it has been found
+            boolean additionalSort = addDefensiveAlliance(population, parentGraph, SIZE_OF_DEFENSIVE_ALLIANCE);
+
             if (++counter % 10 == 0) {
                 population = Population.remove_duplicates_Threaded(
                         population,
@@ -165,7 +197,18 @@ The following is an example of a generic evolutionary algorithm:
                         parentGraph,
                         SIZE_OF_DEFENSIVE_ALLIANCE
                 );
+                additionalSort = true; //if duplicates are removed, sort the population again
             }
+            //if additionalSort is true, sort the population again
+            if (additionalSort) {
+                population.sort_Population_by_fitness_and_size_reversed();
+            }
+
+            //adds the best genome to the list of best genomes
+            bestGenomes.put(counter, population.getPopulation()[0]);
+            //Print some stats and log to file
+            population.printStats();
+            GeneticLogger.logGeneration();
         }
         resetConsoleOutput();
     }
@@ -203,21 +246,18 @@ The following is an example of a generic evolutionary algorithm:
         //init css file
         GeneticLogger.initCSV(cfg);
         redirectConsoleOutput();
-
+        
         int counter = 0;
 
+        //adds the best genome to the list of best genomes
+        bestGenomes.put(counter, population.getPopulation()[0]);
 
-        while (population.generation != NUMBER_OF_ITERATIONS) {
-            //adds defensive alliance to a list if it has been found
-            addDefensiveAlliance(population);
-            //adds the best genome to the list of best genomes
-            bestGenomes.put(counter, population.getPopulation()[0]);
+        //Print some stats and log to file
+        population.printStats();
+        GeneticLogger.logGeneration();
 
-            //Print some stats and log to file
-            population.printStats();
-            GeneticLogger.logGeneration();
 
-            //change Selection method to whhatever
+        while ((population.generation != NUMBER_OF_ITERATIONS) && (population.getPopulation()[0].getFitness() < BREAK_FITNESS)) {
             //Literatur says that using many different selection methods is better
             List<Genome> newGenParents = Selection.select_SelectionMethod(
                     population,
@@ -238,6 +278,9 @@ The following is an example of a generic evolutionary algorithm:
                     SIZE_OF_DEFENSIVE_ALLIANCE
             );
 
+            //adds defensive alliance to a list if it has been found
+            boolean additionalSort = addDefensiveAlliance(population, parentGraph, SIZE_OF_DEFENSIVE_ALLIANCE);
+
             //remove isolated nodes from population, implemented inside remove_duplicates
             //remove duplicates from population and replace them with random generated genomes
             //this is important because otherwise the algorithm will get stuck in local optima way faster
@@ -246,7 +289,18 @@ The following is an example of a generic evolutionary algorithm:
             // right now it exchanges a duplicate with its complement
             if (++counter % 10 == 0) {
                 population = Population.remove_duplicates_Threaded(population, NUMBER_OF_NODES, NODE_EXISTENCE_PROBABILITY, parentGraph, SIZE_OF_DEFENSIVE_ALLIANCE);
+                additionalSort = true; //if duplicates are removed, sort the population again
             }
+            //if additionalSort is true, sort the population again
+            if (additionalSort) {
+                population.sort_Population_by_fitness_and_size_reversed();
+            }
+
+            //adds the best genome to the list of best genomes
+            bestGenomes.put(counter, population.getPopulation()[0]);
+            //Print some stats and log to file
+            population.printStats();
+            GeneticLogger.logGeneration();
         }
         resetConsoleOutput();
     }
@@ -273,6 +327,11 @@ The following is an example of a generic evolutionary algorithm:
 
 
 
+    public static void deleteDuplicates(List<Genome> genomes) {
+        Set<Genome> uniqueGenomes = new HashSet<>(genomes);
+        genomes.clear();
+        genomes.addAll(uniqueGenomes);
+    }
 
 
 
@@ -371,6 +430,14 @@ The following is an example of a generic evolutionary algorithm:
         // At end of execution
         cfg.writeToFile(GeneticLogger.getOutputDirectory() +"runConfiguration.txt");
         String csvPath = GeneticLogger.getOutputDirectory() + "ga_stats.csv";
+        
+        if (!defensiveAlliances.isEmpty()) {
+            // Write defensive alliances to file
+            File foundDefensiveAlliancesFile = new File(GeneticLogger.getOutputDirectory() + "foundDefensiveAlliances.txt");
+            //deleteDuplicates(defensiveAlliances);
+            GeneticLogger.printDefensiveAlliances(foundDefensiveAlliancesFile, defensiveAlliances);
+        }
+        
         System.out.println("CSV_PATH:" + csvPath);  // Special marker for batch file
     }
 

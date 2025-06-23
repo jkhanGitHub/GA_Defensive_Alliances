@@ -5,6 +5,7 @@ import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.math.BigDecimal;
+import java.util.*;
 
 public class GeneticLogger {
     private static String directory;
@@ -181,6 +182,18 @@ public class GeneticLogger {
             writer.newLine();
         } catch (Exception e) {
             System.err.println("Generation logging failed: " + e.getMessage());
+        }
+    }
+
+    
+    public static void printDefensiveAlliances(File file, List<Genome> defensiveAlliances) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
+            for (Genome da : defensiveAlliances) {
+                writer.write(da.info());
+                writer.newLine();
+            }
+        } catch (IOException e) {
+            System.err.println("ERROR: Failed to write defensive alliances to file: " + e.getMessage());
         }
     }
 }

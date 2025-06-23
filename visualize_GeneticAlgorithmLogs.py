@@ -7,9 +7,9 @@ import textwrap
 
 
 def main():
-    print("Python visualization script started")
-    print(f"Python version: {sys.version}")
-    print(f"Arguments received: {sys.argv}")
+    #print("Python visualization script started")
+    #print(f"Python version: {sys.version}")
+    #print(f"Arguments received: {sys.argv}")
 
     if len(sys.argv) < 2:
         print("Error: Missing CSV file argument")

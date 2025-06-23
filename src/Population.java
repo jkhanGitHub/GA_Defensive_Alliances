@@ -656,7 +656,7 @@ public class Population {
 
     // CSV logging
     private static final String CSV_HEADER = "generation,population_fitness,mean_fitness,mean_size," +
-            "survivors,offspring,best_fitness,best_size," +
+            "survivors,offspring,best_fitness,size_of_fittest," +
             "second_fitness,second_size,worst_fitness,worst_size," +
             "best_second_diff,best_current_vs_last_diff";
 
