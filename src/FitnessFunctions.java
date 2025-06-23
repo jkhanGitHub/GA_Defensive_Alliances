@@ -33,7 +33,8 @@ public class FitnessFunctions {
         return (int) fitness;
     }
 
-    static int calculateFitnessMIN(Genome genome, Genome PARENT_GRAPH){
+    //THIS IS THE ONLY ONE THAT IS USED AND MATTERS I COULD DELETE THE REST OTHER two
+    static int calculateFitnessMIN(Genome genome, Genome PARENT_GRAPH, int SIZE_OF_DEFENSIVE_ALLIANCE){
         int sum = 0;
         int sizeFactor = genome.getSize();
 
@@ -48,11 +49,16 @@ public class FitnessFunctions {
             }
         }
 
+        //if sum is 0 then the genome is a defensive alliance
         if(sum == 0){
-            sum = (PARENT_GRAPH.getSize() - genome.getSize());
+            sum = (PARENT_GRAPH.getSize() - distanceFunction(SIZE_OF_DEFENSIVE_ALLIANCE,genome.getSize()));
         }
 
         return sum;
+    }
+
+    static int distanceFunction(int mainPoint, int testPoint){
+        return Math.abs(mainPoint - testPoint);
     }
 
 

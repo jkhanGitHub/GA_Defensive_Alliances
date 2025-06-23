@@ -9,7 +9,7 @@ public class Learning {
         learnMethods.put(3, "Remove harmful nodes");
     }
 
-    protected static List<Integer> add_test_high_degree_vertices_mutation(Genome mutatedGenome, int numberOfNodesToRemove, OneGenome parentGraph){
+    protected static List<Integer> add_test_high_degree_vertices_mutation(Genome mutatedGenome, int numberOfNodesToRemove, OneGenome parentGraph, int SIZE_OF_DEFENSIVE_ALLIANCE) {
 
         //initialize List in which all the changed alleles are stored
         List<Integer> changedAllele = new ArrayList<>();
@@ -27,7 +27,7 @@ public class Learning {
                 mutatedGenome.addNode(index);
 
                 //calculate the fitness of the mutated genome
-                int newFitness = FitnessFunctions.calculateFitnessMIN(mutatedGenome, parentGraph);
+                int newFitness = FitnessFunctions.calculateFitnessMIN(mutatedGenome, parentGraph, SIZE_OF_DEFENSIVE_ALLIANCE);
 
                 //reject the mutated genome if it is worse than the original genome
                 if (oldFitness > newFitness){
@@ -62,13 +62,13 @@ public class Learning {
         int value = entry.getValue(); //difference in degrees; degree change after Operation
 
         //remove the node from the subgraph
-        subgraph.getGenome()[key] = 0;
+        subgraph.removeNode(key);
 
         return key;
     }
 
     //remove the node with the highest degree
-    protected static List<Integer> remove_many_harmful_Nodes(Genome subgraph, OneGenome parent, int numberOfNodesToRemove){
+    protected static List<Integer> remove_many_harmful_Nodes(Genome subgraph, OneGenome parent, int numberOfNodesToRemove,int SIZE_OF_DEFENSIVE_ALLIANCE){
         //initialize List in which all the changed alleles are stored
         List<Integer> changedAllele = new ArrayList<>();
 
@@ -91,7 +91,7 @@ public class Learning {
 
 
         //calculate the fitness of the mutated genome
-        subgraph.setFitness(FitnessFunctions.calculateFitnessMIN(subgraph, parent));
+        subgraph.setFitness(FitnessFunctions.calculateFitnessMIN(subgraph, parent, SIZE_OF_DEFENSIVE_ALLIANCE));
 
         /*//reject the mutated genome if it is worse than the original genome
         if (subgraph.getFitness()< subgraph.getFitness()){

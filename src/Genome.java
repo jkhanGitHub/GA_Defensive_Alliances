@@ -441,14 +441,14 @@ public class Genome {
     }*/
 
 
-    static Genome learn(Genome genome, OneGenome parentGraph, int numberOfChanges) {
+    static Genome learn(Genome genome, OneGenome parentGraph, int numberOfChanges, int SIZE_OF_DEFENSIVE_ALLIANCE) {
         //TODO implement learning
         int fitness = genome.getFitness();
         int size = genome.getSize();
         List<Integer> changedAllele;
 
-        Learning.add_test_high_degree_vertices_mutation(genome, numberOfChanges, parentGraph); //insanely good method wirth even worse operational time(n^3)*(till numberOfChanges Reached)
-        Learning.remove_many_harmful_Nodes(genome, parentGraph, numberOfChanges);
+        Learning.add_test_high_degree_vertices_mutation(genome, numberOfChanges, parentGraph, SIZE_OF_DEFENSIVE_ALLIANCE); //insanely good method wirth even worse operational time(n^3)*(till numberOfChanges Reached)
+        Learning.remove_many_harmful_Nodes(genome, parentGraph, numberOfChanges, SIZE_OF_DEFENSIVE_ALLIANCE);
 
 
         /*
@@ -469,21 +469,21 @@ public class Genome {
         return genome;
     }
 
-    static Genome learn_test(Genome genome, OneGenome parentGraph, int numberOfChanges) {
+    static Genome learn_test(Genome genome, OneGenome parentGraph, int numberOfChanges, int SIZE_OF_DEFENSIVE_ALLIANCE) {
         //TODO implement learning
         int fitness = genome.getFitness();
         int size = genome.getSize();
 
-        Learning.add_test_high_degree_vertices_mutation(genome, numberOfChanges, parentGraph); //insanely good method wirth even worse operational time(n^3)*(till numberOfChanges Reached)
+        Learning.add_test_high_degree_vertices_mutation(genome, numberOfChanges, parentGraph, SIZE_OF_DEFENSIVE_ALLIANCE); //insanely good method wirth even worse operational time(n^3)*(till numberOfChanges Reached)
         return genome;
     }
 
-    static Genome learn_remove(Genome genome, OneGenome parentGraph, int numberOfChanges) {
+    static Genome learn_remove(Genome genome, OneGenome parentGraph, int numberOfChanges, int SIZE_OF_DEFENSIVE_ALLIANCE) {
         //TODO implement learning
         int fitness = genome.getFitness();
         int size = genome.getSize();
 
-        Learning.remove_many_harmful_Nodes(genome, parentGraph, numberOfChanges);
+        Learning.remove_many_harmful_Nodes(genome, parentGraph, numberOfChanges, SIZE_OF_DEFENSIVE_ALLIANCE);
         return genome;
     }
 

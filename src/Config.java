@@ -15,6 +15,7 @@ public class Config {
     public int NUMBER_OF_CHILDS_PER_PARENT;
     public float MUTATION_RATE;
     public int NUMBER_OF_ITERATIONS;
+    public int SIZE_OF_DEFENSIVE_ALLIANCE;
     public int BREAK_FITNESS;
     public float INTERSECTION_PROBABILITY;
     public String RECOMBINATION_METHOD;
@@ -25,6 +26,7 @@ public class Config {
     public boolean CAPPED_LEARNING;
     public int AMOUNT_OF_LEARNERS;
     public boolean RANDOMIZE_LEARNERS;
+    
 
 
     public Config(Properties props) {
@@ -37,6 +39,7 @@ public class Config {
         NUMBER_OF_CHILDS_PER_PARENT = Integer.parseInt(props.getProperty("NUMBER_OF_CHILDS_PER_PARENT"));
         MUTATION_RATE = Float.parseFloat(props.getProperty("MUTATION_RATE"));
         NUMBER_OF_ITERATIONS = Integer.parseInt(props.getProperty("NUMBER_OF_ITERATIONS"));
+        SIZE_OF_DEFENSIVE_ALLIANCE = Integer.parseInt(props.getProperty("SIZE_OF_DEFENSIVE_ALLIANCE"));
         BREAK_FITNESS = Integer.parseInt(props.getProperty("BREAK_FITNESS"));
         INTERSECTION_PROBABILITY = Float.parseFloat(props.getProperty("INTERSECTION_PROBABILITY"));
         RECOMBINATION_METHOD = props.getProperty("RECOMBINATION_METHOD");
@@ -67,6 +70,7 @@ public class Config {
             writeField(writer, "NUMBER_OF_CHILDS_PER_PARENT", NUMBER_OF_CHILDS_PER_PARENT);
             writeField(writer, "MUTATION_RATE", MUTATION_RATE);
             writeField(writer, "NUMBER_OF_ITERATIONS", NUMBER_OF_ITERATIONS);
+            writeField(writer, "SIZE_OF_DEFENSIVE_ALLIANCE", SIZE_OF_DEFENSIVE_ALLIANCE);
             writeField(writer, "BREAK_FITNESS", BREAK_FITNESS);
             writeField(writer, "INTERSECTION_PROBABILITY", INTERSECTION_PROBABILITY);
             writeField(writer, "RECOMBINATION_METHOD", RECOMBINATION_METHOD);

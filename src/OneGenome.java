@@ -98,6 +98,7 @@ public class OneGenome extends Genome {
     }
 
 
+    //this fitness is not actually achievable since there was a change, resulting in searching for a alliance of specific size
     void calculateWorstFitnessPossible(){
         worstFitnessPossible = Arrays.stream(degrees).sum();
     }

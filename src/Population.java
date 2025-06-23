@@ -65,7 +65,7 @@ public class Population {
         this.mean_size = mean_size;
     }
 
-    Population(int sizeOfPopulation, int numberOFNodes, float existenceRate,OneGenome parentGraph) {
+    Population(int sizeOfPopulation, int numberOFNodes, float existenceRate,OneGenome parentGraph, int SIZE_OF_DEFENSIVE_ALLIANCE) {
         population = new Genome[sizeOfPopulation];
         generation++;
         Population.parentGraph = parentGraph;
@@ -83,7 +83,7 @@ public class Population {
                 //calculate degrees
                 Genome.calculateDegrees_withNeighbourhood(population[finalI]);
                 //calculate fitness
-                population[finalI].setFitness(FitnessFunctions.calculateFitnessMIN(population[finalI], parentGraph));
+                population[finalI].setFitness(FitnessFunctions.calculateFitnessMIN(population[finalI], parentGraph, SIZE_OF_DEFENSIVE_ALLIANCE));
             });
             threads[finalI].start();
         }
@@ -104,10 +104,10 @@ public class Population {
     }
 
 
-    Population(Population oldGeneration, float mutationrate, float proabibility, int newChildsPerParents, List<Genome> nextGenParents, int mutation_identifier, int recombination_identifier, boolean activateLearning) {
+    Population(Population oldGeneration, float mutationrate, float proabibility, int newChildsPerParents, List<Genome> nextGenParents, int mutation_identifier, int recombination_identifier, boolean activateLearning, int SIZE_OF_DEFENSIVE_ALLIANCE) {
         population = new Genome[oldGeneration.population.length];
         bestGenomeFromLastGeneration = new Genome(oldGeneration.getPopulation()[0]);
-        offspringsFromPreviousGeneration = generate_nextChildrenListThreaded(mutationrate, proabibility, newChildsPerParents, nextGenParents, mutation_identifier, recombination_identifier);
+        offspringsFromPreviousGeneration = generate_nextChildrenListThreaded(mutationrate, proabibility, newChildsPerParents, nextGenParents, mutation_identifier, recombination_identifier, SIZE_OF_DEFENSIVE_ALLIANCE);
 
         List<Genome> newGeneration;
         newGeneration = createListOfNextGeneration_Boltzmann(offspringsFromPreviousGeneration);
@@ -115,7 +115,7 @@ public class Population {
         survivors = getSurvivors(newGeneration);
         if (activateLearning) {
             if (!survivors.isEmpty()){
-                survivors_learn(survivors, parentGraph, amountOfLearning);
+                survivors_learn(survivors, parentGraph, amountOfLearning, SIZE_OF_DEFENSIVE_ALLIANCE);
                 newGeneration.sort(Comparator.comparingInt(Genome::getFitness).reversed());
             }
         }
@@ -133,13 +133,12 @@ public class Population {
     }
 
 
-    Population(Population oldGeneration, float mutationrate, float proabibility, int newChildsPerParents, List<Genome> nextGenParents, int mutation_identifier, int recombination_identifier, int amountOfLearners, boolean randomizeLearners) {
+    Population(Population oldGeneration, float mutationrate, float proabibility, int newChildsPerParents, List<Genome> nextGenParents, int mutation_identifier, int recombination_identifier, int amountOfLearners, boolean randomizeLearners, int SIZE_OF_DEFENSIVE_ALLIANCE) {
         population = new Genome[oldGeneration.population.length];
         bestGenomeFromLastGeneration = new Genome(oldGeneration.getPopulation()[0]);
-        offspringsFromPreviousGeneration = generate_nextChildrenListThreaded(mutationrate, proabibility, newChildsPerParents, nextGenParents, mutation_identifier, recombination_identifier);
 
         List<Genome> childrenList;
-        childrenList = generate_nextChildrenListThreaded(mutationrate, proabibility, newChildsPerParents, nextGenParents, mutation_identifier, recombination_identifier);
+        childrenList = generate_nextChildrenListThreaded(mutationrate, proabibility, newChildsPerParents, nextGenParents, mutation_identifier, recombination_identifier, SIZE_OF_DEFENSIVE_ALLIANCE);
 
         List<Genome> newGeneration;
         newGeneration = createListOfNextGeneration_Boltzmann(childrenList);
@@ -147,7 +146,7 @@ public class Population {
 
         survivors = getSurvivors(newGeneration);
         if (!survivors.isEmpty()){
-            survivors_learn(survivors, parentGraph, amountOfLearning,amountOfLearners,randomizeLearners);
+            survivors_learn(survivors, parentGraph, amountOfLearning,amountOfLearners,randomizeLearners, SIZE_OF_DEFENSIVE_ALLIANCE);
             newGeneration.sort(Comparator.comparingInt(Genome::getFitness).reversed());
         }
         newGeneration.sort(Comparator.comparingInt(Genome::getFitness).reversed());
@@ -165,11 +164,11 @@ public class Population {
     }
 
     //used in Genetic Algorithm
-    static Genome[] newGeneration(float mutationrate, float proabibility, int newChildsPerParents, List<Genome> nextGenParents, int mutation_identifier, int recombination_identifier,boolean activateLearning, int amountOfLearners, boolean randomizeLearners) {
+    static Genome[] newGeneration(float mutationrate, float proabibility, int newChildsPerParents, List<Genome> nextGenParents, int mutation_identifier, int recombination_identifier,boolean activateLearning, int amountOfLearners, boolean randomizeLearners, int SIZE_OF_DEFENSIVE_ALLIANCE) {
         bestGenomeFromLastGeneration = new Genome(population[0]);
 
         List<Genome> childrenList;
-        childrenList = generate_nextChildrenListThreaded(mutationrate, proabibility, newChildsPerParents, nextGenParents, mutation_identifier, recombination_identifier);
+        childrenList = generate_nextChildrenListThreaded(mutationrate, proabibility, newChildsPerParents, nextGenParents, mutation_identifier, recombination_identifier, SIZE_OF_DEFENSIVE_ALLIANCE);
 
         List<Genome> newGeneration;
         newGeneration = createListOfNextGeneration_Boltzmann(childrenList);
@@ -178,7 +177,7 @@ public class Population {
         survivors = getSurvivors(newGeneration);
         if (activateLearning) {
             if (!survivors.isEmpty()){
-                survivors_learn(survivors, parentGraph, amountOfLearning,amountOfLearners,randomizeLearners);
+                survivors_learn(survivors, parentGraph, amountOfLearning,amountOfLearners,randomizeLearners, SIZE_OF_DEFENSIVE_ALLIANCE);
                 newGeneration.sort(Comparator.comparingInt(Genome::getFitness).reversed());
             }
         }
@@ -200,9 +199,9 @@ public class Population {
 
 
     //you can change generate_nextChildrenList to generate_nextChildrenListThreaded if you want to use the threaded version
-    static Genome[] newGeneration(float mutationrate, float proabibility, int newChildsPerParents, List<Genome> nextGenParents, int mutation_identifier, int recombination_identifier, boolean activateLearning) {
+    static Genome[] newGeneration(float mutationrate, float proabibility, int newChildsPerParents, List<Genome> nextGenParents, int mutation_identifier, int recombination_identifier, boolean activateLearning, int SIZE_OF_DEFENSIVE_ALLIANCE) {
         bestGenomeFromLastGeneration = new Genome(population[0]);
-        offspringsFromPreviousGeneration = generate_nextChildrenListThreaded(mutationrate, proabibility, newChildsPerParents, nextGenParents, mutation_identifier, recombination_identifier);
+        offspringsFromPreviousGeneration = generate_nextChildrenListThreaded(mutationrate, proabibility, newChildsPerParents, nextGenParents, mutation_identifier, recombination_identifier, SIZE_OF_DEFENSIVE_ALLIANCE);
 
         List<Genome> newGeneration;
         newGeneration = createListOfNextGeneration_Boltzmann(offspringsFromPreviousGeneration);
@@ -210,7 +209,7 @@ public class Population {
         survivors = getSurvivors(newGeneration);
         if (activateLearning) {
             if (!survivors.isEmpty()){
-                survivors_learn(survivors, parentGraph, amountOfLearning);
+                survivors_learn(survivors, parentGraph, amountOfLearning, SIZE_OF_DEFENSIVE_ALLIANCE);
                 newGeneration.sort(Comparator.comparingInt(Genome::getFitness).reversed());
             }
         }
@@ -260,13 +259,13 @@ public class Population {
 
     }
 
-    static void survivors_learn(List<Genome> survivors, OneGenome parentGraph, int amountOfLearning) {
+    static void survivors_learn(List<Genome> survivors, OneGenome parentGraph, int amountOfLearning, int SIZE_OF_DEFENSIVE_ALLIANCE) {
         Thread[] threads = new Thread[survivors.size()];
 
         for (int i = 0; i < survivors.size(); i++) {
             final int index = i;
             threads[index] = new Thread(() -> {
-                Genome.learn(survivors.get(index), parentGraph, amountOfLearning);
+                Genome.learn(survivors.get(index), parentGraph, amountOfLearning, SIZE_OF_DEFENSIVE_ALLIANCE);
             });
             threads[index].start();
         }
@@ -281,7 +280,7 @@ public class Population {
         }
     }
 
-    static void survivors_learn(List<Genome> survivors, OneGenome parentGraph, int amountOfLearning, int learnerAmount, boolean randomizeLearners) {
+    static void survivors_learn(List<Genome> survivors, OneGenome parentGraph, int amountOfLearning, int learnerAmount, boolean randomizeLearners, int SIZE_OF_DEFENSIVE_ALLIANCE) {
         /**
          * This method is used to let the surviviors of the last generation learn.
          * @learnerAmount is the amount of survivors that are going to learn.
@@ -297,7 +296,7 @@ public class Population {
         for (int i = 0; (i < survivors.size()) && (i < learnerAmount); i++) {
             final int index = i;
             threads[index] = new Thread(() -> {
-                Genome.learn(survivors.get(index), parentGraph, amountOfLearning);
+                Genome.learn(survivors.get(index), parentGraph, amountOfLearning, SIZE_OF_DEFENSIVE_ALLIANCE);
             });
             threads[index].start();
         }
@@ -312,7 +311,7 @@ public class Population {
         }
     }
 
-    static List<Genome> generate_nextChildrenListThreaded(float mutationrate, float probability, int newChildsPerParents, List<Genome> nextGenParents, int mutation_identifier, int recombination_identifier) {
+    static List<Genome> generate_nextChildrenListThreaded(float mutationrate, float probability, int newChildsPerParents, List<Genome> nextGenParents, int mutation_identifier, int recombination_identifier, int SIZE_OF_DEFENSIVE_ALLIANCE) {
 
         List<Genome> nextGenChildren = Collections.synchronizedList(new LinkedList<>()); // Thread-safe list
         System.out.println(Recombinations.recombinationIdentifiers.get(recombination_identifier));
@@ -363,7 +362,7 @@ public class Population {
                     }
 
                     //calculate fitness
-                    int fitnessValue = FitnessFunctions.calculateFitnessMIN(newChild, parentGraph);
+                    int fitnessValue = FitnessFunctions.calculateFitnessMIN(newChild, parentGraph, SIZE_OF_DEFENSIVE_ALLIANCE);
                     if (fitnessValue==0)System.out.println("\u001B[31m"+fitnessValue);
                     newChild.setFitness(fitnessValue);
 
@@ -390,7 +389,7 @@ public class Population {
 
 
 
-    static List<Genome> generate_nextChildrenList(float mutationrate, float proabibility, int newChildsPerParents, List<Genome> nextGenParents, int mutation_identifier, int recombination_identifier) {
+    static List<Genome> generate_nextChildrenList(float mutationrate, float proabibility, int newChildsPerParents, List<Genome> nextGenParents, int mutation_identifier, int recombination_identifier, int SIZE_OF_DEFENSIVE_ALLIANCE) {
 
         List<Genome> nextGenChildren = Collections.synchronizedList(new LinkedList<>()); // Thread-safe list
 
@@ -425,7 +424,7 @@ public class Population {
                 }
 
                 //calculate fitness
-                newChild.setFitness(FitnessFunctions.calculateFitnessMIN(newChild, parentGraph));
+                newChild.setFitness(FitnessFunctions.calculateFitnessMIN(newChild, parentGraph, SIZE_OF_DEFENSIVE_ALLIANCE));
 
                 nextGenChildren.add(newChild);
             }
@@ -473,7 +472,7 @@ public class Population {
     }
 
     //o(n) = (n^2)
-    static Population remove_duplicates(Population population, int numberOFNodes, float existenceRate, OneGenome parentGraph) {
+    static Population remove_duplicates(Population population, int numberOFNodes, float existenceRate, OneGenome parentGraph, int SIZE_OF_DEFENSIVE_ALLIANCE) {
 
         //remove isolated nodes
         //Population temp = remove_isolated_nodes(population, parentGraph);
@@ -494,7 +493,7 @@ public class Population {
                     //calculate size
                     temp.population[i].calculateSize();
                     //calculate fitness
-                    temp.population[i].setFitness(FitnessFunctions.calculateFitnessMIN(temp.population[i], parentGraph));
+                    temp.population[i].setFitness(FitnessFunctions.calculateFitnessMIN(temp.population[i], parentGraph, SIZE_OF_DEFENSIVE_ALLIANCE));
 
 
                     found = true;
@@ -569,7 +568,7 @@ public class Population {
         return population;
     }*/
 
-    static Population remove_duplicates_Threaded(Population population, int numberOFNodes, float existenceRate, OneGenome parentGraph) {
+    static Population remove_duplicates_Threaded(Population population, int numberOFNodes, float existenceRate, OneGenome parentGraph,int SIZE_OF_DEFENSIVE_ALLIANCE) {
         Population temp = population;
         boolean[] toReplace = new boolean[temp.population.length];
         final AtomicInteger counter = new AtomicInteger(0);
@@ -593,7 +592,7 @@ public class Population {
                 Genome newGenome = new Genome(numberOFNodes, existenceRate);
                 Genome.calculateDegrees_withNeighbourhood(newGenome);
                 newGenome.calculateSize();
-                newGenome.setFitness(FitnessFunctions.calculateFitnessMIN(newGenome, parentGraph));
+                newGenome.setFitness(FitnessFunctions.calculateFitnessMIN(newGenome, parentGraph, SIZE_OF_DEFENSIVE_ALLIANCE));
                 temp.population[i] = newGenome;
             }
         });

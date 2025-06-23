@@ -116,6 +116,7 @@ The following is an example of a generic evolutionary algorithm:
             float NODE_EXISTENCE_PROBABILITY,
             int POPULATION_SIZE,
             int NUMBER_OF_ITERATIONS,
+            int SIZE_OF_DEFENSIVE_ALLIANCE,
             int BREAK_FITNESS,
             int numberOfContestantsPerRound,
             float mutationRate,
@@ -127,7 +128,7 @@ The following is an example of a generic evolutionary algorithm:
             int mutationMethod,
             boolean activateLearning
     ) throws IOException {
-        Population population = new Population(POPULATION_SIZE, NUMBER_OF_NODES, NODE_EXISTENCE_PROBABILITY, parentGraph);
+        Population population = new Population(POPULATION_SIZE, NUMBER_OF_NODES, NODE_EXISTENCE_PROBABILITY, parentGraph, SIZE_OF_DEFENSIVE_ALLIANCE);
         population.sort_Population_by_fitness_and_size_reversed();
 
 
@@ -153,14 +154,16 @@ The following is an example of a generic evolutionary algorithm:
                     newGenParents,
                     mutationMethod,
                     recombinationMethod,
-                    activateLearning
+                    activateLearning,
+                    SIZE_OF_DEFENSIVE_ALLIANCE
             );
             if (++counter % 10 == 0) {
                 population = Population.remove_duplicates_Threaded(
                         population,
                         NUMBER_OF_NODES,
                         NODE_EXISTENCE_PROBABILITY,
-                        parentGraph
+                        parentGraph,
+                        SIZE_OF_DEFENSIVE_ALLIANCE
                 );
             }
         }
@@ -172,6 +175,7 @@ The following is an example of a generic evolutionary algorithm:
             float NODE_EXISTENCE_PROBABILITY,
             int POPULATION_SIZE,
             int NUMBER_OF_ITERATIONS,
+            int SIZE_OF_DEFENSIVE_ALLIANCE,
             int BREAK_FITNESS,
             int numberOfContestantsPerRound,
             float mutationrate,
@@ -187,7 +191,7 @@ The following is an example of a generic evolutionary algorithm:
 
     ) throws IOException {
         //Generatess first Population and calculates the Fitness of each Genome
-        Population population = new Population(POPULATION_SIZE, NUMBER_OF_NODES, NODE_EXISTENCE_PROBABILITY, parentGraph);
+        Population population = new Population(POPULATION_SIZE, NUMBER_OF_NODES, NODE_EXISTENCE_PROBABILITY, parentGraph, SIZE_OF_DEFENSIVE_ALLIANCE);
         population.sort_Population_by_fitness_and_size_reversed();
 
         /*
@@ -230,7 +234,8 @@ The following is an example of a generic evolutionary algorithm:
                     recombinationMethod,
                     activateLearning,
                     amountOfLearners,
-                    randomizeLearners
+                    randomizeLearners,
+                    SIZE_OF_DEFENSIVE_ALLIANCE
             );
 
             //remove isolated nodes from population, implemented inside remove_duplicates
@@ -240,7 +245,7 @@ The following is an example of a generic evolutionary algorithm:
             // remove_duplicates is really slow
             // right now it exchanges a duplicate with its complement
             if (++counter % 10 == 0) {
-                population = Population.remove_duplicates_Threaded(population, NUMBER_OF_NODES, NODE_EXISTENCE_PROBABILITY, parentGraph);
+                population = Population.remove_duplicates_Threaded(population, NUMBER_OF_NODES, NODE_EXISTENCE_PROBABILITY, parentGraph, SIZE_OF_DEFENSIVE_ALLIANCE);
             }
         }
         resetConsoleOutput();
@@ -266,6 +271,21 @@ The following is an example of a generic evolutionary algorithm:
         System.setErr(originalErr);
     }
 
+
+
+
+
+
+
+    /**
+     * Main method to run the genetic algorithm.
+     * Loads configuration, reads graph data, initializes the population,
+     * a connected graph is expected
+     * and starts the genetic algorithm process.
+     *
+     * @param args command line arguments (not used)
+     * @throws IOException if there is an error reading the graph data
+     */
 
     public static void main(String[] args) throws IOException {
 
@@ -309,6 +329,7 @@ The following is an example of a generic evolutionary algorithm:
                     cfg.NODE_EXISTENCE_PROBABILITY,
                     cfg.POPULATION_SIZE,
                     cfg.NUMBER_OF_ITERATIONS,
+                    cfg.SIZE_OF_DEFENSIVE_ALLIANCE,
                     cfg.BREAK_FITNESS,
                     cfg.NUMBER_OF_CONTESTANTS_PER_ROUND,
                     cfg.MUTATION_RATE,
@@ -331,6 +352,7 @@ The following is an example of a generic evolutionary algorithm:
                     cfg.NODE_EXISTENCE_PROBABILITY,
                     cfg.POPULATION_SIZE,
                     cfg.NUMBER_OF_ITERATIONS,
+                    cfg.SIZE_OF_DEFENSIVE_ALLIANCE,
                     cfg.BREAK_FITNESS,
                     cfg.NUMBER_OF_CONTESTANTS_PER_ROUND,
                     cfg.MUTATION_RATE,
