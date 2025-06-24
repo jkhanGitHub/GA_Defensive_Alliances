@@ -80,7 +80,6 @@ public class Genome {
         length = genetic_data.length;
         genome = genetic_data;
         degrees = new int[length];
-        calculateSize();
     }
 
     protected Genome(int[] genetic_data, Genome mother, Genome father, int crossoverPoint) {
@@ -106,11 +105,11 @@ public class Genome {
     //for the complement genome
     protected Genome(int[] genetic_data, boolean complement) {
         length = genetic_data.length;
-        ;
         genome = complement(genetic_data);
         degrees = new int[length];
     }
 
+    //deep copy constructor
     protected Genome(Genome genome) {
         this.genome = Arrays.copyOf(genome.genome, genome.genome.length);
         this.degrees = Arrays.copyOf(genome.degrees, genome.degrees.length);
@@ -545,6 +544,39 @@ public class Genome {
         return same;
     }
 
+    //test List<Genome> on identical genomes, list has to be sorted by fitness reversed
+    static void deleteDuplicates(List<Genome> genomes) {
+        // Use LinkedHashSet to track unique genomes BY CONTENT (not reference)
+        Map<String, Genome> uniqueGenomes = new LinkedHashMap<>();
+    
+        for (Genome genome : genomes) {
+            // Create unique key from genome content
+            String key = genome.getSize() + "#" + Arrays.toString(genome.getGenome());
+        
+            // Keep first occurrence (highest fitness due to sort)
+            uniqueGenomes.putIfAbsent(key, genome);
+        }
+    
+        // Rebuild list with unique genomes in original order
+        genomes.clear();
+        genomes.addAll(uniqueGenomes.values());
+    }
+
+
+    // Check if the genome is already in the list
+    static boolean checkIfListContainsGenome(List<Genome> genomes, Genome genome) {
+        boolean contains = false;
+        int searchedSize = genome.getSize();
+        for (Genome g : genomes) {
+            if (g.getSize() == searchedSize && Arrays.equals(g.getGenome(), genome.getGenome())) {
+                contains = true;
+                break;
+            }
+        }
+        return contains;
+    }
+
+
     List<Genome> getConnectedSubgraphs(OneGenome parentGraph){
         // goes through the neighbourhood of parentGraph and checks for all Neighbours inside the genome
         List<Genome> connectedSubgraphs = new ArrayList<>();
@@ -589,13 +621,27 @@ public class Genome {
     //for storing all found DA in File
     String info() {
         String result = 
-                //"Genome: " + Arrays.toString(genome) + "\n" +
+                "Genome: " + getNodeIDs() + "\n" +
                 //"Degrees: " + Arrays.toString(degrees) + "\n" +
                 "Size: " + size + "\n" +
                 "Fitness: " + fitness + "\n" +
                 "Positive Fitness: " + positiveFitness + "\n\n";
         return result;
     }
+
+    // Returns a List of indices where the genome has a value of 1
+    List<Integer> getNodeIDs() {
+        List<Integer> activeIndices = new ArrayList<>();
+        for (int i = 0; i < genome.length; i++) {
+            if (genome[i] == 1) {
+                activeIndices.add(i);
+            }
+        }
+        return activeIndices;
+    }
+
+
+
 
 
 

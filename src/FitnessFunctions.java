@@ -61,6 +61,13 @@ public class FitnessFunctions {
         return Math.abs(mainPoint - testPoint);
     }
 
+    //we can skip the first part of the fitness calculation since we are only interested in the size of the defensive alliance, 
+    // since we already know that the genome is a defensive alliance
+    static int calculateFitnessForDA(Genome genome, Genome PARENT_GRAPH, int SIZE_OF_DEFENSIVE_ALLIANCE){
+        int sum = (PARENT_GRAPH.getSize() - distanceFunction(SIZE_OF_DEFENSIVE_ALLIANCE,genome.getSize()));
+        return sum;
+    }
+
 
     //hat keinen Sinn im Moment
     static int calculateFitnessMAX(Genome genome, Genome PARENT_GRAPH){
