@@ -620,6 +620,50 @@ public class Population {
         return temp;
     }
 
+    //test List<Genome> on identical genomes, list has to be sorted by fitness reversed
+    static void deleteDuplicates(Genome[] genomes, OneGenome parentGraph, int SIZE_OF_DEFENSIVE_ALLIANCE, float NODE_EXISTENCE_PROBABILITY) {
+        // Use LinkedHashSet to track unique genomes BY CONTENT (not reference)
+        Map<String, Genome> uniqueGenomes = new LinkedHashMap<>();
+    
+        for (Genome genome : genomes) {
+            // Create unique key from genome content
+            String key = genome.length + "#" + Arrays.toString(genome.getGenome());
+        
+            // Keep first occurrence (highest fitness due to sort)
+            uniqueGenomes.putIfAbsent(key, genome);
+        }
+    
+        // Rebuild list with unique genomes in original order
+        Arrays.fill(genomes, null);
+        // Fill the array with unique genomes
+        int index = 0;
+        for (Genome uniqueGenome : uniqueGenomes.values()) {
+            genomes[index++] = uniqueGenome;
+        }
+
+        // create new genomes for null entries
+        for (int i = index; i < genomes.length; i++) {
+            //create a new genome 
+            if (parentGraph.Ids_toFilter.isEmpty()) {
+                genomes[i] = new Genome(parentGraph.length, NODE_EXISTENCE_PROBABILITY);
+            } else {
+                genomes[i] = new Genome(parentGraph.length, NODE_EXISTENCE_PROBABILITY, parentGraph.Ids_toFilter);
+            }
+            //calculate degrees
+            Genome.calculateDegrees_withNeighbourhood(genomes[i]);
+            //calculate fitness
+            genomes[i].setFitness(FitnessFunctions.calculateFitnessMIN(genomes[i], parentGraph, SIZE_OF_DEFENSIVE_ALLIANCE));
+        }
+
+        //document the amount of duplicates
+        int dupCount = genomes.length - uniqueGenomes.size();
+        if (dupCount > 0) {
+            System.out.println("\u001B[35m" + "Duplicates found and removed: " + dupCount + "\u001B[0m");
+        } else {
+            System.out.println("No duplicates found");
+        }
+    }
+
     //calculate total difference in population
     static int calculateTotalDifference(Population population) {
         int totalDifference = 0;

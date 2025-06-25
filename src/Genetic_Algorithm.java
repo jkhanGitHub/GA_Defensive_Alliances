@@ -48,6 +48,7 @@ The following is an example of a generic evolutionary algorithm:
 
     public static List<Genome> defensiveAlliances = new LinkedList<>();
     public static List<Genome> connected_defensiveAlliances = new LinkedList<>();
+    public static final int MAXIMUM_AMOUNT_OF_STORED_DEFENSIVE_ALLIANCES = 1000; //maximum amount of stored defensive alliances, if this is reached, the worst defensive alliances will be removed
 
 
     //Path to the csv file
@@ -98,11 +99,13 @@ The following is an example of a generic evolutionary algorithm:
     static Random random = new Random();
 
     static boolean addDefensiveAlliance(Population population, OneGenome parentGraph, int SIZE_OF_DEFENSIVE_ALLIANCE) {
-        int x = 0;
+        boolean foundnewDefensiveAlliance = false;
         for (int i = 0; (i < population.getPopulation().length && population.getPopulation()[i].getFitness() > 0); i++) {
             Genome g = population.getPopulation()[i];
             //if the genome is already in the defensive alliances, skip it
             if (!Genome.checkIfListContainsGenome(defensiveAlliances, g)) {
+                foundnewDefensiveAlliance = true; //found a new defensive alliance
+
                 defensiveAlliances.add(new Genome(g)); //add a deep copy of the genome to the defensive alliances
                 // all conected components of a DA are also a DA by definition
                 List<Genome> connectedComponents = g.getConnectedSubgraphs(parentGraph);
@@ -114,20 +117,43 @@ The following is an example of a generic evolutionary algorithm:
 
                 //sort connectedComponents by fitness
                 connectedComponents.sort(Comparator.comparingInt(Genome::getFitness).reversed());
+
+                //add defensive alliances to the population by replacing worst genomes
+                for (int j = 0; j < connectedComponents.size(); j++) {
+                    Genome da = connectedComponents.get(j);
+                    population.population[population.getPopulation().length - 1 - j] = da;
+                }
+
+                //add new defensive alliances to the list of connected defensive alliances
                 defensiveAlliances.addAll(connectedComponents);
                 connected_defensiveAlliances.addAll(connectedComponents); //add all connected components to the connected defensive alliances
 
-                //add defensive alliances as deepCopies to the population by replacing worst genomes
-                for (int j = 0; j < connectedComponents.size(); j++) {
-                    Genome da = new Genome(connectedComponents.get(j));
-                    population.population[population.getPopulation().length - 1 - j] = da;
-                    x++;
+                //important step to avoid java.lang.OutOfMemoryError: Java heap space
+                //remove as many defensive alliances as needed to not exceed the maximum amount of stored defensive alliances
+                if (defensiveAlliances.size() > MAXIMUM_AMOUNT_OF_STORED_DEFENSIVE_ALLIANCES) {
+                    //sort defensive alliances by fitness
+                    defensiveAlliances.sort(Comparator.comparingInt(Genome::getFitness).reversed());
+                    connected_defensiveAlliances.sort(Comparator.comparingInt(Genome::getFitness).reversed());
+                    //remove the worst defensive alliances
+                    for (int j = 0; j < defensiveAlliances.size() - MAXIMUM_AMOUNT_OF_STORED_DEFENSIVE_ALLIANCES; j++) {
+                        defensiveAlliances.remove(defensiveAlliances.size() - 1);
+                    }
+                    //remove the worst defensive alliances
+                    for (int j = 0; j < connected_defensiveAlliances.size() - MAXIMUM_AMOUNT_OF_STORED_DEFENSIVE_ALLIANCES; j++) {
+                        connected_defensiveAlliances.remove(connected_defensiveAlliances.size() - 1);
+                    }
                 }
             }
         }
+        if (foundnewDefensiveAlliance){
+            //remove duplicates from the population
+            //necessary to avoid duplicates in the population
+            //this is important because otherwise the algorithm will get stuck in local optima way faster, sinc eeverything is filled with duplicates
+            Population.deleteDuplicates(population.getPopulation(),parentGraph, SIZE_OF_DEFENSIVE_ALLIANCE, cfg.NODE_EXISTENCE_PROBABILITY); 
 
-        if (x>0){
-            System.out.println("\u001B[31m" + "new Defensive Alliances found: " + x + "\u001B[0m"); 
+            Genome.deleteDuplicates(defensiveAlliances);
+            Genome.deleteDuplicates(connected_defensiveAlliances);
+            System.out.println("\u001B[31m" + "new Defensive Alliances found: "+ "\u001B[0m"); 
             return true;
         }
         return false;         
@@ -445,33 +471,12 @@ The following is an example of a generic evolutionary algorithm:
         //create document containing defensive alliances
         if (!defensiveAlliances.isEmpty()) {
             // Write defensive alliances to file
-            defensiveAlliances.sort(Comparator.comparingInt(Genome::getFitness).reversed());
-
-            /*
-            //debug purposes
-            for (Genome da : defensiveAlliances) {
-                System.out.println(da.isDefensiveAlliance(parentGraph));
-            }
-            */
-
-            Genome.deleteDuplicates(defensiveAlliances);
             File foundDefensiveAlliancesFile = new File(GeneticLogger.getOutputDirectory() + "distinctDefensiveAlliances.txt");
             GeneticLogger.printDefensiveAlliances(foundDefensiveAlliancesFile, defensiveAlliances);
         }
 
         //create document containing connected defensive alliances
         if (!connected_defensiveAlliances.isEmpty()) {
-            // Write defensive alliances to file
-            connected_defensiveAlliances.sort(Comparator.comparingInt(Genome::getFitness).reversed());
-
-            /*
-            //debug purposes
-            for (Genome da : connected_defensiveAlliances) {
-                System.out.println(da.isDefensiveAlliance(parentGraph));
-            }
-            */
-
-            Genome.deleteDuplicates(connected_defensiveAlliances);
             File foundDefensiveAlliancesFile = new File(GeneticLogger.getOutputDirectory() + "connected_distinctDefensiveAlliances.txt");
             GeneticLogger.printDefensiveAlliances(foundDefensiveAlliancesFile, connected_defensiveAlliances);
         }
