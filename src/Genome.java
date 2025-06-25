@@ -76,6 +76,16 @@ public class Genome {
         calculateSize();
     }
 
+    protected Genome(int numberOfNodes, float existenceRate, List<Integer> Ids_toFilter) {
+        length = numberOfNodes;
+        genome = new int[length];
+        degrees = new int[length];
+
+        generate_genome(existenceRate);
+        removeNodesThatCannotBeInDefensiveAllianceOfSizeK(Ids_toFilter);
+        calculateSize();
+    }
+
     protected Genome(int[] genetic_data) {
         length = genetic_data.length;
         genome = genetic_data;
@@ -123,6 +133,15 @@ public class Genome {
     int calculateSize() {
         size = Arrays.stream(genome).sum();
         return size;
+    }
+
+    int[] removeNodesThatCannotBeInDefensiveAllianceOfSizeK(List<Integer> Ids_toFilter) {
+        //removes all nodes that cannot be in a defensive alliance of size k
+        for (int i=0; i<Ids_toFilter.size(); i++) {
+            int index = Ids_toFilter.get(i);
+            genome[index] = 0; //set the genome entry to 0
+        }
+        return genome;
     }
 
 

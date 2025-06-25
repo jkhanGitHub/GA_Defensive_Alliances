@@ -31,6 +31,7 @@ public class Population {
     static Genome bestGenomeFromLastGeneration;
     static Dictionary<Integer, String> mutationIdentifiers = new Hashtable<Integer, String>();
 
+
     static {
         mutationIdentifiers.put(0, "Mutation");
         mutationIdentifiers.put(1, "Mutation of vertices with high degree");
@@ -75,11 +76,18 @@ public class Population {
         //Generates Genomes
 
         //comment out and change loop to start at 0 if parent graph should not be in array makes sense when using OnepointCrossover
-        population[0] = parentGraph;
+        //population[0] = parentGraph;
         for (int i = 0; i < population.length; i++) {
             final int finalI = i;
             threads[finalI] = new Thread(() -> {
-                population[finalI] = new Genome(numberOFNodes, existenceRate);
+
+                //create a new genome 
+                if (parentGraph.Ids_toFilter.isEmpty()) {
+                    population[finalI] = new Genome(numberOFNodes, existenceRate);
+                } else {
+                    population[finalI] = new Genome(numberOFNodes, existenceRate, parentGraph.Ids_toFilter);
+                }
+
                 //calculate degrees
                 Genome.calculateDegrees_withNeighbourhood(population[finalI]);
                 //calculate fitness
@@ -589,9 +597,14 @@ public class Population {
         // Parallel replacement: Generate new genomes for marked positions
         IntStream.range(0, temp.population.length).parallel().forEach(i -> {
             if (toReplace[i]) {
-                Genome newGenome = new Genome(numberOFNodes, existenceRate);
+                Genome newGenome;
+                //create a new genome 
+                if (parentGraph.Ids_toFilter.isEmpty()) {
+                    newGenome = new Genome(numberOFNodes, existenceRate);
+                } else {
+                    newGenome = new Genome(numberOFNodes, existenceRate, parentGraph.Ids_toFilter);
+                }
                 Genome.calculateDegrees_withNeighbourhood(newGenome);
-                newGenome.calculateSize();
                 newGenome.setFitness(FitnessFunctions.calculateFitnessMIN(newGenome, parentGraph, SIZE_OF_DEFENSIVE_ALLIANCE));
                 temp.population[i] = newGenome;
             }
@@ -617,6 +630,7 @@ public class Population {
         }
         return totalDifference;
     }
+
 
     static void printStats(Population population) {
         System.out.println("Generation: " + population.generation);

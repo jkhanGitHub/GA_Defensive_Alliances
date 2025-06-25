@@ -6,3 +6,4 @@ get rid of selection method in Genetic LOgger and config
 
 Erwarten zusammenhängenden Graphen
 Zusammenhangscomponenten erkenn und in population setzen
+rename BoltzmannSelection, since the name is wrong, confused it with a variation of the comma strategy

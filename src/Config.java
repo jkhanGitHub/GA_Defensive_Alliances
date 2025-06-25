@@ -16,6 +16,7 @@ public class Config {
     public float MUTATION_RATE;
     public int NUMBER_OF_ITERATIONS;
     public int SIZE_OF_DEFENSIVE_ALLIANCE;
+    public boolean FILTER_NODES_THAT_CANNOT_BE_IN_A_DEFENSIVE_ALLIANCE_OF_SIZE_K;
     public int BREAK_FITNESS;
     public float INTERSECTION_PROBABILITY;
     public String RECOMBINATION_METHOD;
@@ -49,6 +50,7 @@ public class Config {
         AMOUNT_OF_LEARNERS = Integer.parseInt(props.getProperty("AMOUNT_OF_LEARNERS"));
         RANDOMIZE_LEARNERS = Boolean.parseBoolean(props.getProperty("RANDOMIZE_LEARNERS"));
         CAPPED_LEARNING = Boolean.parseBoolean(props.getProperty("CAPPED_LEARNING"));
+        FILTER_NODES_THAT_CANNOT_BE_IN_A_DEFENSIVE_ALLIANCE_OF_SIZE_K = Boolean.parseBoolean(props.getProperty("FILTER_NODES_THAT_CANNOT_BE_IN_A_DEFENSIVE_ALLIANCE_OF_SIZE_K"));
     }
 
 
@@ -71,6 +73,7 @@ public class Config {
             writeField(writer, "MUTATION_RATE", MUTATION_RATE);
             writeField(writer, "NUMBER_OF_ITERATIONS", NUMBER_OF_ITERATIONS);
             writeField(writer, "SIZE_OF_DEFENSIVE_ALLIANCE", SIZE_OF_DEFENSIVE_ALLIANCE);
+            writeField(writer, "FILTER_NODES_THAT_CANNOT_BE_IN_A_DEFENSIVE_ALLIANCE_OF_SIZE_K", FILTER_NODES_THAT_CANNOT_BE_IN_A_DEFENSIVE_ALLIANCE_OF_SIZE_K);
             writeField(writer, "BREAK_FITNESS", BREAK_FITNESS);
             writeField(writer, "INTERSECTION_PROBABILITY", INTERSECTION_PROBABILITY);
             writeField(writer, "RECOMBINATION_METHOD", RECOMBINATION_METHOD);

@@ -374,9 +374,18 @@ The following is an example of a generic evolutionary algorithm:
         Graph g = new Graph(graph);
         Map.Entry<int[], int[]> pairWithLargestComponent = g.componetsWithDegrees.entrySet().iterator().next();
 
+
         //the first constructor ensures a connected graph
-        //PARENT_GRAPH = new OneGenome(pairWithLargestComponent.getKey(), pairWithLargestComponent.getValue(),g.adjMatrix);
-        OneGenome parentGraph = new OneGenome(numberOfNodes, graph);
+        OneGenome parentGraph;
+        if (cfg.FILTER_NODES_THAT_CANNOT_BE_IN_A_DEFENSIVE_ALLIANCE_OF_SIZE_K){
+            //parentGraph = new OneGenome(pairWithLargestComponent.getKey(), pairWithLargestComponent.getValue(),g.adjMatrix, cfg.SIZE_OF_DEFENSIVE_ALLIANCE);
+            parentGraph = new OneGenome(numberOfNodes, graph, cfg.SIZE_OF_DEFENSIVE_ALLIANCE);
+        }
+        else{
+            //parentGraph = new OneGenome(pairWithLargestComponent.getKey(), pairWithLargestComponent.getValue(),g.adjMatrix);
+            parentGraph = new OneGenome(numberOfNodes, graph);
+        }
+        
 
 
         // Map method strings to IDs

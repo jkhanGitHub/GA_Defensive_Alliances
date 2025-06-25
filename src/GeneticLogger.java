@@ -111,11 +111,12 @@ public class GeneticLogger {
             // Configuration header
             writer.write("# Genetic Algorithm Configuration"); writer.newLine();
             writer.write("# Graph: " + cfg.FILEPATH); writer.newLine();
-            writer.write(String.format("# Nodes: %d, Population: %d, Generations: %d, Searched DA Size: %d",
+            writer.write(String.format("# Nodes: %d, Population: %d, Generations: %d, Searched DA Size: %d, Filter Nodes: %b",
                     cfg.NUMBER_OF_NODES,
                     cfg.POPULATION_SIZE,
                     cfg.NUMBER_OF_ITERATIONS,
-                    cfg.SIZE_OF_DEFENSIVE_ALLIANCE)); writer.newLine();
+                    cfg.SIZE_OF_DEFENSIVE_ALLIANCE,
+                    cfg.FILTER_NODES_THAT_CANNOT_BE_IN_A_DEFENSIVE_ALLIANCE_OF_SIZE_K)); writer.newLine();
             writer.write(String.format("# Node Probability: %.2f, Mutation Rate: %s",
                     cfg.NODE_EXISTENCE_PROBABILITY,
                     scientificMutationRate)); writer.newLine();
