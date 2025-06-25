@@ -565,20 +565,17 @@ public class Genome {
 
     //test List<Genome> on identical genomes, list has to be sorted by fitness reversed
     static void deleteDuplicates(List<Genome> genomes) {
-        // Use LinkedHashSet to track unique genomes BY CONTENT (not reference)
-        Map<String, Genome> uniqueGenomes = new LinkedHashMap<>();
-    
+        // Use LinkedHashSet to track unique genomes BY CONTENT (using equals/hashCode)
+        // LinkedHashSet maintains insertion order. Use HashSet if order doesn't matter for initial collection.
+        Set<Genome> uniqueGenomes = new LinkedHashSet<>();
+
         for (Genome genome : genomes) {
-            // Create unique key from genome content
-            String key = genome.getSize() + "#" + Arrays.toString(genome.getGenome());
-        
-            // Keep first occurrence (highest fitness due to sort)
-            uniqueGenomes.putIfAbsent(key, genome);
+            uniqueGenomes.add(genome); // This will automatically use Genome's equals() and hashCode()
         }
-    
-        // Rebuild list with unique genomes in original order
+
+        // Rebuild list with unique genomes in original order (or the order they appeared first)
         genomes.clear();
-        genomes.addAll(uniqueGenomes.values());
+        genomes.addAll(uniqueGenomes); // Add all unique genomes back to the list
     }
 
 
@@ -595,6 +592,21 @@ public class Genome {
         return contains;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Genome genome1 = (Genome) o;
+        // Compare the genome arrays directly
+        return Arrays.equals(this.genome, genome1.genome); 
+    }
+
+    @Override
+    public int hashCode() {
+        // Generate hash based on defining fields. Use Objects.hash for simple fields
+        // and Arrays.hashCode for array fields.
+        return 31 * Arrays.hashCode(genome);
+    }
 
     List<Genome> getConnectedSubgraphs(OneGenome parentGraph){
         // goes through the neighbourhood of parentGraph and checks for all Neighbours inside the genome

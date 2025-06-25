@@ -622,22 +622,18 @@ public class Population {
 
     //test List<Genome> on identical genomes, list has to be sorted by fitness reversed
     static void deleteDuplicates(Genome[] genomes, OneGenome parentGraph, int SIZE_OF_DEFENSIVE_ALLIANCE, float NODE_EXISTENCE_PROBABILITY) {
-        // Use LinkedHashSet to track unique genomes BY CONTENT (not reference)
-        Map<String, Genome> uniqueGenomes = new LinkedHashMap<>();
-    
+        // Use LinkedHashSet to track unique genomes BY CONTENT (using equals/hashCode)
+        // LinkedHashSet maintains insertion order. Use HashSet if order doesn't matter for initial collection.
+        Set<Genome> uniqueGenomes = new LinkedHashSet<>();
+
         for (Genome genome : genomes) {
-            // Create unique key from genome content
-            String key = genome.length + "#" + Arrays.toString(genome.getGenome());
-        
-            // Keep first occurrence (highest fitness due to sort)
-            uniqueGenomes.putIfAbsent(key, genome);
+            uniqueGenomes.add(genome); // This will automatically use Genome's equals() and hashCode() overritten in Genome class
         }
     
-        // Rebuild list with unique genomes in original order
+        // Rebuild list with unique genomes in original order (or the order they appeared first)
         Arrays.fill(genomes, null);
-        // Fill the array with unique genomes
         int index = 0;
-        for (Genome uniqueGenome : uniqueGenomes.values()) {
+        for (Genome uniqueGenome : uniqueGenomes) { // Iterate over the set
             genomes[index++] = uniqueGenome;
         }
 

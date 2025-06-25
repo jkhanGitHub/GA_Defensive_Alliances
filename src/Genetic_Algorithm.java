@@ -218,13 +218,7 @@ The following is an example of a generic evolutionary algorithm:
             boolean additionalSort = addDefensiveAlliance(population, parentGraph, SIZE_OF_DEFENSIVE_ALLIANCE);
 
             if (++counter % 10 == 0) {
-                population = Population.remove_duplicates_Threaded(
-                        population,
-                        NUMBER_OF_NODES,
-                        NODE_EXISTENCE_PROBABILITY,
-                        parentGraph,
-                        SIZE_OF_DEFENSIVE_ALLIANCE
-                );
+                Population.deleteDuplicates(population.getPopulation(),parentGraph, SIZE_OF_DEFENSIVE_ALLIANCE, NODE_EXISTENCE_PROBABILITY);
                 additionalSort = true; //if duplicates are removed, sort the population again
             }
             //if additionalSort is true, sort the population again
@@ -316,7 +310,7 @@ The following is an example of a generic evolutionary algorithm:
             // remove_duplicates is really slow
             // right now it exchanges a duplicate with its complement
             if (++counter % 10 == 0) {
-                population = Population.remove_duplicates_Threaded(population, NUMBER_OF_NODES, NODE_EXISTENCE_PROBABILITY, parentGraph, SIZE_OF_DEFENSIVE_ALLIANCE);
+                Population.deleteDuplicates(population.getPopulation(),parentGraph, SIZE_OF_DEFENSIVE_ALLIANCE, NODE_EXISTENCE_PROBABILITY);
                 additionalSort = true; //if duplicates are removed, sort the population again
             }
             //if additionalSort is true, sort the population again
