@@ -29,13 +29,13 @@ public class Genome {
 
     int[] degrees;
 
-    int size;
+    int size; //number of nodes in Genome
 
     public void setSize(int size) {
         this.size = size;
     }
 
-    int length;
+    int length; //number of nodes in whole Graph
 
     public void setFitness(int fitness) {
         this.fitness = fitness;
@@ -92,6 +92,7 @@ public class Genome {
         degrees = new int[length];
     }
 
+    //used for OnePointCrossover
     protected Genome(int[] genetic_data, Genome mother, Genome father, int crossoverPoint) {
         length = genetic_data.length;
         genome = genetic_data;
@@ -101,6 +102,7 @@ public class Genome {
         this.crossoverPoint = crossoverPoint;
     }
 
+    //used for Intersection with probability (probability is factored in inside the recombination method)
     protected Genome(int[] genetic_data, Genome mother, Genome father, List<Integer> changedAllele) {
         length = genetic_data.length;
         genome = genetic_data;

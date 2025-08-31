@@ -1,5 +1,5 @@
 import java.util.*;
-import  java.io.*;
+import java.io.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -445,8 +445,6 @@ public class Population {
 
 
     static List<Genome> createListOfNextGeneration_Boltzmann(List<Genome> newGenomes) {
-        int counter = 0;
-
         //add OldGeneration to the list
         newGenomes.addAll(Arrays.asList(population));
 
