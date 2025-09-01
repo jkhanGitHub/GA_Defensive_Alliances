@@ -1,12 +1,5 @@
 import java.util.*;
 import java.io.*;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.*;
-import java.util.stream.IntStream;
 
 //many methods might have unused parameters, these are just there so that the methods can be interchanged in the genetic algorithm
 public class Population {
@@ -66,6 +59,9 @@ public class Population {
         this.mean_size = mean_size;
     }
 
+
+
+    //initial Population generation is being created by this Constructor
     Population(int sizeOfPopulation, int numberOFNodes, float existenceRate,OneGenome parentGraph, int SIZE_OF_DEFENSIVE_ALLIANCE) {
         population = new Genome[sizeOfPopulation];
         generation++;
@@ -112,13 +108,15 @@ public class Population {
     }
 
 
+    //non Threaded fully functional version similiar to the method below, but the algorithm got changed to use a single genome array instead of creating a new population class every generation to save memory
+    /*
     Population(Population oldGeneration, float mutationrate, float proabibility, int newChildsPerParents, List<Genome> nextGenParents, int mutation_identifier, int recombination_identifier, boolean activateLearning, int SIZE_OF_DEFENSIVE_ALLIANCE) {
         population = new Genome[oldGeneration.population.length];
         bestGenomeFromLastGeneration = new Genome(oldGeneration.getPopulation()[0]);
         offspringsFromPreviousGeneration = generate_nextChildrenListThreaded(mutationrate, proabibility, newChildsPerParents, nextGenParents, mutation_identifier, recombination_identifier, SIZE_OF_DEFENSIVE_ALLIANCE);
 
         List<Genome> newGeneration;
-        newGeneration = createListOfNextGeneration_Boltzmann(offspringsFromPreviousGeneration);
+        newGeneration = createListOfNextGeneration_EmbeddedElitsm(offspringsFromPreviousGeneration);
 
         survivors = getSurvivors(newGeneration);
         if (activateLearning) {
@@ -140,7 +138,11 @@ public class Population {
         mean_size = calculateMeanSize();
     }
 
+     */
 
+
+    //the current version uses a single genome array instead of creating a new population class every generation to save memory
+    /*
     Population(Population oldGeneration, float mutationrate, float proabibility, int newChildsPerParents, List<Genome> nextGenParents, int mutation_identifier, int recombination_identifier, int amountOfLearners, boolean randomizeLearners, int SIZE_OF_DEFENSIVE_ALLIANCE) {
         population = new Genome[oldGeneration.population.length];
         bestGenomeFromLastGeneration = new Genome(oldGeneration.getPopulation()[0]);
@@ -149,7 +151,7 @@ public class Population {
         childrenList = generate_nextChildrenListThreaded(mutationrate, proabibility, newChildsPerParents, nextGenParents, mutation_identifier, recombination_identifier, SIZE_OF_DEFENSIVE_ALLIANCE);
 
         List<Genome> newGeneration;
-        newGeneration = createListOfNextGeneration_Boltzmann(childrenList);
+        newGeneration = createListOfNextGeneration_EmbeddedElitsm(childrenList);
 
 
         survivors = getSurvivors(newGeneration);
@@ -171,7 +173,9 @@ public class Population {
         mean_size = calculateMeanSize();
     }
 
-    //used in Genetic Algorithm
+     */
+
+    //used in Genetic Algorithm class to create a new generation
     static Genome[] newGeneration(float mutationrate, float proabibility, int newChildsPerParents, List<Genome> nextGenParents, int mutation_identifier, int recombination_identifier,boolean activateLearning, int amountOfLearners, boolean randomizeLearners, int SIZE_OF_DEFENSIVE_ALLIANCE) {
         bestGenomeFromLastGeneration = new Genome(population[0]);
 
@@ -179,7 +183,7 @@ public class Population {
         childrenList = generate_nextChildrenListThreaded(mutationrate, proabibility, newChildsPerParents, nextGenParents, mutation_identifier, recombination_identifier, SIZE_OF_DEFENSIVE_ALLIANCE);
 
         List<Genome> newGeneration;
-        newGeneration = createListOfNextGeneration_Boltzmann(childrenList);
+        newGeneration = createListOfNextGeneration_EmbeddedElitsm(childrenList);
 
 
         survivors = getSurvivors(newGeneration);
@@ -206,13 +210,14 @@ public class Population {
     }
 
 
+    //also used in Genetic Algorithm class to create a new generation but with less parameters this time
     //you can change generate_nextChildrenList to generate_nextChildrenListThreaded if you want to use the threaded version
     static Genome[] newGeneration(float mutationrate, float proabibility, int newChildsPerParents, List<Genome> nextGenParents, int mutation_identifier, int recombination_identifier, boolean activateLearning, int SIZE_OF_DEFENSIVE_ALLIANCE) {
         bestGenomeFromLastGeneration = new Genome(population[0]);
         offspringsFromPreviousGeneration = generate_nextChildrenListThreaded(mutationrate, proabibility, newChildsPerParents, nextGenParents, mutation_identifier, recombination_identifier, SIZE_OF_DEFENSIVE_ALLIANCE);
 
         List<Genome> newGeneration;
-        newGeneration = createListOfNextGeneration_Boltzmann(offspringsFromPreviousGeneration);
+        newGeneration = createListOfNextGeneration_EmbeddedElitsm(offspringsFromPreviousGeneration);
 
         survivors = getSurvivors(newGeneration);
         if (activateLearning) {
@@ -267,6 +272,7 @@ public class Population {
 
     }
 
+    //in this version all survivors learn one can modify the method below so that this one becomes redundant
     static void survivors_learn(List<Genome> survivors, OneGenome parentGraph, int amountOfLearning, int SIZE_OF_DEFENSIVE_ALLIANCE) {
         Thread[] threads = new Thread[survivors.size()];
 
@@ -359,11 +365,11 @@ public class Population {
                     switch (mutation_identifier) {
                         case 0:
                             //Mutation //mutation works on reference so the Genome will already be changed
-                            Mutations.mutation(mutationrate, newChild, parentGraph.graph);
+                            Mutations.mutation(mutationrate, newChild);
                             break;
                         case 1:
                             //Mutation of vertices with high degree
-                            Mutations.mutation_of_vertices_with_high_degree(mutationrate, newChild, parentGraph.graph);
+                            Mutations.mutation_of_vertices_with_high_degree(mutationrate, newChild);
                             break;
                         default:
                             throw new IllegalStateException("Unexpected value: " + mutation_identifier);
@@ -397,6 +403,8 @@ public class Population {
 
 
 
+    //non threaded version fully functional but not being used one can use this one instead if there are isssues with threading or one pleases to
+    /*
     static List<Genome> generate_nextChildrenList(float mutationrate, float proabibility, int newChildsPerParents, List<Genome> nextGenParents, int mutation_identifier, int recombination_identifier, int SIZE_OF_DEFENSIVE_ALLIANCE) {
 
         List<Genome> nextGenChildren = Collections.synchronizedList(new LinkedList<>()); // Thread-safe list
@@ -421,11 +429,11 @@ public class Population {
                 switch (mutation_identifier) {
                     case 0:
                         //Mutation //mutation works on reference so the Genome will already be changed
-                        Mutations.mutation(mutationrate, newChild,parentGraph.graph);
+                        Mutations.mutation(mutationrate, newChild);
                         break;
                     case 1:
                         //Mutation of vertices with high degree
-                        Mutations.mutation_of_vertices_with_high_degree(mutationrate, newChild, parentGraph.graph);
+                        Mutations.mutation_of_vertices_with_high_degree(mutationrate, newChild);
                         break;
                     default:
                         throw new IllegalStateException("Unexpected value: " + mutation_identifier);
@@ -442,9 +450,10 @@ public class Population {
         //Number of Elites = POPULATION_SIZE - (POPULATION_SIZE/numberOfContestantsPerRound)
         return nextGenChildren;
     }
+     */
 
 
-    static List<Genome> createListOfNextGeneration_Boltzmann(List<Genome> newGenomes) {
+    static List<Genome> createListOfNextGeneration_EmbeddedElitsm(List<Genome> newGenomes) {
         //add OldGeneration to the list
         newGenomes.addAll(Arrays.asList(population));
 
@@ -478,6 +487,8 @@ public class Population {
     }
 
     //o(n) = (n^2)
+    //not being used since delete duplicates is being used now still the logic is correct, the algorithm just doesnt create new Populations classes anymore
+    /*
     static Population remove_duplicates(Population population, int numberOFNodes, float existenceRate, OneGenome parentGraph, int SIZE_OF_DEFENSIVE_ALLIANCE) {
 
         //remove isolated nodes
@@ -515,64 +526,6 @@ public class Population {
         }
         return temp;
     }
-
-    /*
-    static Population remove_duplicates_Threaded(Population population, int numberOFNodes, float existenceRate, OneGenome parentGraph) {
-
-        Population temp = population;
-
-        // Thread-safe map to store updated genomes
-        ConcurrentHashMap<Integer, Genome> updatedPopulation = new ConcurrentHashMap<>();
-        ExecutorService executor = Executors.newFixedThreadPool(temp.population.length);
-
-
-        AtomicBoolean found = new AtomicBoolean(false);
-        AtomicInteger counter = new AtomicInteger();
-        for (int i = 0; i < temp.population.length; i++) {
-            final int index = i;
-            executor.submit(() -> {
-                //remove isolated nodes
-                temp.population[index] = Genome.removeIsolatedNodes(temp.population[index], parentGraph);
-
-                //loop wont run if i = population.population.length
-                for (int j = index + 1; j < temp.population.length; j++) {
-                    int difference = Genome.difference(temp.population[index], temp.population[j]);
-                    if (difference == 0) {
-                        //create complementary genome
-                        Genome newGenome = new Genome(temp.population[index].getGenome(), true);
-
-                        //calculate size
-                        newGenome.calculateSize();
-                        //calculate degrees
-                        Genome.calculateDegreesUndirected(parentGraph.graph, newGenome);
-                        //calculate fitness
-                        newGenome.setFitness(FitnessFunctions.calculateFitnessMIN(newGenome, parentGraph));
-
-                        updatedPopulation.put(index, newGenome);
-                        found.set(true);
-                        counter.incrementAndGet();
-                        break;
-                    }
-                }
-            });
-        }
-        executor.shutdown();
-
-        try {
-            executor.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-
-        for (Map.Entry<Integer, Genome> entry : updatedPopulation.entrySet()) {
-            int index = entry.getKey();
-            temp.population[index] = entry.getValue();
-        }
-        if (found.get()) {
-            System.out.println("\u001B[35m" + "Duplicates found and removed: " + counter.get() + "\u001B[0m");
-        }
-        return population;
-    }*/
 
     static Population remove_duplicates_Threaded(Population population, int numberOFNodes, float existenceRate, OneGenome parentGraph,int SIZE_OF_DEFENSIVE_ALLIANCE) {
         Population temp = population;
@@ -617,6 +570,7 @@ public class Population {
         }
         return temp;
     }
+    */
 
     //test List<Genome> on identical genomes, list has to be sorted by fitness reversed
     static void deleteDuplicates(Genome[] genomes, OneGenome parentGraph, int SIZE_OF_DEFENSIVE_ALLIANCE, float NODE_EXISTENCE_PROBABILITY) {
@@ -667,23 +621,6 @@ public class Population {
             }
         }
         return totalDifference;
-    }
-
-
-    static void printStats(Population population) {
-        System.out.println("Generation: " + population.generation);
-        System.out.println("Population fitness: " + population.population_fitness);
-        System.out.println("Mean fitness: " + population.mean_fitness);
-        System.out.println("Mean size: " + population.mean_size);
-        System.out.println("Population size: " + population.population.length+"\n");
-
-        System.out.println("First Best Fitness in Population: " + population.population[0].getFitness() + " Size: " + population.population[0].getSize());
-        System.out.println("Second Best Fitness in Population: " + population.population[1].getFitness() + " Size: " + population.population[1].getSize());
-        System.out.println("Worst Fitness in Population: " + population.population[population.population.length-1].getFitness() + " Size: " + population.population[population.population.length-1].getSize());
-        System.out.println("Difference between best and second best genome: " + Genome.difference(population.population[0], population.population[1]));
-        System.out.println("Difference between best and worst best genome: " + Genome.difference(population.population[0], population.population[population.population.length-1]));
-        System.out.println("---------------------------------------------------------------------------------------------------------------------------------------------------"+'\n');
-
     }
 
     void printStats() {

@@ -63,6 +63,8 @@ public class OneGenome extends Genome {
         calculateWorstFitnessPossible();
     }
 
+    /* this code was used in a previous version but now the algorithm expects a connected graph from the get go,
+     also the code is outdated and doesnt work anymore
     //component received by Graph.java
     OneGenome(int[] component, int[] degreesOfComponent, int[][]adjzMatrix){
         this.component = component;
@@ -82,7 +84,9 @@ public class OneGenome extends Genome {
         orderedMapOfHighestDegrees();
         calculateWorstFitnessPossible();
     }
+     */
 
+    /*outdated code
     OneGenome(int[] component, int[] degreesOfComponent, int[][]adjzMatrix, int SIZE_OF_DEFENSIVE_ALLIANCE){
         this.component = component;
         length = component.length;
@@ -103,6 +107,8 @@ public class OneGenome extends Genome {
         orderedMapOfHighestDegrees();
         calculateWorstFitnessPossible();
     }
+
+     */
 
     static Genome calculateDegreesUndirected_Neighborhood(int[][] matrix, Genome g) {
         for (int i = 0; i < g.length; i++) {
@@ -170,22 +176,6 @@ public class OneGenome extends Genome {
                 ));
     }
 
-    //give a map with the highest degrees and where to find them
-    void orderedMapOfHighestDegrees(List<Integer> Ids_toFilter) {
-        for (int i = 0; i < degrees.length; i++) {
-            orderedMapOfHighestDegrees.put(i, degrees[i]);
-        }
-
-        orderedMapOfHighestDegrees = orderedMapOfHighestDegrees.entrySet().stream()
-                .sorted(Map.Entry.<Integer, Integer>comparingByValue().reversed())
-                .collect(Collectors.toMap(
-                        Map.Entry::getKey,
-                        Map.Entry::getValue,
-                        (e1, e2) -> e1, // Merge function (not needed here as keys are unique)
-                        LinkedHashMap::new // Use LinkedHashMap to preserve the sorted order
-                ));
-    }
-
     void remove_isolated_nodes(){
         for (int i = 0; i < length; i++) {
             if (degrees[i]==0){
@@ -194,13 +184,18 @@ public class OneGenome extends Genome {
         }
     }
 
+    /*
+    used to be useful in a previous version in which we didnt expect a fully connected graph as argument
+
     void generate_MiniGraph(int[][] adjzMatrix,int[]component){
         for (int i = 0; i < length; i++) {
             graph[i] = adjzMatrix[component[i]];
         }
     }
 
-    //filter genomes that are not in a defensive alliance of size k
+     */
+
+    //filter genomes that can not be in a defensive alliance of size k because their degree is too high
     List<Integer> find_Ids_To_Filter(int k) {
         int max_degree = (2*k)+1;
         List<Integer> Ids_toFilter = new LinkedList<>();

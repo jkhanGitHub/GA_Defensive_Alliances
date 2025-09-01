@@ -1,5 +1,7 @@
 import java.util.*;
 
+//every method in here does exist with the Genome return type and with the array of Genomes return type
+// this makes it easier if one wants to change the ways this algorithm works but for now only the array of Genomes is used
 public class Recombinations {
 
 
@@ -114,6 +116,7 @@ public class Recombinations {
         }
     }
 
+    //this method give genome class back instead of array of genomes
     static Genome recombination_with_identifierSingle(Genome genome1, Genome genome2, float proabibility, int recombinationIdentifier) {
         switch (recombinationIdentifier) {
             case 0:

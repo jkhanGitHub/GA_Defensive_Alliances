@@ -162,6 +162,7 @@ The following is an example of a generic evolutionary algorithm:
 
     //when using onepointcrossover the parentgraph should not be included in the population!
     // GeneticAlgorithm.java: updated method signature
+    //Genetic Algorithm run without capped learners
     static void geneticAlgorithm(
             int NUMBER_OF_NODES,
             float NODE_EXISTENCE_PROBABILITY,
@@ -235,6 +236,7 @@ The following is an example of a generic evolutionary algorithm:
         resetConsoleOutput();
     }
 
+    // geneticAlgorithm ran with capped Learners
     static void geneticAlgorithm(
             int NUMBER_OF_NODES,
             float NODE_EXISTENCE_PROBABILITY,
@@ -465,13 +467,13 @@ The following is an example of a generic evolutionary algorithm:
         //create document containing defensive alliances
         if (!defensiveAlliances.isEmpty()) {
             // Write defensive alliances to file
-            File foundDefensiveAlliancesFile = new File(GeneticLogger.getOutputDirectory() + "distinctDefensiveAlliances.txt");
+            File foundDefensiveAlliancesFile = new File(GeneticLogger.getOutputDirectory() + "DefensiveAlliances.txt");
             GeneticLogger.printDefensiveAlliances(foundDefensiveAlliancesFile, defensiveAlliances);
         }
 
         //create document containing connected defensive alliances
         if (!connected_defensiveAlliances.isEmpty()) {
-            File foundDefensiveAlliancesFile = new File(GeneticLogger.getOutputDirectory() + "connected_distinctDefensiveAlliances.txt");
+            File foundDefensiveAlliancesFile = new File(GeneticLogger.getOutputDirectory() + "connected_DefensiveAlliances.txt");
             GeneticLogger.printDefensiveAlliances(foundDefensiveAlliancesFile, connected_defensiveAlliances);
         }
         

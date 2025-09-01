@@ -4,6 +4,7 @@ public class Mutations {
 
     public static int implementedMutationMethods = 2;
 
+    /* fully functional but slower because it iterates through the matrix instead of the neighbourhood
     protected static void mutation(float mutationrate, Genome mutatedGenome, int[][] matrix){
         for (int i=0; i<mutatedGenome.length; i++) {
             if (Math.random()<=mutationrate) {
@@ -12,6 +13,8 @@ public class Mutations {
             }
         }
     }
+
+     */
 
     protected static void mutation(float mutationrate, Genome mutatedGenome){
         for (int i=0; i<mutatedGenome.length; i++) {
@@ -24,6 +27,7 @@ public class Mutations {
 
 
     //degrees of genome must have been calculated before
+    /* fully functional but slower because it iterates through the matrix instead of the neighbourhood
     protected static void mutation_of_vertices_with_high_degree(float mutationrate, Genome mutatedGenome, int[][] matrix){
         int multiplier = 0;
         for (int i=0; i<mutatedGenome.length; i++) {
@@ -40,6 +44,7 @@ public class Mutations {
             }
         }
     }
+     */
 
     protected static void mutation_of_vertices_with_high_degree(float mutationrate, Genome mutatedGenome){
         int multiplier = 0;

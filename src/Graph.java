@@ -1,6 +1,9 @@
 import java.io.IOException;
 import java.util.*;
 
+//this class is fully functional but is not being used in the current version of the algorithm it used to be used in a previous variation
+
+
 //used to find connected components in a graph
 class Graph {
     protected int[][] adjMatrix;

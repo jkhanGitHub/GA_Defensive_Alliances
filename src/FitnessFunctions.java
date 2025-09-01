@@ -1,37 +1,4 @@
 public class FitnessFunctions {
-    /*static int calculateFitness(Genome genome){
-        int sum = 0;
-        for(int i=0; i<genome.length;i++){
-            if(genome.genome[i]==1){
-                sum += Math.min(0,(2*genome.degrees[i])+1-genome.parentGraph.degrees[i]);
-            }
-        }
-        return sum;
-    }*/
-
-    /*static int calculate_abs_Fitness(Genome genome){
-        int sum = 0;
-        for(int i=0; i<genome.length;i++){
-            if(genome.genome[i]==1){
-                sum += Math.min(0,(2*genome.degrees[i])+1-genome.parentGraph.degrees[i]);
-            }
-        }
-        return Math.abs(sum);
-    }*/
-
-    //ignore nur Ansatz
-    static int cFitness(Genome genome, Genome PARENT_GRAPH){
-        double sum = 0;
-        for(int i=0; i<genome.length;i++){
-            if(genome.genome[i]==1){
-                double fewNeighbors = (double) (PARENT_GRAPH.getSize() - genome.degrees[i]) /PARENT_GRAPH.getSize();
-                sum += fewNeighbors;
-            }
-        }
-        int sizeFactor = PARENT_GRAPH.getSize()- genome.getSize();
-        double fitness = sum * sizeFactor;
-        return (int) fitness;
-    }
 
     //THIS IS THE ONLY ONE THAT IS USED AND MATTERS I COULD DELETE THE REST OTHER two
     static int calculateFitnessMIN(Genome genome, Genome PARENT_GRAPH, int SIZE_OF_DEFENSIVE_ALLIANCE){
@@ -69,7 +36,7 @@ public class FitnessFunctions {
     }
 
 
-    //hat keinen Sinn im Moment
+    //hat keinen Sinn im Moment idee was es mir math.max zu arbeiten statt math.min um mit den fitness values besser arbeiten zu können
     static int calculateFitnessMAX(Genome genome, Genome PARENT_GRAPH){
         int sum = 0;
         for(int i=0; i<genome.length;i++){
@@ -85,6 +52,7 @@ public class FitnessFunctions {
         return sum;
     }
 
+    //not needed anymore
     static int normalizedFitness(Genome genome){
         int normalizedFitness = OneGenome.worstFitnessPossible + genome.getFitness();
         return normalizedFitness;

@@ -148,6 +148,7 @@ public class Genome {
 
 
     //calculate the degrees of the genome in an undirected graph
+    //not used in the actual algorithm since its as slow as the slowest neighbourhood calculation possible
     static Genome calculateDegreesUndirected(int[][] matrix, Genome g) {
         for (int i = 0; i < g.length; i++) {
             if (g.genome[i] == 1) {
@@ -222,6 +223,8 @@ public class Genome {
         }
     }
 
+    /* while this code is fully functional we dont use the matrix version anymore since we have the neighbourhoud saved.
+
     void updateChildDegrees_crossover(int[][] matrix){
         Genome child = this;
 
@@ -260,6 +263,8 @@ public class Genome {
         }
     }
 
+     */
+
     void updateChildDegrees(){
         Genome child = this;
 
@@ -275,20 +280,6 @@ public class Genome {
     }
 
 
-    //expects nxn matrix; carefull check if node exists
-    void removeNode(int[][] matrix,int index){
-        int n = length;
-        genome[index]=0;
-        size--;
-
-        for (int i = 0; i < n; i++) {
-            if(matrix[i][index]==1 && genome[i]==1){
-                degrees[i]--;
-            }
-        }
-        degrees[index] = 0;
-    }
-
     void removeNode(int index){
         genome[index]=0;
         size--;
@@ -301,23 +292,6 @@ public class Genome {
             }
         }
         degrees[index] = 0;
-    }
-
-    //expects nxn matrix; carefull check if node exists;
-    //functions without int[][] matrix parameter use the neighbourhood instead for calculation which is always faster
-    void addNode(int[][] matrix,int index){
-
-        int n = length;
-        genome[index]=1;
-        degrees[index] = 0;
-        size++;
-
-        for (int i = 0; i < n; i++) {
-            if(matrix[i][index]==1 && genome[i]==1){
-                degrees[i]++;
-                degrees[index]++;
-            }
-        }
     }
 
     void addNode(int index){
@@ -335,13 +309,6 @@ public class Genome {
         }
     }
 
-    void bitFlip(int[][] matrix,int index){
-        if (genome[index]==1){
-            removeNode(matrix,index);
-        }
-        else addNode(matrix,index);
-    }
-
     void bitFlip(int index){
         if (genome[index]==1){
             removeNode(index);
@@ -356,6 +323,47 @@ public class Genome {
         else addNode(index);
     }
 
+
+    //in a previous version this slower variant was being used instead of the neighbourhood every code that still uses this version is commented out or deleted still its fully functional
+    /*
+    //expects nxn matrix; carefull check if node exists;
+    //functions without int[][] matrix parameter use the neighbourhood instead for calculation which is always faster
+    void addNode(int[][] matrix,int index){
+
+        int n = length;
+        genome[index]=1;
+        degrees[index] = 0;
+        size++;
+
+        for (int i = 0; i < n; i++) {
+            if(matrix[i][index]==1 && genome[i]==1){
+                degrees[i]++;
+                degrees[index]++;
+            }
+        }
+    }
+
+    //expects nxn matrix; carefull check if node exists
+    void removeNode(int[][] matrix,int index){
+        int n = length;
+        genome[index]=0;
+        size--;
+
+        for (int i = 0; i < n; i++) {
+            if(matrix[i][index]==1 && genome[i]==1){
+                degrees[i]--;
+            }
+        }
+        degrees[index] = 0;
+    }
+    void bitFlip(int[][] matrix,int index){
+        if (genome[index]==1){
+            removeNode(matrix,index);
+        }
+        else addNode(matrix,index);
+    }
+
+     */
     // end of bit operations
 
 

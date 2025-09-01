@@ -9,6 +9,7 @@ public class Learning {
         learnMethods.put(3, "Remove harmful nodes");
     }
 
+    //tries to add nodes with high degree to the genome if they are not already in the genome and not in the filter list e.g it could possibly be in a defensive alliance of searched size
     protected static List<Integer> add_test_high_degree_vertices_mutation(Genome mutatedGenome, int numberOfNodesToRemove, OneGenome parentGraph, int SIZE_OF_DEFENSIVE_ALLIANCE) {
 
         //initialize List in which all the changed alleles are stored
@@ -47,6 +48,7 @@ public class Learning {
         return changedAllele;
     }
 
+    // this method only removes one node  the idea was the call this method multiple times if needed but now only remove_many_harmful_Nodes is used
     //parent.getOrderedMapOfHighestDegrees().entrySet().iterator(); in iterator eintragen
     protected static int remove_harmfulNode(Genome subgraph, OneGenome parent){
         //remove the node with the highest degree
