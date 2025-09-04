@@ -19,7 +19,6 @@ public class Mutations {
     protected static void mutation(float mutationrate, Genome mutatedGenome){
         for (int i=0; i<mutatedGenome.length; i++) {
             if (Math.random()<=mutationrate) {
-                mutatedGenome.genome[i]=Math.abs(mutatedGenome.genome[i]-1);
                 mutatedGenome.bitFlip(i);
             }
         }
@@ -57,7 +56,6 @@ public class Mutations {
             }
             double randomValue = Math.random();
             if (randomValue<=(mutationrate*multiplier)) {
-                mutatedGenome.genome[i]=Math.abs(mutatedGenome.genome[i]-1);
                 mutatedGenome.bitFlip(i);
             }
         }

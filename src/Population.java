@@ -374,6 +374,8 @@ public class Population {
                         default:
                             throw new IllegalStateException("Unexpected value: " + mutation_identifier);
                     }
+                    //remove potential nodes that might have been added through mutation, that cant be in the defensive alliance of size k
+                    newChild.removeNodesThatCannotBeInDefensiveAllianceOfSizeK(parentGraph.Ids_toFilter);
 
                     //calculate fitness
                     int fitnessValue = FitnessFunctions.calculateFitnessMIN(newChild, parentGraph, SIZE_OF_DEFENSIVE_ALLIANCE);
@@ -438,6 +440,9 @@ public class Population {
                     default:
                         throw new IllegalStateException("Unexpected value: " + mutation_identifier);
                 }
+
+                //remove potential nodes that might have been added through mutation, that cant be in the defensive alliance of size k
+                    newChild.removeNodesThatCannotBeInDefensiveAllianceOfSizeK(parentGraph.Ids_toFilter);
 
                 //calculate fitness
                 newChild.setFitness(FitnessFunctions.calculateFitnessMIN(newChild, parentGraph, SIZE_OF_DEFENSIVE_ALLIANCE));

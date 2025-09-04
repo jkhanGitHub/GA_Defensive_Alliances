@@ -141,7 +141,7 @@ public class Genome {
         //removes all nodes that cannot be in a defensive alliance of size k
         for (int i=0; i<Ids_toFilter.size(); i++) {
             int index = Ids_toFilter.get(i);
-            genome[index] = 0; //set the genome entry to 0
+            removeNode(index); //set the genome entry to 0
         }
         return genome;
     }
@@ -281,6 +281,10 @@ public class Genome {
 
 
     void removeNode(int index){
+        //check if node is already 0 in genome
+        if(genome[index] == 0) {
+            return;
+        }
         genome[index]=0;
         size--;
 
@@ -295,6 +299,11 @@ public class Genome {
     }
 
     void addNode(int index){
+        //check if node is already 1 in genome
+        if(genome[index] == 1) {
+            return;
+        }
+
         genome[index]=1;
         degrees[index] = 0;
         size++;
