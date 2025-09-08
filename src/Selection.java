@@ -16,7 +16,7 @@ public class Selection {
         selectionMethods.put(3, "Linear Rank Selection");
         selectionMethods.put(4, "Exponential Rank Selection");
         selectionMethods.put(5, "Elitism");
-        selectionMethods.put(6, "Random Selection");
+        selectionMethods.put(6, "Random");
     }
 
     //adds the members with the highest fitness value in population to a list
