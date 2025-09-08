@@ -209,6 +209,7 @@ public class Genome {
         }
     }
 
+    //this method is wrong right now the calcultated size is not correct
     void updateChildDegrees_intersectionWithProbability(){
         Genome child = this;
 

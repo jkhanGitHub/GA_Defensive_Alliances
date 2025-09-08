@@ -30,6 +30,7 @@ The following is an example of a generic evolutionary algorithm:
 
     static Dictionary<String, Integer> selectionMethods = new Hashtable<>();
 
+    //This Table needs to be uptodate when adding new selection methods alsways check if both tables are the same or change the implementation when time to spare
     static {
         selectionMethods.put("Stochastic Universal Sampling", 0);
         selectionMethods.put("Tournament Selection Elimination", 1);
@@ -37,6 +38,7 @@ The following is an example of a generic evolutionary algorithm:
         selectionMethods.put("Linear Rank Selection", 3);
         selectionMethods.put("Exponential Rank Selection", 4);
         selectionMethods.put("Elitism", 5);
+        selectionMethods.put("Random", 6);
     }
 
     static Dictionary<String, Integer> mutationIdentifiers = new Hashtable<>();
@@ -202,7 +204,7 @@ The following is an example of a generic evolutionary algorithm:
             List<Genome> newGenParents = Selection.select_SelectionMethod(
                     population,
                     numberOfContestantsPerRound,
-                    random.nextInt(Selection.IMPLEMENTED_SELECTION_METHODS)); // selectionMethod if you want to use a specific selection method, otherwise random
+                    selectionMethod); // selectionMethod if you want to use a specific selection method, otherwise random
             
             Population.population = Population.newGeneration(
                     mutationRate,
@@ -286,7 +288,7 @@ The following is an example of a generic evolutionary algorithm:
             List<Genome> newGenParents = Selection.select_SelectionMethod(
                     population,
                     numberOfContestantsPerRound,
-                    random.nextInt(Selection.IMPLEMENTED_SELECTION_METHODS));// selectionMethod if you want to use a specific selection method, otherwise random
+                    selectionMethod);// selectionMethod if you want to use a specific selection method, otherwise random
 
             //create new population
             Population.population = Population.newGeneration(
