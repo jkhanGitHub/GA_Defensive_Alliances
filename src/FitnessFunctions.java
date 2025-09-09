@@ -3,11 +3,6 @@ public class FitnessFunctions {
     //THIS IS THE ONLY ONE THAT IS USED AND MATTERS I COULD DELETE THE REST OTHER two
     static int calculateFitnessMIN(Genome genome, Genome PARENT_GRAPH, int SIZE_OF_DEFENSIVE_ALLIANCE){
         int sum = 0;
-        int sizeFactor = genome.getSize();
-
-        if ((sizeFactor==0) || (sizeFactor==PARENT_GRAPH.getSize())){
-            return 0;
-        }
 
         for(int i=0; i<genome.length;i++){
             if(genome.genome[i]==1){
