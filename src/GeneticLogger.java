@@ -23,74 +23,23 @@ public class GeneticLogger {
         InputStream is = null;
         OutputStream os = null;
         try {
-                is = new FileInputStream(source);
-                os = new FileOutputStream(dest);
-                byte[] buffer = new byte[1024];
-                int length;
-                while ((length = is.read(buffer)) > 0) {
-                        os.write(buffer, 0, length);
-                }
+            is = new FileInputStream(source);
+            os = new FileOutputStream(dest);
+            byte[] buffer = new byte[1024];
+            int length;
+            while ((length = is.read(buffer)) > 0) {
+                os.write(buffer, 0, length);
+            }
         } finally {
-                is.close();
-                os.close();
-        }
-}
-
-    // Call this once at program start
-    public static void initCSV() {
-        String timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        directory = "LOG_Files/run_" + timestamp + "/";
-        new File(directory).mkdirs();  // Create directory
-
-        filename = directory + "ga_stats.csv";
-
-        String scientificMutationRate = new BigDecimal(Genetic_Algorithm.MUTATION_RATE).toString();
-
-        try (BufferedWriter writer = Files.newBufferedWriter(
-                Paths.get(filename),
-                StandardCharsets.UTF_8)) {
-
-            // Write configuration header
-            writer.write("# Genetic Algorithm Configuration");
-            writer.newLine();
-            writer.write("# Graph: " + Genetic_Algorithm.FILEPATH);
-            writer.newLine();
-            writer.write(String.format("# Nodes: %d, Population: %d, Generations: %d",
-                    Genetic_Algorithm.NUMBER_OF_NODES,
-                    Genetic_Algorithm.POPULATION_SIZE,
-                    Genetic_Algorithm.NUMBER_OF_ITERATIONS));
-            writer.newLine();
-            writer.write(String.format("# Node Probability: %.2f, Mutation Rate: %s",
-                    Genetic_Algorithm.NODE_EXISTENCE_PROBABILITY,
-                    scientificMutationRate));
-            writer.newLine();
-            writer.write(String.format("# Selection: Tournament (n=%d), Children/Parent: %d",
-                    Genetic_Algorithm.NUMBER_OF_CONTESTANTS_PER_ROUND,
-                    Genetic_Algorithm.NUMBER_OF_CHILDS_PER_PARENT));
-            writer.newLine();
-            writer.write(String.format("# Learning: %d, Recombination Prob: %.2f",
-                    Genetic_Algorithm.AmountOfLearnings,
-                    Genetic_Algorithm.Intersection_PROBABILITY));
-            writer.newLine();
-            writer.write("# Break Fitness: " + Genetic_Algorithm.BREAK_FITNESS);
-            writer.newLine();
-            writer.write("# Worst Possible Fitness: " + OneGenome.worstFitnessPossible);
-            writer.newLine();
-            writer.newLine();
-
-            // Write CSV header
-            writer.write("generation,population_fitness,mean_fitness,mean_size,"
-                    + "survivors,offspring,best_fitness,best_size,"
-                    + "second_fitness,second_size,worst_fitness,worst_size,"
-                    + "best_second_diff,best_worst_diff,best_current_vs_last_diff");
-            writer.newLine();
-        } catch (Exception e) {
-            System.err.println("CSV initialization failed: " + e.getMessage());
+            is.close();
+            os.close();
         }
     }
 
+    // Call this once at program start
     /**
      * Initialize CSV logging using values from Config.
+     *
      * @param cfg Configuration object containing all GA parameters
      */
     public static void initCSV(Config cfg) {
@@ -109,35 +58,55 @@ public class GeneticLogger {
                 StandardCharsets.UTF_8)) {
 
             // Configuration header
-            writer.write("# Genetic Algorithm Configuration"); writer.newLine();
-            writer.write("# Graph: " + cfg.FILEPATH); writer.newLine();
+            writer.write("# Genetic Algorithm Configuration");
+            writer.newLine();
+            writer.write("# Graph: " + cfg.FILEPATH);
+            writer.newLine();
             writer.write(String.format("# Nodes: %d, Population: %d, Generations: %d, Searched DA Size: %d, Filter Nodes: %b",
                     cfg.NUMBER_OF_NODES,
                     cfg.POPULATION_SIZE,
                     cfg.NUMBER_OF_ITERATIONS,
                     cfg.SIZE_OF_DEFENSIVE_ALLIANCE,
-                    cfg.FILTER_NODES_THAT_CANNOT_BE_IN_A_DEFENSIVE_ALLIANCE_OF_SIZE_K)); writer.newLine();
+                    cfg.FILTER_NODES_THAT_CANNOT_BE_IN_A_DEFENSIVE_ALLIANCE_OF_SIZE_K));
+            writer.newLine();
             writer.write(String.format("# Node Probability: %.2f, Mutation Rate: %s",
                     cfg.NODE_EXISTENCE_PROBABILITY,
-                    scientificMutationRate)); writer.newLine();
+                    scientificMutationRate));
+            writer.newLine();
             writer.write(String.format("# Selection Method: %s (n=%d)",
                     cfg.SELECTION_METHOD,
-                    cfg.NUMBER_OF_CONTESTANTS_PER_ROUND)); writer.newLine();
+                    cfg.NUMBER_OF_PARENTS));
+            writer.newLine();
+            writer.write(String.format("# Allow Duplicate Parents: %b", cfg.ALLOW_DUPLICATE_PARENTS));
+            writer.newLine();
             writer.write(String.format("# Recombination Method: %s, Intersection Prob: %.2f",
                     cfg.RECOMBINATION_METHOD,
-                    cfg.INTERSECTION_PROBABILITY)); writer.newLine();
+                    cfg.INTERSECTION_PROBABILITY));
+            writer.newLine();
             writer.write(String.format("# Mutation Method: %s, Children/Parent: %d",
                     cfg.MUTATION_METHOD,
-                    cfg.NUMBER_OF_CHILDS_PER_PARENT)); writer.newLine();
-            writer.write("# Activate Learning: " + cfg.ACTIVATE_LEARNING); writer.newLine();
+                    cfg.NUMBER_OF_CHILDS_PER_PARENT));
+            writer.newLine();
+            writer.write("# Activate Learning: " + cfg.ACTIVATE_LEARNING);
+            writer.newLine();
 
-            if(activateCappedLearning){
-                writer.write("# Amount of Learners: " + cfg.AMOUNT_OF_LEARNINGS); writer.newLine();
-                writer.write("# Randomize Learners: " + cfg.RANDOMIZE_LEARNERS); writer.newLine();
+            if (activateCappedLearning) {
+                writer.write("# Amount of Learners: " + cfg.AMOUNT_OF_LEARNERS);
+                writer.newLine();
+                writer.write("# Amount of Learnings: " + cfg.AMOUNT_OF_LEARNINGS);
+                writer.newLine();
+                writer.write("# Randomize Learners: " + cfg.RANDOMIZE_LEARNERS);
+                writer.newLine();
+            }
+            else {
+                writer.write("# Amount of Learnings: " + cfg.AMOUNT_OF_LEARNINGS);
+                writer.newLine();
             }
 
-            writer.write("# Break Fitness: " + cfg.BREAK_FITNESS); writer.newLine();
-            writer.write("# Worst Possible Fitness: " + OneGenome.worstFitnessPossible); writer.newLine();
+            writer.write("# Break Fitness: " + cfg.BREAK_FITNESS);
+            writer.newLine();
+            writer.write("# Worst Possible Fitness: " + OneGenome.worstFitnessPossible);
+            writer.newLine();
             writer.newLine();
 
             // CSV header row
@@ -186,7 +155,7 @@ public class GeneticLogger {
         }
     }
 
-    
+
     public static void printDefensiveAlliances(File file, List<Genome> defensiveAlliances) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
             for (Genome da : defensiveAlliances) {

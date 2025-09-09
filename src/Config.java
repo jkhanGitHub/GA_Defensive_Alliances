@@ -11,7 +11,7 @@ public class Config {
     public int POPULATION_SIZE;
     public int AMOUNT_OF_LEARNINGS;
     public float NODE_EXISTENCE_PROBABILITY;
-    public int NUMBER_OF_CONTESTANTS_PER_ROUND;
+    public int NUMBER_OF_PARENTS;
     public int NUMBER_OF_CHILDS_PER_PARENT;
     public float MUTATION_RATE;
     public int NUMBER_OF_ITERATIONS;
@@ -21,6 +21,9 @@ public class Config {
     public float INTERSECTION_PROBABILITY;
     public String RECOMBINATION_METHOD;
     public String SELECTION_METHOD;
+
+    public boolean ALLOW_DUPLICATE_PARENTS;
+
     public String MUTATION_METHOD;
     public boolean ACTIVATE_LEARNING;
 
@@ -36,7 +39,7 @@ public class Config {
         POPULATION_SIZE = Integer.parseInt(props.getProperty("POPULATION_SIZE"));
         AMOUNT_OF_LEARNINGS = Integer.parseInt(props.getProperty("AMOUNT_OF_LEARNINGS"));
         NODE_EXISTENCE_PROBABILITY = Float.parseFloat(props.getProperty("NODE_EXISTENCE_PROBABILITY"));
-        NUMBER_OF_CONTESTANTS_PER_ROUND = Integer.parseInt(props.getProperty("NUMBER_OF_CONTESTANTS_PER_ROUND"));
+        NUMBER_OF_PARENTS = Integer.parseInt(props.getProperty("NUMBER_OF_PARENTS"));
         NUMBER_OF_CHILDS_PER_PARENT = Integer.parseInt(props.getProperty("NUMBER_OF_CHILDS_PER_PARENT"));
         MUTATION_RATE = Float.parseFloat(props.getProperty("MUTATION_RATE"));
         NUMBER_OF_ITERATIONS = Integer.parseInt(props.getProperty("NUMBER_OF_ITERATIONS"));
@@ -45,6 +48,7 @@ public class Config {
         INTERSECTION_PROBABILITY = Float.parseFloat(props.getProperty("INTERSECTION_PROBABILITY"));
         RECOMBINATION_METHOD = props.getProperty("RECOMBINATION_METHOD");
         SELECTION_METHOD = props.getProperty("SELECTION_METHOD");
+        ALLOW_DUPLICATE_PARENTS = Boolean.parseBoolean(props.getProperty("ALLOW_DUPLICATE_PARENTS"));
         MUTATION_METHOD = props.getProperty("MUTATION_METHOD");
         ACTIVATE_LEARNING = Boolean.parseBoolean(props.getProperty("ACTIVATE_LEARNING"));
         AMOUNT_OF_LEARNERS = Integer.parseInt(props.getProperty("AMOUNT_OF_LEARNERS"));
@@ -68,7 +72,7 @@ public class Config {
             writeField(writer, "NUMBER_OF_NODES", NUMBER_OF_NODES);
             writeField(writer, "POPULATION_SIZE", POPULATION_SIZE);
             writeField(writer, "NODE_EXISTENCE_PROBABILITY", NODE_EXISTENCE_PROBABILITY);
-            writeField(writer, "NUMBER_OF_CONTESTANTS_PER_ROUND", NUMBER_OF_CONTESTANTS_PER_ROUND);
+            writeField(writer, "NUMBER_OF_PARENTS", NUMBER_OF_PARENTS);
             writeField(writer, "NUMBER_OF_CHILDS_PER_PARENT", NUMBER_OF_CHILDS_PER_PARENT);
             writeField(writer, "MUTATION_RATE", MUTATION_RATE);
             writeField(writer, "NUMBER_OF_ITERATIONS", NUMBER_OF_ITERATIONS);
@@ -78,6 +82,7 @@ public class Config {
             writeField(writer, "INTERSECTION_PROBABILITY", INTERSECTION_PROBABILITY);
             writeField(writer, "RECOMBINATION_METHOD", RECOMBINATION_METHOD);
             writeField(writer, "SELECTION_METHOD", SELECTION_METHOD);
+            writeField(writer, "ALLOW_DUPLICATE_PARENTS", ALLOW_DUPLICATE_PARENTS);
             writeField(writer, "MUTATION_METHOD", MUTATION_METHOD);
             writeField(writer, "ACTIVATE_LEARNING", ACTIVATE_LEARNING);
             writeField(writer, "AMOUNT_OF_LEARNINGS", AMOUNT_OF_LEARNINGS);

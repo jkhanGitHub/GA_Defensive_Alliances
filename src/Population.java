@@ -5,8 +5,6 @@ import java.io.*;
 public class Population {
     static Genome[] population; //Array is used since it is easy to update and we keep its size static
 
-    static int amountOfLearning = Genetic_Algorithm.AmountOfLearnings;
-
     static int generation = -1;
 
     static long population_fitness;
@@ -176,7 +174,7 @@ public class Population {
      */
 
     //used in Genetic Algorithm class to create a new generation
-    static Genome[] newGeneration(float mutationrate, float proabibility, int newChildsPerParents, List<Genome> nextGenParents, int mutation_identifier, int recombination_identifier,boolean activateLearning, int amountOfLearners, boolean randomizeLearners, int SIZE_OF_DEFENSIVE_ALLIANCE) {
+    static Genome[] newGeneration(float mutationrate, float proabibility, int newChildsPerParents, List<Genome> nextGenParents, int mutation_identifier, int recombination_identifier,boolean activateLearning, int amountOfLearners,int amountOfLearning, boolean randomizeLearners, int SIZE_OF_DEFENSIVE_ALLIANCE) {
         bestGenomeFromLastGeneration = new Genome(population[0]);
 
         List<Genome> childrenList;
@@ -212,7 +210,7 @@ public class Population {
 
     //also used in Genetic Algorithm class to create a new generation but with less parameters this time
     //you can change generate_nextChildrenList to generate_nextChildrenListThreaded if you want to use the threaded version
-    static Genome[] newGeneration(float mutationrate, float proabibility, int newChildsPerParents, List<Genome> nextGenParents, int mutation_identifier, int recombination_identifier, boolean activateLearning, int SIZE_OF_DEFENSIVE_ALLIANCE) {
+    static Genome[] newGeneration(float mutationrate, float proabibility, int newChildsPerParents, List<Genome> nextGenParents, int mutation_identifier, int recombination_identifier, boolean activateLearning, int amountOfLearning, int SIZE_OF_DEFENSIVE_ALLIANCE) {
         bestGenomeFromLastGeneration = new Genome(population[0]);
         offspringsFromPreviousGeneration = generate_nextChildrenListThreaded(mutationrate, proabibility, newChildsPerParents, nextGenParents, mutation_identifier, recombination_identifier, SIZE_OF_DEFENSIVE_ALLIANCE);
 
@@ -328,6 +326,8 @@ public class Population {
     static List<Genome> generate_nextChildrenListThreaded(float mutationrate, float probability, int newChildsPerParents, List<Genome> nextGenParents, int mutation_identifier, int recombination_identifier, int SIZE_OF_DEFENSIVE_ALLIANCE) {
 
         List<Genome> nextGenChildren = Collections.synchronizedList(new LinkedList<>()); // Thread-safe list
+        System.out.println("Number of childs per parent: " + newChildsPerParents);
+        System.out.println("Total children to be created: " + (nextGenParents.size()*newChildsPerParents));
         System.out.println(Recombinations.recombinationIdentifiers.get(recombination_identifier));
 
         //recombine Parents: Number of parents = POPULATION_SIZE/numberOfContestantsPerRound

@@ -2,7 +2,6 @@ import java.io.IOException;
 import java.util.*;
 import java.io.*;
 import java.util.Properties;
-
 public class Genetic_Algorithm {
 
 
@@ -52,48 +51,6 @@ The following is an example of a generic evolutionary algorithm:
     public static List<Genome> connected_defensiveAlliances = new LinkedList<>();
     public static final int MAXIMUM_AMOUNT_OF_STORED_DEFENSIVE_ALLIANCES = 1000; //maximum amount of stored defensive alliances, if this is reached, the worst defensive alliances will be removed
 
-
-    //Path to the csv file
-    public static final String FILEPATH = "lasftm_asia/lastfm_asia_edges.csv";
-    //Number of Nodes of graph
-    public static final int NUMBER_OF_NODES = 7624;
-
-    public static final int POPULATION_SIZE = (int) Math.pow(2, 11); //Powers of two are best suited for variable tournament selection, use  factors of two for 1v1
-
-    public static final int AmountOfLearnings = 5;
-
-    public static final float NODE_EXISTENCE_PROBABILITY = 0.5F;
-
-    static boolean activateLearning = true; //if true, survivors will learn
-
-    static int AMOUNT_OF_lEARNERS = 10; //amount of survivors that learn, this is only used when activateLearning is true
-
-    static boolean randomizeLearners = true; //if true, the learners will be randomly selected from the survivors, otherwise the first AMOUNT_OF_lEARNERS survivors will learn
-
-
-    //recombine Parents: Number of parents = POPULATION_SIZE/numberOfContestantsPerRound
-    //Number of children = number of parents*NUMBER_OF_CHILDS_PER_PARENT
-    //new population will take over the best from last generation + all new children
-    // new nodes in next population is (NUMBER_OF_CONTESTANTS_PER_ROUND/NUMBER_OF_CHILDS_PER_PARENT) in percent
-    public static final int NUMBER_OF_CONTESTANTS_PER_ROUND = (int) Math.pow(2, 2); // only 1 winner -< lower number ensures more worse parents and probably more diversity
-
-    //increase this number to increase the number of children per parent also resulting in bigger population in each generation, only makes sense when making population a list wont be doing that tho xD
-    //higher number -< earlier local maximum because of incest
-    public static final int NUMBER_OF_CHILDS_PER_PARENT = 2;
-
-    public static final int MULTIPLIER = POPULATION_SIZE / NUMBER_OF_CONTESTANTS_PER_ROUND; //Multiplier for some selection methods which have an average parent output of 1
-
-    //Explanation of mutation identfieres found in Population.java mutate_Population()
-    public static final float MUTATION_RATE = 1 / NUMBER_OF_NODES; //mutation rate, 0.01 means 1% chance of mutation per node, 0.1 means 10% chance of mutation per node
-    public static final int NUMBER_OF_ITERATIONS = 150; //number of generations
-
-    public static final int BREAK_FITNESS = Integer.MAX_VALUE;
-    public static final float Intersection_PROBABILITY = 0.5f; //probability of intersection, 0.5 means 50% chance of intersection and 50% chance of crossover
-
-
-    public static OneGenome PARENT_GRAPH;
-
-    final static int UPPER_BOUND_OF_LEARNERS = POPULATION_SIZE / NUMBER_OF_CONTESTANTS_PER_ROUND; //upper bound for ADDITIONAL_amount of genomes to be mutated
     public static int[][] graph;
 
     public static Map<Integer, Genome> bestGenomes = new HashMap<>();
@@ -172,15 +129,17 @@ The following is an example of a generic evolutionary algorithm:
             int NUMBER_OF_ITERATIONS,
             int SIZE_OF_DEFENSIVE_ALLIANCE,
             int BREAK_FITNESS,
-            int numberOfContestantsPerRound,
+            int NUMBER_OF_PARENTS,
             float mutationRate,
             OneGenome parentGraph,
             int recombinationMethod,
             int numberOfChildsPerParent,
             float intersectionProbability,
             int selectionMethod,
+            boolean duplicatesAllowed,
             int mutationMethod,
-            boolean activateLearning
+            boolean activateLearning,
+            int amountOfLearnings
     ) throws IOException {
 
         Population population = new Population(POPULATION_SIZE, NUMBER_OF_NODES, NODE_EXISTENCE_PROBABILITY, parentGraph, SIZE_OF_DEFENSIVE_ALLIANCE);
@@ -203,8 +162,8 @@ The following is an example of a generic evolutionary algorithm:
         while ((population.generation != NUMBER_OF_ITERATIONS) && (population.getPopulation()[0].getFitness() < BREAK_FITNESS)) {
             List<Genome> newGenParents = Selection.select_SelectionMethod(
                     population,
-                    numberOfContestantsPerRound,
-                    selectionMethod); // selectionMethod if you want to use a specific selection method, otherwise random
+                    NUMBER_OF_PARENTS,
+                    selectionMethod, duplicatesAllowed); // selectionMethod if you want to use a specific selection method, otherwise random
             
             Population.population = Population.newGeneration(
                     mutationRate,
@@ -214,6 +173,7 @@ The following is an example of a generic evolutionary algorithm:
                     mutationMethod,
                     recombinationMethod,
                     activateLearning,
+                    amountOfLearnings,
                     SIZE_OF_DEFENSIVE_ALLIANCE
             );
 
@@ -246,16 +206,18 @@ The following is an example of a generic evolutionary algorithm:
             int NUMBER_OF_ITERATIONS,
             int SIZE_OF_DEFENSIVE_ALLIANCE,
             int BREAK_FITNESS,
-            int numberOfContestantsPerRound,
+            int NUMBER_OF_PARENTS,
             float mutationrate,
             OneGenome parentGraph,
             int recombinationMethod,
             int numberOfChildsPerParent,
             float intersection_probability,
             int selectionMethod,
+            boolean duplicalesAllowed,
             int mutationMethod,
             boolean activateLearning,
             int amountOfLearners,
+            int amountOfLearnings,
             boolean randomizeLearners
 
     ) throws IOException {
@@ -287,8 +249,8 @@ The following is an example of a generic evolutionary algorithm:
             //Literatur says that using many different selection methods is better
             List<Genome> newGenParents = Selection.select_SelectionMethod(
                     population,
-                    numberOfContestantsPerRound,
-                    selectionMethod);// selectionMethod if you want to use a specific selection method, otherwise random
+                    NUMBER_OF_PARENTS,
+                    selectionMethod, duplicalesAllowed);// selectionMethod if you want to use a specific selection method, otherwise random
 
             //create new population
             Population.population = Population.newGeneration(
@@ -300,6 +262,7 @@ The following is an example of a generic evolutionary algorithm:
                     recombinationMethod,
                     activateLearning,
                     amountOfLearners,
+                    amountOfLearnings,
                     randomizeLearners,
                     SIZE_OF_DEFENSIVE_ALLIANCE
             );
@@ -385,9 +348,8 @@ The following is an example of a generic evolutionary algorithm:
 
         System.setOut(new PrintStream(System.out, true, "UTF-8"));
 
-        String filePath = FILEPATH;
+        String filePath = cfg.FILEPATH;
         int numberOfNodes = cfg.NUMBER_OF_NODES;
-
 
         try {
             graph = CsvReader.readCsvEdgesToSymmetricalMatrix(filePath, numberOfNodes);
@@ -425,16 +387,18 @@ The following is an example of a generic evolutionary algorithm:
                     cfg.NUMBER_OF_ITERATIONS,
                     cfg.SIZE_OF_DEFENSIVE_ALLIANCE,
                     cfg.BREAK_FITNESS,
-                    cfg.NUMBER_OF_CONTESTANTS_PER_ROUND,
+                    cfg.NUMBER_OF_PARENTS,
                     cfg.MUTATION_RATE,
                     parentGraph,
                     recombId,
                     cfg.NUMBER_OF_CHILDS_PER_PARENT,
                     cfg.INTERSECTION_PROBABILITY,
                     selectionId,
+                    cfg.ALLOW_DUPLICATE_PARENTS,
                     mutId,
                     cfg.ACTIVATE_LEARNING,
                     cfg.AMOUNT_OF_LEARNERS,
+                    cfg.AMOUNT_OF_LEARNINGS,
                     cfg.RANDOMIZE_LEARNERS
             );
         }
@@ -448,15 +412,17 @@ The following is an example of a generic evolutionary algorithm:
                     cfg.NUMBER_OF_ITERATIONS,
                     cfg.SIZE_OF_DEFENSIVE_ALLIANCE,
                     cfg.BREAK_FITNESS,
-                    cfg.NUMBER_OF_CONTESTANTS_PER_ROUND,
+                    cfg.NUMBER_OF_PARENTS,
                     cfg.MUTATION_RATE,
                     parentGraph,
                     recombId,
                     cfg.NUMBER_OF_CHILDS_PER_PARENT,
                     cfg.INTERSECTION_PROBABILITY,
                     selectionId,
+                    cfg.ALLOW_DUPLICATE_PARENTS,
                     mutId,
-                    cfg.ACTIVATE_LEARNING
+                    cfg.ACTIVATE_LEARNING,
+                    cfg.AMOUNT_OF_LEARNINGS
             );
         }
 
