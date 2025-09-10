@@ -1,15 +1,36 @@
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 public class FitnessFunctions {
 
     //THIS IS THE ONLY ONE THAT IS USED AND MATTERS I COULD DELETE THE REST OTHER two
     static int calculateFitnessMIN(Genome genome, Genome PARENT_GRAPH, int SIZE_OF_DEFENSIVE_ALLIANCE){
         int sum = 0;
+        Map<Integer, Integer> mapWithRelativeFitnessOfNode_And_OriginalPosition = new HashMap<>(); //create a map to store the index and value of the difference
 
         for(int i=0; i<genome.length;i++){
             if(genome.genome[i]==1){
                 int x = (2*genome.degrees[i])+1-PARENT_GRAPH.degrees[i];
                 sum += Math.min(0,(x));
+
+                if (x<0){
+                    mapWithRelativeFitnessOfNode_And_OriginalPosition.put(i, x); //store the index and value of the difference in the map
+                }
             }
         }
+        //sort the map by value //the smaller the value the more harmful the node is
+        Map<Integer, Integer> sortedMap = mapWithRelativeFitnessOfNode_And_OriginalPosition.entrySet()
+                .stream()
+                .sorted(Map.Entry.<Integer, Integer>comparingByValue())
+                .collect(Collectors.toMap(
+                        Map.Entry::getKey,
+                        Map.Entry::getValue,
+                        (e1, e2) -> e1, // Merge function (not needed here as keys are unique)
+                        LinkedHashMap::new // Use LinkedHashMap to preserve the sorted order
+                ));
+        genome.harmfulNodes = sortedMap; //store the map in the harmfulNodes variable
 
         //if sum is 0 then the genome is a defensive alliance
         if(sum == 0){

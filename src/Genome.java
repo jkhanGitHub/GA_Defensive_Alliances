@@ -425,6 +425,7 @@ public class Genome {
 
 
     //find the edges in the graph with the highest degree and check against the degree of the subgraph(genome)
+    //TODO the list should be created by the fitness function to avoid recalculating the same values multiple times
     Map<Integer, Integer> orderedMapOfHarmfulNodes(OneGenome parent_graph) {
         int harmfulnessFitness; //initialize the array with the length of the parent graph to store the difference in degrees
         Map<Integer, Integer> mapWithRelativeFitnessOfNode_And_OriginalPosition = new HashMap<>(); //create a map to store the index and value of the difference

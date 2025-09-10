@@ -52,7 +52,7 @@ public class Learning {
     //parent.getOrderedMapOfHighestDegrees().entrySet().iterator(); in iterator eintragen
     protected static int remove_harmfulNode(Genome subgraph, OneGenome parent){
         //remove the node with the highest degree
-        Map<Integer, Integer> map = subgraph.orderedMapOfHarmfulNodes(parent);
+        Map<Integer, Integer> map = subgraph.harmfulNodes;
         Iterator<Map.Entry<Integer, Integer>> iterator = map.entrySet().iterator();
 
         //check if the map is empty
@@ -77,7 +77,7 @@ public class Learning {
 
         //remove the node with the highest degree
 
-        Map<Integer, Integer> map = subgraph.orderedMapOfHarmfulNodes(parent);
+        Map<Integer, Integer> map = subgraph.harmfulNodes;
         Iterator<Map.Entry<Integer, Integer>> iterator = map.entrySet().iterator();
 
         for (int i = 0; i < numberOfNodesToRemove && iterator.hasNext(); i++) {
