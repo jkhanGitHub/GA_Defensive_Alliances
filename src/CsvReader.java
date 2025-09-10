@@ -64,7 +64,7 @@ public class CsvReader {
             while ((line = br.readLine()) != null) {
                 String[] columns = line.split(",");
                 try {
-                    if(g.genome[Integer.parseInt(columns[0])]==1 && g.genome[Integer.parseInt(columns[1])]==1){
+                    if(g.chromosome[Integer.parseInt(columns[0])]==1 && g.chromosome[Integer.parseInt(columns[1])]==1){
                         degrees[Integer.parseInt(columns[0])]++;
                         degrees[Integer.parseInt(columns[1])]++;
                     }

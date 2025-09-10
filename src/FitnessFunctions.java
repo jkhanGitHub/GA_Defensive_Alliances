@@ -1,7 +1,5 @@
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 public class FitnessFunctions {
 
@@ -11,7 +9,7 @@ public class FitnessFunctions {
         Map<Integer, Integer> mapWithRelativeFitnessOfNode_And_OriginalPosition = new HashMap<>(); //create a map to store the index and value of the difference
 
         for(int i=0; i<genome.length;i++){
-            if(genome.genome[i]==1){
+            if(genome.chromosome[i]==1){
                 int x = (2*genome.degrees[i])+1-PARENT_GRAPH.degrees[i];
                 sum += Math.min(0,(x));
 
@@ -46,7 +44,7 @@ public class FitnessFunctions {
     static int calculateFitnessMAX(Genome genome, Genome PARENT_GRAPH){
         int sum = 0;
         for(int i=0; i<genome.length;i++){
-            if(genome.genome[i]==1){
+            if(genome.chromosome[i]==1){
                 int x = PARENT_GRAPH.degrees[i]-(2*genome.degrees[i]+1);
                 sum += Math.max(0,(x));
             }

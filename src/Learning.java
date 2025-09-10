@@ -22,7 +22,7 @@ public class Learning {
             Map.Entry<Integer, Integer> entry = iterator.next();
             int index = entry.getKey();
             // check if the node is not already in the genome and also not in the filter list e.g it could possibly be in a defensive alliance of searched size
-            if(mutatedGenome.getGenome()[index] == 0 && !parentGraph.Ids_toFilter.contains(index)) {
+            if(mutatedGenome.getChromosome()[index] == 0 && !parentGraph.Ids_toFilter.contains(index)) {
 
                 //Experimental from Here ---------------------------------------------------------------------------
                 //calculate the degrees of the mutated genome

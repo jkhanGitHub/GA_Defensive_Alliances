@@ -1,5 +1,4 @@
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.*;
@@ -9,8 +8,8 @@ import java.util.*;
 
 public class Genome {
 
-    public void setGenome(int[] genome) {
-        this.genome = genome;
+    public void setChromosome(int[] chromosome) {
+        this.chromosome = chromosome;
     }
 
     //if positiveFitness is OneGenome.worstFitnessPossible, then the  genome is a defensive alliance
@@ -25,7 +24,7 @@ public class Genome {
 
     int crossoverPoint = 0; //for OnePointcrossover
     Map<Integer, Integer> harmfulNodes;
-    int[] genome;
+    int[] chromosome;
 
     int[] degrees;
 
@@ -44,8 +43,8 @@ public class Genome {
 
     int fitness = 0;
 
-    public int[] getGenome() {
-        return genome;
+    public int[] getChromosome() {
+        return chromosome;
     }
 
     public int[] getDegrees() {
@@ -69,7 +68,7 @@ public class Genome {
     //dont remove the graph parameter, it is needed for overloading
     protected Genome(int numberOfNodes, float existenceRate) {
         length = numberOfNodes;
-        genome = new int[length];
+        chromosome = new int[length];
         degrees = new int[length];
 
         generate_genome(existenceRate);
@@ -78,7 +77,7 @@ public class Genome {
 
     protected Genome(int numberOfNodes, float existenceRate, List<Integer> Ids_toFilter) {
         length = numberOfNodes;
-        genome = new int[length];
+        chromosome = new int[length];
         degrees = new int[length];
 
         generate_genome(existenceRate);
@@ -88,14 +87,14 @@ public class Genome {
 
     protected Genome(int[] genetic_data) {
         length = genetic_data.length;
-        genome = genetic_data;
+        chromosome = genetic_data;
         degrees = new int[length];
     }
 
     //used for OnePointCrossover
     protected Genome(int[] genetic_data, Genome mother, Genome father, int crossoverPoint) {
         length = genetic_data.length;
-        genome = genetic_data;
+        chromosome = genetic_data;
         degrees = new int[length];
         this.mother = mother;
         this.father = father;
@@ -105,7 +104,7 @@ public class Genome {
     //used for Intersection with probability (probability is factored in inside the recombination method)
     protected Genome(int[] genetic_data, Genome mother, Genome father, List<Integer> changedAllele) {
         length = genetic_data.length;
-        genome = genetic_data;
+        chromosome = genetic_data;
         degrees = new int[length];
         this.mother = mother;
         this.father = father;
@@ -117,13 +116,13 @@ public class Genome {
     //for the complement genome
     protected Genome(int[] genetic_data, boolean complement) {
         length = genetic_data.length;
-        genome = complement(genetic_data);
+        chromosome = complement(genetic_data);
         degrees = new int[length];
     }
 
     //deep copy constructor
     protected Genome(Genome genome) {
-        this.genome = Arrays.copyOf(genome.genome, genome.genome.length);
+        this.chromosome = Arrays.copyOf(genome.chromosome, genome.chromosome.length);
         this.degrees = Arrays.copyOf(genome.degrees, genome.degrees.length);
         this.positiveFitness = genome.positiveFitness;
         this.fitness = genome.fitness;
@@ -133,7 +132,7 @@ public class Genome {
 
 
     int calculateSize() {
-        size = Arrays.stream(genome).sum();
+        size = Arrays.stream(chromosome).sum();
         return size;
     }
 
@@ -143,7 +142,7 @@ public class Genome {
             int index = Ids_toFilter.get(i);
             removeNode(index); //set the genome entry to 0
         }
-        return genome;
+        return chromosome;
     }
 
 
@@ -151,9 +150,9 @@ public class Genome {
     //not used in the actual algorithm since its as slow as the slowest neighbourhood calculation possible
     static Genome calculateDegreesUndirected(int[][] matrix, Genome g) {
         for (int i = 0; i < g.length; i++) {
-            if (g.genome[i] == 1) {
+            if (g.chromosome[i] == 1) {
                 for (int j = i + 1; j < g.length; j++) {
-                    if (g.genome[j] == 1 && matrix[i][j] == 1) {
+                    if (g.chromosome[j] == 1 && matrix[i][j] == 1) {
                         g.degrees[i]++;
                         g.degrees[j]++;
                     }
@@ -166,12 +165,12 @@ public class Genome {
     static Genome calculateDegrees_withNeighbourhood(Genome g) {
         //iterates over neighbours and calculates the degrees of the genome in an undirected graph
         for (int i = 0; i < g.length; i++) {
-            if (g.genome[i] == 1){
+            if (g.chromosome[i] == 1){
                 for (int j = 0; j < OneGenome.neighbours.get(i).size(); j++) {
                     //get the neighbour index from the neighbours list
                     int neighbourIndex = OneGenome.neighbours.get(i).get(j);
                     //check if neighbour is also element of the genome if so add to degree
-                    if (g.genome[neighbourIndex] == 1) {
+                    if (g.chromosome[neighbourIndex] == 1) {
                         g.degrees[i]++;
                     }
                 }
@@ -191,19 +190,19 @@ public class Genome {
 
         // Copy dominant parent's degrees into child (O(n))
         System.arraycopy(dominantParent.degrees, 0, child.degrees, 0, child.length);
-        System.arraycopy(dominantParent.genome, 0, child.genome, 0, child.length);
+        System.arraycopy(dominantParent.chromosome, 0, child.chromosome, 0, child.length);
         child.size = dominantParent.size;
 
 
 
         // Define non-dominant segment bounds
         int start = (dominantParent == mother) ? crossoverPoint + 1 : 0;
-        int end = (dominantParent == mother) ? child.genome.length : crossoverPoint + 1;
+        int end = (dominantParent == mother) ? child.chromosome.length : crossoverPoint + 1;
 
         // First pass: Add nodes and update degrees for dominant segment neighbors
 
         for (int i = start; i < end; i++) {
-            if (nonDominantParent.genome[i] != dominantParent.genome[i]) {
+            if (nonDominantParent.chromosome[i] != dominantParent.chromosome[i]) {
                 bitFlip(i);
             }
         }
@@ -271,8 +270,8 @@ public class Genome {
 
         //check if its a onepoint crossover
         if(crossoverPoint != 0){
-            System.arraycopy(mother.getGenome(), 0, child.genome, 0, crossoverPoint + 1);
-            System.arraycopy(father.getGenome(), crossoverPoint + 1, child.genome, crossoverPoint + 1, mother.length - (crossoverPoint + 1));
+            System.arraycopy(mother.getChromosome(), 0, child.chromosome, 0, crossoverPoint + 1);
+            System.arraycopy(father.getChromosome(), crossoverPoint + 1, child.chromosome, crossoverPoint + 1, mother.length - (crossoverPoint + 1));
             calculateSize();
         }
 
@@ -283,16 +282,16 @@ public class Genome {
 
     void removeNode(int index){
         //check if node is already 0 in genome
-        if(genome[index] == 0) {
+        if(chromosome[index] == 0) {
             return;
         }
-        genome[index]=0;
+        chromosome[index]=0;
         size--;
 
         //get the neighbours of the node and decrement their degrees if they are also in the genome
         for (int i = 0; i < OneGenome.neighbours.get(index).size(); i++) {
             int neighbourIndex = OneGenome.neighbours.get(index).get(i);
-            if (genome[neighbourIndex] == 1) {
+            if (chromosome[neighbourIndex] == 1) {
                 degrees[neighbourIndex]--;
             }
         }
@@ -301,18 +300,18 @@ public class Genome {
 
     void addNode(int index){
         //check if node is already 1 in genome
-        if(genome[index] == 1) {
+        if(chromosome[index] == 1) {
             return;
         }
 
-        genome[index]=1;
+        chromosome[index]=1;
         degrees[index] = 0;
         size++;
 
         //get the neighbours of the node and add them to the degrees if they are also in the genome
         for (int i = 0; i < OneGenome.neighbours.get(index).size(); i++) {
             int neighbourIndex = OneGenome.neighbours.get(index).get(i);
-            if (genome[neighbourIndex] == 1) {
+            if (chromosome[neighbourIndex] == 1) {
                 degrees[neighbourIndex]++;
                 degrees[index]++;
             }
@@ -320,14 +319,14 @@ public class Genome {
     }
 
     void bitFlip(int index){
-        if (genome[index]==1){
+        if (chromosome[index]==1){
             removeNode(index);
         }
         else addNode(index);
     }
 
     void bitUpdate(int index){
-        if (genome[index]==0){
+        if (chromosome[index]==0){
             removeNode(index);
         }
         else addNode(index);
@@ -381,9 +380,9 @@ public class Genome {
     //calculate the degrees of the genome in a directed graph
     static Genome calculateDegreesDirected(int[][] matrix, Genome g) {
         for (int i = 0; i < g.length; i++) {
-            if (g.genome[i] == 1) {
+            if (g.chromosome[i] == 1) {
                 for (int j = 0; j < g.length; j++) {
-                    if (g.genome[j] == 1 && matrix[i][j] == 1) {
+                    if (g.chromosome[j] == 1 && matrix[i][j] == 1) {
                         g.degrees[i]++;
                     }
                 }
@@ -403,19 +402,19 @@ public class Genome {
     void generate_genome(float existenceRate) {
         for (int i = 0; i < length; i++) {
             if (Math.random() <= existenceRate) {
-                genome[i] = 1;
-            } else genome[i] = 0;
+                chromosome[i] = 1;
+            } else chromosome[i] = 0;
         }
     }
 
     void printGenome() {
-        System.out.println(Arrays.toString(genome));
+        System.out.println(Arrays.toString(chromosome));
     }
 
     boolean isDefensiveAlliance(OneGenome parent) {
         int sum = 0;
-        for (int i = 0; i < genome.length; i++) {
-            if (genome[i] == 1) {
+        for (int i = 0; i < chromosome.length; i++) {
+            if (chromosome[i] == 1) {
                 int control = Math.min(0, (2 * degrees[i]) + 1 - parent.degrees[i]);
                 sum += control;
             }
@@ -490,7 +489,7 @@ public class Genome {
 
         int sum = 0;
         for (int i = 0; i < a.length; i++) {
-            sum += Math.abs(a.genome[i] - b.genome[i]);
+            sum += Math.abs(a.chromosome[i] - b.chromosome[i]);
         }
         return sum;
     }
@@ -500,7 +499,7 @@ public class Genome {
         Genome genome = g;
         for (int i = 0; i < genome.length; i++) {
             if (parentGraph.degrees[i] == 0) {
-                genome.genome[i] = 0;
+                genome.chromosome[i] = 0;
             }
         }
         return genome;
@@ -509,7 +508,7 @@ public class Genome {
     void remove_isolated_nodes() {
         for (int i = 0; i < length; i++) {
             if (degrees[i] == 0) {
-                genome[i] = 0;
+                chromosome[i] = 0;
             }
         }
     }
@@ -519,7 +518,7 @@ public class Genome {
 
         Genome test2 = new Genome(g);
         System.arraycopy(g.degrees,0,test2.degrees,0,g.length);
-        test2.genome = new int[test2.length];
+        test2.chromosome = new int[test2.length];
         Genome.calculateDegrees_withNeighbourhood(test2);
         //test if arrays test2.degrees and population[0].degrees are the same
         boolean same = true;
@@ -555,7 +554,7 @@ public class Genome {
         boolean contains = false;
         int searchedSize = genome.getSize();
         for (Genome g : genomes) {
-            if (g.getSize() == searchedSize && Arrays.equals(g.getGenome(), genome.getGenome())) {
+            if (g.getSize() == searchedSize && Arrays.equals(g.getChromosome(), genome.getChromosome())) {
                 contains = true;
                 break;
             }
@@ -569,22 +568,22 @@ public class Genome {
         if (o == null || getClass() != o.getClass()) return false;
         Genome genome1 = (Genome) o;
         // Compare the genome arrays directly
-        return Arrays.equals(this.genome, genome1.genome); 
+        return Arrays.equals(this.chromosome, genome1.chromosome);
     }
 
     @Override
     public int hashCode() {
         // Generate hash based on defining fields. Use Objects.hash for simple fields
         // and Arrays.hashCode for array fields.
-        return 31 * Arrays.hashCode(genome);
+        return 31 * Arrays.hashCode(chromosome);
     }
 
     List<Genome> getConnectedSubgraphs(OneGenome parentGraph){
         // goes through the neighbourhood of parentGraph and checks for all Neighbours inside the genome
         List<Genome> connectedSubgraphs = new ArrayList<>();
         boolean[] checked = new boolean[length];
-        for (int i = 0; i < genome.length; i++) {
-            if (genome[i] == 1 && !checked[i]) {
+        for (int i = 0; i < chromosome.length; i++) {
+            if (chromosome[i] == 1 && !checked[i]) {
                 //Create empty genome subgraph
                 Genome subgraph = new Genome(new int[length]);
                 Queue<Integer> queue = new LinkedList<>();
@@ -593,12 +592,12 @@ public class Genome {
 
                 while (!queue.isEmpty()) {
                     int currentNode = queue.poll();
-                    subgraph.genome[currentNode] = 1;
+                    subgraph.chromosome[currentNode] = 1;
                     subgraph.degrees[currentNode] = this.degrees[currentNode];
                     subgraph.size++;
 
                     for (int neighbour : OneGenome.neighbours.get(currentNode)) {
-                        if (genome[neighbour] == 1 && !checked[neighbour]) {
+                        if (chromosome[neighbour] == 1 && !checked[neighbour]) {
                             queue.add(neighbour);
                             checked[neighbour] = true;
                         }
@@ -612,7 +611,7 @@ public class Genome {
 
 
     void printParameters() {
-        System.out.println("Genome: " + Arrays.toString(genome));
+        System.out.println("Genome: " + Arrays.toString(chromosome));
         System.out.println("Degrees: " + Arrays.toString(degrees));
         System.out.println("Size: " + size);
         System.out.println("Fitness: " + fitness);
@@ -634,8 +633,8 @@ public class Genome {
     // Returns a List of indices where the genome has a value of 1
     List<Integer> getNodeIDs() {
         List<Integer> activeIndices = new ArrayList<>();
-        for (int i = 0; i < genome.length; i++) {
-            if (genome[i] == 1) {
+        for (int i = 0; i < chromosome.length; i++) {
+            if (chromosome[i] == 1) {
                 activeIndices.add(i);
             }
         }
@@ -732,7 +731,7 @@ public class Genome {
         System.out.println("Test Size: " + Arrays.stream(test2).sum());
 
         //print child2 genome
-        System.out.println("Child Genome: " + Arrays.toString(child2.genome));
+        System.out.println("Child Genome: " + Arrays.toString(child2.chromosome));
         //print degrees of child2
         System.out.println("Child Degrees: " + Arrays.toString(child2.degrees));
         //print size of child2

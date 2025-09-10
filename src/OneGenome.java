@@ -1,6 +1,3 @@
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
@@ -29,7 +26,7 @@ public class OneGenome extends Genome {
 
     OneGenome(int numberOfNodes,int[][] graph) {
         length = numberOfNodes;
-        genome = new int[length];
+        chromosome = new int[length];
         degrees = new int[length];
         this.graph = graph;
 
@@ -46,7 +43,7 @@ public class OneGenome extends Genome {
 
     OneGenome(int numberOfNodes,int[][] graph, int SIZE_OF_DEFENSIVE_ALLIANCE) {
         length = numberOfNodes;
-        genome = new int[length];
+        chromosome = new int[length];
         degrees = new int[length];
         this.graph = graph;
         maximumDegreeinAllianceOfSizeK = (2 * SIZE_OF_DEFENSIVE_ALLIANCE) + 1;
@@ -112,9 +109,9 @@ public class OneGenome extends Genome {
 
     static Genome calculateDegreesUndirected_Neighborhood(int[][] matrix, Genome g) {
         for (int i = 0; i < g.length; i++) {
-            if (g.genome[i] == 1) {
+            if (g.chromosome[i] == 1) {
                 for (int j = i + 1; j < g.length; j++) {
-                    if (g.genome[j] == 1 && matrix[i][j] == 1) {
+                    if (g.chromosome[j] == 1 && matrix[i][j] == 1) {
                         g.degrees[i]++;
                         g.degrees[j]++;
 
@@ -155,7 +152,7 @@ public class OneGenome extends Genome {
 
     void generate_genome() {
         for (int i = 0; i < length; i++) {
-            genome[i] = 1;
+            chromosome[i] = 1;
         }
         calculateSize();
     }

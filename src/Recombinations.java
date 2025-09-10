@@ -67,9 +67,9 @@ public class Recombinations {
             List<Integer> changedAllele = new ArrayList<>();
             int[] intersected_array = new int[genome1.length];
             for (int i = 0; i < genome1.length; i++) {
-                if (genome1.getGenome()[i] == genome2.getGenome()[i]) {
+                if (genome1.getChromosome()[i] == genome2.getChromosome()[i]) {
                     //if (Math.random()<=INTERSECTION_PROBABILITY) //commentn out if its bad
-                    intersected_array[i] = genome1.getGenome()[i];
+                    intersected_array[i] = genome1.getChromosome()[i];
                 } else { //probability part of intersection
                     double x = Math.random();
                     if (x <= proabibility) {
@@ -90,9 +90,9 @@ public class Recombinations {
 
         int[] intersected_array = new int[genome1.length];
         for (int i = 0; i < genome1.length; i++) {
-            if (genome1.getGenome()[i] == genome2.getGenome()[i]) {
+            if (genome1.getChromosome()[i] == genome2.getChromosome()[i]) {
                 //if (Math.random()<=INTERSECTION_PROBABILITY) //commentn out if its bad
-                intersected_array[i] = genome1.getGenome()[i];
+                intersected_array[i] = genome1.getChromosome()[i];
             } else { //probability part of intersection
                 double x = Math.random();
                 if (x <= proabibility) {
