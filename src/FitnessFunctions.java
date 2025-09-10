@@ -20,17 +20,7 @@ public class FitnessFunctions {
                 }
             }
         }
-        //sort the map by value //the smaller the value the more harmful the node is
-        Map<Integer, Integer> sortedMap = mapWithRelativeFitnessOfNode_And_OriginalPosition.entrySet()
-                .stream()
-                .sorted(Map.Entry.<Integer, Integer>comparingByValue())
-                .collect(Collectors.toMap(
-                        Map.Entry::getKey,
-                        Map.Entry::getValue,
-                        (e1, e2) -> e1, // Merge function (not needed here as keys are unique)
-                        LinkedHashMap::new // Use LinkedHashMap to preserve the sorted order
-                ));
-        genome.harmfulNodes = sortedMap; //store the map in the harmfulNodes variable
+        genome.harmfulNodes = mapWithRelativeFitnessOfNode_And_OriginalPosition; //store the map in the harmfulNodes variable
 
         //if sum is 0 then the genome is a defensive alliance
         if(sum == 0){

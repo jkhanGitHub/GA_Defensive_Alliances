@@ -424,22 +424,10 @@ public class Genome {
     }
 
 
-    //find the edges in the graph with the highest degree and check against the degree of the subgraph(genome)
-    //TODO the list should be created by the fitness function to avoid recalculating the same values multiple times
-    Map<Integer, Integer> orderedMapOfHarmfulNodes(OneGenome parent_graph) {
-        int harmfulnessFitness; //initialize the array with the length of the parent graph to store the difference in degrees
-        Map<Integer, Integer> mapWithRelativeFitnessOfNode_And_OriginalPosition = new HashMap<>(); //create a map to store the index and value of the difference
 
-        for (int i = 0; i < genome.length; i++) {
-            if (genome[i] == 1) {
-                harmfulnessFitness = (2 * degrees[i]) + 1 - parent_graph.degrees[i]; //harmfulness>0 means the node is not harmful, harmfulness<0 means the node is harmful
-                if (harmfulnessFitness < 0) { //only add the harmful nodes to the map
-                    mapWithRelativeFitnessOfNode_And_OriginalPosition.put(i, harmfulnessFitness); //store the index and value of the difference in the map
-                }
-            }
-        }
-        //sort the map by value //the smaller the value the more harmful the node is
-        Map<Integer, Integer> sortedMap = mapWithRelativeFitnessOfNode_And_OriginalPosition.entrySet()
+    static Genome learn(Genome genome, OneGenome parentGraph, int numberOfChanges, int SIZE_OF_DEFENSIVE_ALLIANCE) {
+        //sort harmfulNodes map by value ascending
+        genome.harmfulNodes = genome.harmfulNodes.entrySet()
                 .stream()
                 .sorted(Map.Entry.<Integer, Integer>comparingByValue())
                 .collect(Collectors.toMap(
@@ -448,44 +436,6 @@ public class Genome {
                         (e1, e2) -> e1, // Merge function (not needed here as keys are unique)
                         LinkedHashMap::new // Use LinkedHashMap to preserve the sorted order
                 ));
-        harmfulNodes = sortedMap; //store the map in the harmfulNodes variable
-        return sortedMap;
-    }
-
-    //parallelized version of orderedMapOf_harmfulNodes
-    /*static Map<Integer, Integer> orderedMapOf_harmfulNodes(OneGenome parent_graph, Genome subgraph) {
-        int length = subgraph.genome.length;
-        Map<Integer, Integer> resultMap = new ConcurrentHashMap<>();
-
-        ForkJoinPool forkJoinPool = new ForkJoinPool(); // Create a ForkJoinPool for parallel processing
-        forkJoinPool.submit(() -> {
-            IntStream.range(0, length).parallel().forEach(i -> {
-                int difference = 0;
-                if (subgraph.genome[i] == 1) {
-                    difference = parent_graph.getDegrees()[i] - subgraph.getDegrees()[i];
-                }
-                resultMap.put(i, difference);
-            });
-        }).join();
-
-        // Sort the map by value in descending order
-        return resultMap.entrySet()
-                .stream()
-                .sorted(Map.Entry.<Integer, Integer>comparingByValue().reversed())
-                .collect(Collectors.toMap(
-                        Map.Entry::getKey,
-                        Map.Entry::getValue,
-                        (e1, e2) -> e1,
-                        LinkedHashMap::new
-                ));
-    }*/
-
-
-    static Genome learn(Genome genome, OneGenome parentGraph, int numberOfChanges, int SIZE_OF_DEFENSIVE_ALLIANCE) {
-        //TODO implement learning
-        int fitness = genome.getFitness();
-        int size = genome.getSize();
-        List<Integer> changedAllele;
 
         Learning.add_test_high_degree_vertices_mutation(genome, numberOfChanges, parentGraph, SIZE_OF_DEFENSIVE_ALLIANCE); //insanely good method wirth even worse operational time(n^3)*(till numberOfChanges Reached)
         Learning.remove_many_harmful_Nodes(genome, parentGraph, numberOfChanges, SIZE_OF_DEFENSIVE_ALLIANCE);
