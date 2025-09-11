@@ -59,7 +59,7 @@ The following is an example of a generic evolutionary algorithm:
 
     static boolean addDefensiveAlliance(Population population, OneGenome parentGraph, int SIZE_OF_DEFENSIVE_ALLIANCE) {
         boolean foundnewDefensiveAlliance = false;
-        List<Genome> globallyMinimalDefensiveAlliances = new LinkedList<>();
+        List<Genome> connected_DA = new LinkedList<>();
         for (int i = 0; (i < population.getPopulation().length && population.getPopulation()[i].getFitness() > 0); i++) {
             Genome g = population.getPopulation()[i];
             //if the genome is already in the defensive alliances, skip it
@@ -69,7 +69,7 @@ The following is an example of a generic evolutionary algorithm:
                 defensiveAlliances.add(new Genome(g)); //add a deep copy of the genome to the defensive alliances
                 // all conected components of a DA are also a DA by definition
                 List<Genome> connectedComponents = g.getConnectedSubgraphs(parentGraph);
-                globallyMinimalDefensiveAlliances.addAll(connectedComponents);
+                connected_DA.addAll(connectedComponents);
 
 
                 //add new defensive alliances to the list of connected defensive alliances
@@ -78,7 +78,7 @@ The following is an example of a generic evolutionary algorithm:
             }
         }
         //calculate fitness of each connected component
-        for (Genome component : globallyMinimalDefensiveAlliances) {
+        for (Genome component : connected_DA) {
             component.setFitness(FitnessFunctions.calculateFitnessForDA(component, parentGraph, SIZE_OF_DEFENSIVE_ALLIANCE));
         }
 
@@ -99,14 +99,14 @@ The following is an example of a generic evolutionary algorithm:
         }
 
         if (foundnewDefensiveAlliance){
-            //add population to globallyMinimalDefensiveAlliances
-            globallyMinimalDefensiveAlliances.addAll(Arrays.asList(population.getPopulation()));
-            //delete duplicates from globallyMinimalDefensiveAlliances
-            Genome.deleteDuplicates(globallyMinimalDefensiveAlliances);
+            //add population to connected_DA
+            connected_DA.addAll(Arrays.asList(population.getPopulation()));
+            //delete duplicates from connected_DA
+            Genome.deleteDuplicates(connected_DA);
             //sort connectedComponents by fitness
-            globallyMinimalDefensiveAlliances.sort(Comparator.comparingInt(Genome::getFitness).reversed());
-            // split globallyMinimalDefensiveAlliances at population.size()
-            Population.population = globallyMinimalDefensiveAlliances.subList(0, population.getPopulation().length).toArray(new Genome[0]);
+            connected_DA.sort(Comparator.comparingInt(Genome::getFitness).reversed());
+            // split connected_DA at population.size()
+            Population.population = connected_DA.subList(0, population.getPopulation().length).toArray(new Genome[0]);
 
             Genome.deleteDuplicates(defensiveAlliances);
             Genome.deleteDuplicates(connected_defensiveAlliances);
