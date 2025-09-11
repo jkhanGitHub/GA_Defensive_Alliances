@@ -5,13 +5,9 @@ import java.util.stream.Collectors;
 //Represents A connected Component of a graph
 public class OneGenome extends Genome {
 
-    Map<Integer, Integer> orderedMapOfHighestDegrees = new java.util.HashMap<>();
+    public static Map<Integer, Integer> orderedMapOfHighestDegrees = new java.util.HashMap<>();
 
     public static List<Integer> Ids_toFilter = new ArrayList<>(); //holds the ids of the nodes that cannot be in a defensive alliance of size k
-
-    Map<Integer, Integer> getOrderedMapOfHighestDegrees() {
-        return orderedMapOfHighestDegrees;
-    }
 
     //list containing the ids of the neighbours of the nodes in the component
     static Map<Integer,List<Integer>> neighbours = new ConcurrentHashMap<>();

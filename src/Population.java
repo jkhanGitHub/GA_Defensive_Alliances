@@ -369,7 +369,7 @@ public class Population {
                             break;
                         case 1:
                             //Mutation of vertices with high degree
-                            Mutations.mutation_of_vertices_with_high_degree(mutationrate, newChild);
+                            Mutations.mutation_of_vertices_with_high_degree(mutationrate, newChild, parentGraph);
                             break;
                         default:
                             throw new IllegalStateException("Unexpected value: " + mutation_identifier);

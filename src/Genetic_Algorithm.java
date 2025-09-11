@@ -59,6 +59,7 @@ The following is an example of a generic evolutionary algorithm:
 
     static boolean addDefensiveAlliance(Population population, OneGenome parentGraph, int SIZE_OF_DEFENSIVE_ALLIANCE) {
         boolean foundnewDefensiveAlliance = false;
+        List<Genome> globallyMinimalDefensiveAlliances = new LinkedList<>();
         for (int i = 0; (i < population.getPopulation().length && population.getPopulation()[i].getFitness() > 0); i++) {
             Genome g = population.getPopulation()[i];
             //if the genome is already in the defensive alliances, skip it
@@ -68,54 +69,51 @@ The following is an example of a generic evolutionary algorithm:
                 defensiveAlliances.add(new Genome(g)); //add a deep copy of the genome to the defensive alliances
                 // all conected components of a DA are also a DA by definition
                 List<Genome> connectedComponents = g.getConnectedSubgraphs(parentGraph);
+                globallyMinimalDefensiveAlliances.addAll(connectedComponents);
 
-                //calculate fitness of each connected component
-                for (Genome component : connectedComponents) {
-                    component.setFitness(FitnessFunctions.calculateFitnessForDA(component, parentGraph, SIZE_OF_DEFENSIVE_ALLIANCE));
-                }
-
-                //sort connectedComponents by fitness
-                connectedComponents.sort(Comparator.comparingInt(Genome::getFitness).reversed());
-
-                //add defensive alliances to the population by replacing worst genomes
-                for (int j = 0; j < connectedComponents.size(); j++) {
-                    Genome da = connectedComponents.get(j);
-                    population.population[population.getPopulation().length - 1 - j] = da;
-                }
 
                 //add new defensive alliances to the list of connected defensive alliances
                 defensiveAlliances.addAll(connectedComponents);
                 connected_defensiveAlliances.addAll(connectedComponents); //add all connected components to the connected defensive alliances
-
-                //important step to avoid java.lang.OutOfMemoryError: Java heap space
-                //remove as many defensive alliances as needed to not exceed the maximum amount of stored defensive alliances
-                if (defensiveAlliances.size() > MAXIMUM_AMOUNT_OF_STORED_DEFENSIVE_ALLIANCES) {
-                    //sort defensive alliances by fitness
-                    defensiveAlliances.sort(Comparator.comparingInt(Genome::getFitness).reversed());
-                    connected_defensiveAlliances.sort(Comparator.comparingInt(Genome::getFitness).reversed());
-                    //remove the worst defensive alliances
-                    for (int j = 0; j < defensiveAlliances.size() - MAXIMUM_AMOUNT_OF_STORED_DEFENSIVE_ALLIANCES; j++) {
-                        defensiveAlliances.remove(defensiveAlliances.size() - 1);
-                    }
-                    //remove the worst defensive alliances
-                    for (int j = 0; j < connected_defensiveAlliances.size() - MAXIMUM_AMOUNT_OF_STORED_DEFENSIVE_ALLIANCES; j++) {
-                        connected_defensiveAlliances.remove(connected_defensiveAlliances.size() - 1);
-                    }
-                }
             }
         }
+        //calculate fitness of each connected component
+        for (Genome component : globallyMinimalDefensiveAlliances) {
+            component.setFitness(FitnessFunctions.calculateFitnessForDA(component, parentGraph, SIZE_OF_DEFENSIVE_ALLIANCE));
+        }
+
+        //important step to avoid java.lang.OutOfMemoryError: Java heap space
+        //remove as many defensive alliances as needed to not exceed the maximum amount of stored defensive alliances
+        if (defensiveAlliances.size() > MAXIMUM_AMOUNT_OF_STORED_DEFENSIVE_ALLIANCES) {
+            //sort defensive alliances by fitness
+            defensiveAlliances.sort(Comparator.comparingInt(Genome::getFitness).reversed());
+            connected_defensiveAlliances.sort(Comparator.comparingInt(Genome::getFitness).reversed());
+            //remove the worst defensive alliances
+            for (int j = 0; j < defensiveAlliances.size() - MAXIMUM_AMOUNT_OF_STORED_DEFENSIVE_ALLIANCES; j++) {
+                defensiveAlliances.remove(defensiveAlliances.size() - 1);
+            }
+            //remove the worst defensive alliances
+            for (int j = 0; j < connected_defensiveAlliances.size() - MAXIMUM_AMOUNT_OF_STORED_DEFENSIVE_ALLIANCES; j++) {
+                connected_defensiveAlliances.remove(connected_defensiveAlliances.size() - 1);
+            }
+        }
+
         if (foundnewDefensiveAlliance){
-            //remove duplicates from the population
-            //necessary to avoid duplicates in the population
-            //this is important because otherwise the algorithm will get stuck in local optima way faster, sinc eeverything is filled with duplicates
-            Population.deleteDuplicates(population.getPopulation(),parentGraph, SIZE_OF_DEFENSIVE_ALLIANCE, cfg.NODE_EXISTENCE_PROBABILITY); 
+            //add population to globallyMinimalDefensiveAlliances
+            globallyMinimalDefensiveAlliances.addAll(Arrays.asList(population.getPopulation()));
+            //delete duplicates from globallyMinimalDefensiveAlliances
+            Genome.deleteDuplicates(globallyMinimalDefensiveAlliances);
+            //sort connectedComponents by fitness
+            globallyMinimalDefensiveAlliances.sort(Comparator.comparingInt(Genome::getFitness).reversed());
+            // split globallyMinimalDefensiveAlliances at population.size()
+            Population.population = globallyMinimalDefensiveAlliances.subList(0, population.getPopulation().length).toArray(new Genome[0]);
 
             Genome.deleteDuplicates(defensiveAlliances);
             Genome.deleteDuplicates(connected_defensiveAlliances);
             System.out.println("\u001B[31m" + "new Defensive Alliances found: "+ "\u001B[0m"); 
-            return true;
+            return false;
         }
-        return false;         
+        return true;
     }
         
 
@@ -177,16 +175,11 @@ The following is an example of a generic evolutionary algorithm:
                     SIZE_OF_DEFENSIVE_ALLIANCE
             );
 
-            //adds defensive alliance to a list if it has been found
             boolean additionalSort = addDefensiveAlliance(population, parentGraph, SIZE_OF_DEFENSIVE_ALLIANCE);
 
-            if (++counter % 10 == 0) {
+            if (++counter % 10 == 0 && additionalSort) {
                 Population.deleteDuplicates(population.getPopulation(),parentGraph, SIZE_OF_DEFENSIVE_ALLIANCE, NODE_EXISTENCE_PROBABILITY);
-                additionalSort = true; //if duplicates are removed, sort the population again
-            }
-            //if additionalSort is true, sort the population again
-            if (additionalSort) {
-                population.sort_Population_by_fitness_and_size_reversed();
+                population.sort_Population_by_fitness_and_size_reversed(); //if duplicates are removed, sort the population again
             }
 
             //adds the best genome to the list of best genomes
@@ -267,22 +260,11 @@ The following is an example of a generic evolutionary algorithm:
                     SIZE_OF_DEFENSIVE_ALLIANCE
             );
 
-            //adds defensive alliance to a list if it has been found
             boolean additionalSort = addDefensiveAlliance(population, parentGraph, SIZE_OF_DEFENSIVE_ALLIANCE);
 
-            //remove isolated nodes from population, implemented inside remove_duplicates
-            //remove duplicates from population and replace them with random generated genomes
-            //this is important because otherwise the algorithm will get stuck in local optima way faster
-            //can potentially result in duplicates in the population but chances are low
-            // remove_duplicates is really slow
-            // right now it exchanges a duplicate with its complement
-            if (++counter % 10 == 0) {
+            if (++counter % 10 == 0 && additionalSort) {
                 Population.deleteDuplicates(population.getPopulation(),parentGraph, SIZE_OF_DEFENSIVE_ALLIANCE, NODE_EXISTENCE_PROBABILITY);
-                additionalSort = true; //if duplicates are removed, sort the population again
-            }
-            //if additionalSort is true, sort the population again
-            if (additionalSort) {
-                population.sort_Population_by_fitness_and_size_reversed();
+                population.sort_Population_by_fitness_and_size_reversed(); //if duplicates are removed, sort the population again
             }
 
             //adds the best genome to the list of best genomes

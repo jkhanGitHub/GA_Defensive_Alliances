@@ -15,7 +15,7 @@ public class Learning {
         //initialize List in which all the changed alleles are stored
         List<Integer> changedAllele = new ArrayList<>();
 
-        Iterator<Map.Entry<Integer, Integer>> iterator = parentGraph.getOrderedMapOfHighestDegrees().entrySet().iterator();
+        Iterator<Map.Entry<Integer, Integer>> iterator = OneGenome.orderedMapOfHighestDegrees.entrySet().iterator();
         int oldFitness = mutatedGenome.getFitness();
 
         while (iterator.hasNext() && numberOfNodesToRemove > 0) {

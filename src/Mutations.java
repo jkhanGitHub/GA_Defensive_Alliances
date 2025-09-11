@@ -45,15 +45,11 @@ public class Mutations {
     }
      */
 
-    protected static void mutation_of_vertices_with_high_degree(float mutationrate, Genome mutatedGenome){
+    protected static void mutation_of_vertices_with_high_degree(float mutationrate, Genome mutatedGenome, OneGenome parentGraph){
         int multiplier = 0;
         for (int i=0; i<mutatedGenome.length; i++) {
-            if(mutatedGenome.getDegrees()[i]==0){
-                multiplier = 1;
-            }
-            else {
-                multiplier = mutatedGenome.getDegrees()[i];
-            }
+            multiplier = parentGraph.getDegrees()[i];
+
             double randomValue = Math.random();
             if (randomValue<=(mutationrate*multiplier)) {
                 mutatedGenome.bitFlip(i);
