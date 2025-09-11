@@ -426,19 +426,19 @@ public class Genome {
 
     static Genome learn(Genome genome, OneGenome parentGraph, int numberOfChanges, int SIZE_OF_DEFENSIVE_ALLIANCE) {
         //sort harmfulNodes map by value ascending
-        genome.harmfulNodes = genome.harmfulNodes.entrySet()
-                .stream()
-                .sorted(Map.Entry.<Integer, Integer>comparingByValue())
-                .collect(Collectors.toMap(
-                        Map.Entry::getKey,
-                        Map.Entry::getValue,
-                        (e1, e2) -> e1, // Merge function (not needed here as keys are unique)
-                        LinkedHashMap::new // Use LinkedHashMap to preserve the sorted order
-                ));
-
+        if (!Objects.isNull(genome.harmfulNodes)){
+            genome.harmfulNodes = genome.harmfulNodes.entrySet()
+                    .stream()
+                    .sorted(Map.Entry.<Integer, Integer>comparingByValue())
+                    .collect(Collectors.toMap(
+                            Map.Entry::getKey,
+                            Map.Entry::getValue,
+                            (e1, e2) -> e1, // Merge function (not needed here as keys are unique)
+                            LinkedHashMap::new // Use LinkedHashMap to preserve the sorted order
+                    ));
+            Learning.remove_many_harmful_Nodes(genome, parentGraph, numberOfChanges, SIZE_OF_DEFENSIVE_ALLIANCE);
+        }
         Learning.add_test_high_degree_vertices_mutation(genome, numberOfChanges, parentGraph, SIZE_OF_DEFENSIVE_ALLIANCE); //insanely good method wirth even worse operational time(n^3)*(till numberOfChanges Reached)
-        Learning.remove_many_harmful_Nodes(genome, parentGraph, numberOfChanges, SIZE_OF_DEFENSIVE_ALLIANCE);
-
 
         /*
         //test purpose
