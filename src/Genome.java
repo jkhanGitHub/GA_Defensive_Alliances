@@ -75,7 +75,7 @@ public class Genome {
         calculateSize();
     }
 
-    protected Genome(int numberOfNodes, float existenceRate, List<Integer> Ids_toFilter) {
+    protected Genome(int numberOfNodes, float existenceRate, HashSet<Integer> Ids_toFilter) {
         length = numberOfNodes;
         chromosome = new int[length];
         degrees = new int[length];
@@ -136,11 +136,10 @@ public class Genome {
         return size;
     }
 
-    int[] removeNodesThatCannotBeInDefensiveAllianceOfSizeK(List<Integer> Ids_toFilter) {
+    int[] removeNodesThatCannotBeInDefensiveAllianceOfSizeK(HashSet<Integer> Ids_toFilter) {
         //removes all nodes that cannot be in a defensive alliance of size k
-        for (int i=0; i<Ids_toFilter.size(); i++) {
-            int index = Ids_toFilter.get(i);
-            removeNode(index); //set the genome entry to 0
+        for (int id : Ids_toFilter) {
+            removeNode(id); //set the genome entry to 0
         }
         return chromosome;
     }

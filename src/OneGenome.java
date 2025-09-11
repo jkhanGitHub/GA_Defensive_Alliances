@@ -7,7 +7,7 @@ public class OneGenome extends Genome {
 
     public static Map<Integer, Integer> orderedMapOfHighestDegrees = new java.util.HashMap<>();
 
-    public static List<Integer> Ids_toFilter = new ArrayList<>(); //holds the ids of the nodes that cannot be in a defensive alliance of size k
+    public static HashSet<Integer> Ids_toFilter = new HashSet<>(); //holds the ids of the nodes that cannot be in a defensive alliance of size k
 
     //list containing the ids of the neighbours of the nodes in the component
     static Map<Integer,List<Integer>> neighbours = new ConcurrentHashMap<>();
@@ -189,9 +189,9 @@ public class OneGenome extends Genome {
      */
 
     //filter genomes that can not be in a defensive alliance of size k because their degree is too high
-    List<Integer> find_Ids_To_Filter(int k) {
+    HashSet<Integer> find_Ids_To_Filter(int k) {
         int max_degree = (2*k)+1;
-        List<Integer> Ids_toFilter = new LinkedList<>();
+        HashSet<Integer> Ids_toFilter = new HashSet<>();
         
         for(int i = 0; i<length; i++) {
             if (degrees[i] >= max_degree) {
@@ -199,8 +199,6 @@ public class OneGenome extends Genome {
             }
         }
 
-        //make LinkedList to arrayList for fast access
-        Ids_toFilter = new ArrayList<>(Ids_toFilter);
         System.out.println("Ids to filter: " + Ids_toFilter);
         //print amount of nodes to filter
         System.out.println("Amount of nodes to filter: " + Ids_toFilter.size());
