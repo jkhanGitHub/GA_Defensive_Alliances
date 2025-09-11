@@ -327,10 +327,10 @@ public class Population {
 
         List<Genome> nextGenChildren = Collections.synchronizedList(new LinkedList<>()); // Thread-safe list
         System.out.println("Number of childs per parent: " + newChildsPerParents);
-        System.out.println("Total children to be created: " + (nextGenParents.size()*newChildsPerParents));
+        System.out.println("Total children to be created: " + ((nextGenParents.size()*newChildsPerParents)/2));
         System.out.println(Recombinations.recombinationIdentifiers.get(recombination_identifier));
 
-        //recombine Parents: Number of parents = POPULATION_SIZE/numberOfContestantsPerRound
+        //recombine Parents:
         for (int i = 0, j = 1; j < nextGenParents.size(); i = i + 2, j = j + 2) {
             Genome[] childrens = Recombinations.recombination_with_identifier(nextGenParents.get(i), nextGenParents.get(j), probability, newChildsPerParents, recombination_identifier);
             Thread[] threads = new Thread[newChildsPerParents];
