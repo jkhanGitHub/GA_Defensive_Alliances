@@ -15,6 +15,9 @@ public class Learning {
         //initialize List in which all the changed alleles are stored
         List<Integer> changedAllele = new ArrayList<>();
 
+        //check for defensive alliance to avoid unnecessary calculations
+        if(SIZE_OF_DEFENSIVE_ALLIANCE >= mutatedGenome.size) return changedAllele;
+
         Iterator<Map.Entry<Integer, Integer>> iterator = OneGenome.orderedMapOfHighestDegrees.entrySet().iterator();
         int oldFitness = mutatedGenome.getFitness();
 

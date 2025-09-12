@@ -60,7 +60,7 @@ public class Population {
 
 
     //initial Population generation is being created by this Constructor
-    Population(int sizeOfPopulation, int numberOFNodes, float existenceRate,OneGenome parentGraph, int SIZE_OF_DEFENSIVE_ALLIANCE) {
+    Population(int sizeOfPopulation, int numberOFNodes, float existenceRate,OneGenome parentGraph, int SIZE_OF_DEFENSIVE_ALLIANCE, boolean deployLearning, int amountOfLearning) {
         population = new Genome[sizeOfPopulation];
         generation++;
         Population.parentGraph = parentGraph;
@@ -86,6 +86,12 @@ public class Population {
                 Genome.calculateDegrees_withNeighbourhood(population[finalI]);
                 //calculate fitness
                 population[finalI].setFitness(FitnessFunctions.calculateFitnessMIN(population[finalI], parentGraph, SIZE_OF_DEFENSIVE_ALLIANCE));
+
+                if (deployLearning){
+                    for (Genome genome: population) {
+                        Genome.learn(genome, parentGraph, amountOfLearning, SIZE_OF_DEFENSIVE_ALLIANCE);
+                    }
+                }
             });
             threads[finalI].start();
         }

@@ -137,10 +137,12 @@ The following is an example of a generic evolutionary algorithm:
             boolean duplicatesAllowed,
             int mutationMethod,
             boolean activateLearning,
-            int amountOfLearnings
+            int amountOfLearnings,
+            boolean deployLearningOnInitialization,
+            int amountOfLearningsUponInitialization
     ) throws IOException {
 
-        Population population = new Population(POPULATION_SIZE, NUMBER_OF_NODES, NODE_EXISTENCE_PROBABILITY, parentGraph, SIZE_OF_DEFENSIVE_ALLIANCE);
+        Population population = new Population(POPULATION_SIZE, NUMBER_OF_NODES, NODE_EXISTENCE_PROBABILITY, parentGraph, SIZE_OF_DEFENSIVE_ALLIANCE, deployLearningOnInitialization, amountOfLearningsUponInitialization);
         population.sort_Population_by_fitness_and_size_reversed();
 
 
@@ -175,12 +177,7 @@ The following is an example of a generic evolutionary algorithm:
                     SIZE_OF_DEFENSIVE_ALLIANCE
             );
 
-            boolean additionalSort = addDefensiveAlliance(population, parentGraph, SIZE_OF_DEFENSIVE_ALLIANCE);
-
-            if (++counter % 10 == 0 && additionalSort) {
-                Population.deleteDuplicates(population.getPopulation(),parentGraph, SIZE_OF_DEFENSIVE_ALLIANCE, NODE_EXISTENCE_PROBABILITY);
-                population.sort_Population_by_fitness_and_size_reversed(); //if duplicates are removed, sort the population again
-            }
+            addDefensiveAlliance(population, parentGraph, SIZE_OF_DEFENSIVE_ALLIANCE);
 
             //adds the best genome to the list of best genomes
             bestGenomes.put(counter, population.getPopulation()[0]);
@@ -211,11 +208,13 @@ The following is an example of a generic evolutionary algorithm:
             boolean activateLearning,
             int amountOfLearners,
             int amountOfLearnings,
-            boolean randomizeLearners
+            boolean randomizeLearners,
+            boolean deployLearningOnInitialization,
+            int amountOfLearningsUponInitialization
 
     ) throws IOException {
         //Generatess first Population and calculates the Fitness of each Genome
-        Population population = new Population(POPULATION_SIZE, NUMBER_OF_NODES, NODE_EXISTENCE_PROBABILITY, parentGraph, SIZE_OF_DEFENSIVE_ALLIANCE);
+        Population population = new Population(POPULATION_SIZE, NUMBER_OF_NODES, NODE_EXISTENCE_PROBABILITY, parentGraph, SIZE_OF_DEFENSIVE_ALLIANCE, deployLearningOnInitialization, amountOfLearningsUponInitialization);
         population.sort_Population_by_fitness_and_size_reversed();
 
         /*
@@ -260,12 +259,7 @@ The following is an example of a generic evolutionary algorithm:
                     SIZE_OF_DEFENSIVE_ALLIANCE
             );
 
-            boolean additionalSort = addDefensiveAlliance(population, parentGraph, SIZE_OF_DEFENSIVE_ALLIANCE);
-
-            if (++counter % 10 == 0 && additionalSort) {
-                Population.deleteDuplicates(population.getPopulation(),parentGraph, SIZE_OF_DEFENSIVE_ALLIANCE, NODE_EXISTENCE_PROBABILITY);
-                population.sort_Population_by_fitness_and_size_reversed(); //if duplicates are removed, sort the population again
-            }
+            addDefensiveAlliance(population, parentGraph, SIZE_OF_DEFENSIVE_ALLIANCE);
 
             //adds the best genome to the list of best genomes
             bestGenomes.put(counter, population.getPopulation()[0]);
@@ -381,7 +375,9 @@ The following is an example of a generic evolutionary algorithm:
                     cfg.ACTIVATE_LEARNING,
                     cfg.AMOUNT_OF_LEARNERS,
                     cfg.AMOUNT_OF_LEARNINGS,
-                    cfg.RANDOMIZE_LEARNERS
+                    cfg.RANDOMIZE_LEARNERS,
+                    cfg.DEPLOY_LEARNING_ON_INITIALIZATION,
+                    cfg.AMOUNT_OF_LEARNINGS_UPON_INITIALIZATION
             );
         }
         else {
@@ -404,7 +400,9 @@ The following is an example of a generic evolutionary algorithm:
                     cfg.ALLOW_DUPLICATE_PARENTS,
                     mutId,
                     cfg.ACTIVATE_LEARNING,
-                    cfg.AMOUNT_OF_LEARNINGS
+                    cfg.AMOUNT_OF_LEARNINGS,
+                    cfg.DEPLOY_LEARNING_ON_INITIALIZATION,
+                    cfg.AMOUNT_OF_LEARNINGS_UPON_INITIALIZATION
             );
         }
 

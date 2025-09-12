@@ -102,6 +102,12 @@ public class GeneticLogger {
                 writer.write("# Amount of Learnings: " + cfg.AMOUNT_OF_LEARNINGS);
                 writer.newLine();
             }
+            if (cfg.DEPLOY_LEARNING_ON_INITIALIZATION) {
+                writer.write("# Deploy Learning on Initialization: " + cfg.DEPLOY_LEARNING_ON_INITIALIZATION);
+                writer.newLine();
+                writer.write("# Amount of Learnings upon Initialization: " + cfg.AMOUNT_OF_LEARNINGS_UPON_INITIALIZATION);
+                writer.newLine();
+            }
 
             writer.write("# Break Fitness: " + cfg.BREAK_FITNESS);
             writer.newLine();

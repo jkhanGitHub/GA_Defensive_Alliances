@@ -30,7 +30,10 @@ public class Config {
     public boolean CAPPED_LEARNING;
     public int AMOUNT_OF_LEARNERS;
     public boolean RANDOMIZE_LEARNERS;
-    
+
+    public boolean DEPLOY_LEARNING_ON_INITIALIZATION;
+
+    public int AMOUNT_OF_LEARNINGS_UPON_INITIALIZATION;
 
 
     public Config(Properties props) {
@@ -55,6 +58,8 @@ public class Config {
         RANDOMIZE_LEARNERS = Boolean.parseBoolean(props.getProperty("RANDOMIZE_LEARNERS"));
         CAPPED_LEARNING = Boolean.parseBoolean(props.getProperty("CAPPED_LEARNING"));
         FILTER_NODES_THAT_CANNOT_BE_IN_A_DEFENSIVE_ALLIANCE_OF_SIZE_K = Boolean.parseBoolean(props.getProperty("FILTER_NODES_THAT_CANNOT_BE_IN_A_DEFENSIVE_ALLIANCE_OF_SIZE_K"));
+        DEPLOY_LEARNING_ON_INITIALIZATION = Boolean.parseBoolean(props.getProperty("DEPLOY_LEARNING_ON_INITIALIZATION"));
+        AMOUNT_OF_LEARNINGS_UPON_INITIALIZATION = Integer.parseInt(props.getProperty("AMOUNT_OF_LEARNINGS_UPON_INITIALIZATION"));
     }
 
 
@@ -89,6 +94,8 @@ public class Config {
             writeField(writer, "CAPPED_LEARNING", CAPPED_LEARNING);
             writeField(writer, "AMOUNT_OF_LEARNERS", AMOUNT_OF_LEARNERS);
             writeField(writer, "RANDOMIZE_LEARNERS", RANDOMIZE_LEARNERS);
+            writeField(writer, "DEPLOY_LEARNING_ON_INITIALIZATION", DEPLOY_LEARNING_ON_INITIALIZATION);
+            writeField(writer, "AMOUNT_OF_LEARNINGS_UPON_INITIALIZATION", AMOUNT_OF_LEARNINGS_UPON_INITIALIZATION);
         }
     }
 
