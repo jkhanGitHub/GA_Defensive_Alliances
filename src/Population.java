@@ -65,6 +65,8 @@ public class Population {
         generation++;
         Population.parentGraph = parentGraph;
 
+        boolean filter = !OneGenome.Ids_toFilter.isEmpty();
+
         Thread[] threads = new Thread[sizeOfPopulation];
         //generation number will be updated in Selection in order to reuse the sorted population
         //Generates Genomes
@@ -76,10 +78,10 @@ public class Population {
             threads[finalI] = new Thread(() -> {
 
                 //create a new genome 
-                if (parentGraph.Ids_toFilter.isEmpty()) {
-                    population[finalI] = new Genome(numberOFNodes, existenceRate);
+                if (filter) {
+                    population[finalI] = new Genome(numberOFNodes, existenceRate, OneGenome.Ids_toFilter);
                 } else {
-                    population[finalI] = new Genome(numberOFNodes, existenceRate, parentGraph.Ids_toFilter);
+                    population[finalI] = new Genome(numberOFNodes, existenceRate);
                 }
 
                 //calculate degrees
@@ -88,9 +90,7 @@ public class Population {
                 population[finalI].setFitness(FitnessFunctions.calculateFitnessMIN(population[finalI], parentGraph, SIZE_OF_DEFENSIVE_ALLIANCE));
 
                 if (deployLearning){
-                    for (Genome genome: population) {
-                        Genome.learn(genome, parentGraph, amountOfLearning, SIZE_OF_DEFENSIVE_ALLIANCE);
-                    }
+                    Genome.learn(population[finalI], parentGraph, amountOfLearning, SIZE_OF_DEFENSIVE_ALLIANCE);
                 }
             });
             threads[finalI].start();
