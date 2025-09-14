@@ -9,9 +9,10 @@ The project provides:
 
 ## ✨ What Are Defensive Alliances?
 
-A **defensive alliance** in a graph is a set of vertices such that each member is at least as strongly connected to the alliance as to the rest of the graph. Finding minimal such sets is important for analyzing network resilience and community structure.
+A **defensive alliance** in an undirected graph G=(V,E) is a subset S of V such that each member has at least as many neighbors within S as it has outside of S. 
+Finding minimal such sets is important for analyzing network resilience and community structure.
 
-This project aims to efficiently discover such alliances using evolutionary computation, making it suitable for large or complex graphs where brute-force methods are impractical.
+This project aims to efficiently and effectively discover such defensive alliances using evolutionary computation, making it suitable for large or complex graphs where brute-force methods are impractical.
 
 ## 🔍 Core Functionality
 
