@@ -1,5 +1,3 @@
-import java.util.*;
-
 public class Mutations {
 
     public static int implementedMutationMethods = 2;
@@ -16,7 +14,7 @@ public class Mutations {
 
      */
 
-    protected static void mutation(float mutationrate, Genome mutatedGenome){
+    protected static void mutation(double mutationrate, Genome mutatedGenome){
         for (int i=0; i<mutatedGenome.length; i++) {
             if (Math.random()<=mutationrate) {
                 mutatedGenome.bitFlip(i);
@@ -45,7 +43,7 @@ public class Mutations {
     }
      */
 
-    protected static void mutation_of_vertices_with_high_degree(float mutationrate, Genome mutatedGenome, OneGenome parentGraph){
+    protected static void mutation_of_vertices_with_high_degree(double mutationrate, Genome mutatedGenome, OneGenome parentGraph){
         int multiplier = 0;
         for (int i=0; i<mutatedGenome.length; i++) {
             multiplier = parentGraph.getDegrees()[i];

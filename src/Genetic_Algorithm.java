@@ -1,7 +1,7 @@
 import java.io.IOException;
 import java.util.*;
 import java.io.*;
-import java.util.Properties;
+
 public class Genetic_Algorithm {
 
 
@@ -70,6 +70,8 @@ The following is an example of a generic evolutionary algorithm:
                 // all conected components of a DA are also a DA by definition
                 List<Genome> connectedComponents = g.getConnectedSubgraphs(parentGraph);
                 connected_DA.addAll(connectedComponents);
+                //delete duplicates from connected_DA, // has to be done early to avoid OutOfMemoryError
+                Genome.deleteDuplicates(connected_DA);
 
 
                 //add new defensive alliances to the list of connected defensive alliances
@@ -101,8 +103,6 @@ The following is an example of a generic evolutionary algorithm:
         if (foundnewDefensiveAlliance){
             //add population to connected_DA
             connected_DA.addAll(Arrays.asList(population.getPopulation()));
-            //delete duplicates from connected_DA
-            Genome.deleteDuplicates(connected_DA);
             //sort connectedComponents by fitness
             connected_DA.sort(Comparator.comparingInt(Genome::getFitness).reversed());
             // split connected_DA at population.size()
@@ -122,13 +122,13 @@ The following is an example of a generic evolutionary algorithm:
     //Genetic Algorithm run without capped learners
     static void geneticAlgorithm(
             int NUMBER_OF_NODES,
-            float NODE_EXISTENCE_PROBABILITY,
+            double NODE_EXISTENCE_PROBABILITY,
             int POPULATION_SIZE,
             int NUMBER_OF_ITERATIONS,
             int SIZE_OF_DEFENSIVE_ALLIANCE,
             int BREAK_FITNESS,
             int NUMBER_OF_PARENTS,
-            float mutationRate,
+            double mutationRate,
             OneGenome parentGraph,
             int recombinationMethod,
             int numberOfChildsPerParent,
@@ -191,13 +191,13 @@ The following is an example of a generic evolutionary algorithm:
     // geneticAlgorithm ran with capped Learners
     static void geneticAlgorithm(
             int NUMBER_OF_NODES,
-            float NODE_EXISTENCE_PROBABILITY,
+            double NODE_EXISTENCE_PROBABILITY,
             int POPULATION_SIZE,
             int NUMBER_OF_ITERATIONS,
             int SIZE_OF_DEFENSIVE_ALLIANCE,
             int BREAK_FITNESS,
             int NUMBER_OF_PARENTS,
-            float mutationrate,
+            double mutationrate,
             OneGenome parentGraph,
             int recombinationMethod,
             int numberOfChildsPerParent,

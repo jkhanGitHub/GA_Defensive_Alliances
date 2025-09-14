@@ -66,7 +66,7 @@ public class Genome {
     }
 
     //dont remove the graph parameter, it is needed for overloading
-    protected Genome(int numberOfNodes, float existenceRate) {
+    protected Genome(int numberOfNodes, double existenceRate) {
         length = numberOfNodes;
         chromosome = new int[length];
         degrees = new int[length];
@@ -75,7 +75,7 @@ public class Genome {
         calculateSize();
     }
 
-    protected Genome(int numberOfNodes, float existenceRate, HashSet<Integer> Ids_toFilter) {
+    protected Genome(int numberOfNodes, double existenceRate, HashSet<Integer> Ids_toFilter) {
         length = numberOfNodes;
         chromosome = new int[length];
         degrees = new int[length];
@@ -398,7 +398,7 @@ public class Genome {
         return complement;
     }
 
-    void generate_genome(float existenceRate) {
+    void generate_genome(double existenceRate) {
         for (int i = 0; i < length; i++) {
             if (Math.random() <= existenceRate) {
                 chromosome[i] = 1;

@@ -13,7 +13,7 @@ public class Config {
     public float NODE_EXISTENCE_PROBABILITY;
     public int NUMBER_OF_PARENTS;
     public int NUMBER_OF_CHILDS_PER_PARENT;
-    public float MUTATION_RATE;
+    public double MUTATION_RATE;
     public int NUMBER_OF_ITERATIONS;
     public int SIZE_OF_DEFENSIVE_ALLIANCE;
     public boolean FILTER_NODES_THAT_CANNOT_BE_IN_A_DEFENSIVE_ALLIANCE_OF_SIZE_K;
@@ -32,7 +32,6 @@ public class Config {
     public boolean RANDOMIZE_LEARNERS;
 
     public boolean DEPLOY_LEARNING_ON_INITIALIZATION;
-
     public int AMOUNT_OF_LEARNINGS_UPON_INITIALIZATION;
 
 
@@ -44,7 +43,7 @@ public class Config {
         NODE_EXISTENCE_PROBABILITY = Float.parseFloat(props.getProperty("NODE_EXISTENCE_PROBABILITY"));
         NUMBER_OF_PARENTS = Integer.parseInt(props.getProperty("NUMBER_OF_PARENTS"));
         NUMBER_OF_CHILDS_PER_PARENT = Integer.parseInt(props.getProperty("NUMBER_OF_CHILDS_PER_PARENT"));
-        MUTATION_RATE = Float.parseFloat(props.getProperty("MUTATION_RATE"));
+        MUTATION_RATE = Double.parseDouble(props.getProperty("MUTATION_RATE"));
         NUMBER_OF_ITERATIONS = Integer.parseInt(props.getProperty("NUMBER_OF_ITERATIONS"));
         SIZE_OF_DEFENSIVE_ALLIANCE = Integer.parseInt(props.getProperty("SIZE_OF_DEFENSIVE_ALLIANCE"));
         BREAK_FITNESS = Integer.parseInt(props.getProperty("BREAK_FITNESS"));
