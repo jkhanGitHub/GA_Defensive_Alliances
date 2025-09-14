@@ -110,12 +110,12 @@ The following is an example of a generic evolutionary algorithm:
 
             Genome.deleteDuplicates(defensiveAlliances);
             Genome.deleteDuplicates(connected_defensiveAlliances);
-            System.out.println("\u001B[31m" + "new Defensive Alliances found: "+ "\u001B[0m"); 
+            System.out.println("\u001B[31m" + "new Defensive Alliances found: "+ "\u001B[0m");
             return false;
         }
         return true;
     }
-        
+
 
     //when using onepointcrossover the parentgraph should not be included in the population!
     // GeneticAlgorithm.java: updated method signature
@@ -164,7 +164,7 @@ The following is an example of a generic evolutionary algorithm:
                     population,
                     NUMBER_OF_PARENTS,
                     selectionMethod, duplicatesAllowed); // selectionMethod if you want to use a specific selection method, otherwise random
-            
+
             Population.population = Population.newGeneration(
                     mutationRate,
                     intersectionProbability,
@@ -184,6 +184,7 @@ The following is an example of a generic evolutionary algorithm:
             //Print some stats and log to file
             population.printStats();
             GeneticLogger.logGeneration();
+            System.gc();
         }
         resetConsoleOutput();
     }
@@ -226,7 +227,7 @@ The following is an example of a generic evolutionary algorithm:
         //init css file
         GeneticLogger.initCSV(cfg);
         redirectConsoleOutput();
-        
+
         int counter = 0;
 
         //adds the best genome to the list of best genomes
@@ -266,6 +267,7 @@ The following is an example of a generic evolutionary algorithm:
             //Print some stats and log to file
             population.printStats();
             GeneticLogger.logGeneration();
+            System.gc();
         }
         resetConsoleOutput();
     }
@@ -347,7 +349,7 @@ The following is an example of a generic evolutionary algorithm:
             //parentGraph = new OneGenome(pairWithLargestComponent.getKey(), pairWithLargestComponent.getValue(),g.adjMatrix);
             parentGraph = new OneGenome(numberOfNodes, graph);
         }
-        
+
 
 
         // Map method strings to IDs
@@ -411,7 +413,7 @@ The following is an example of a generic evolutionary algorithm:
         // At end of execution
         cfg.writeToFile(GeneticLogger.getOutputDirectory() +"runConfiguration.txt");
         String csvPath = GeneticLogger.getOutputDirectory() + "ga_stats.csv";
-        
+
         //create document containing defensive alliances
         if (!defensiveAlliances.isEmpty()) {
             // Write defensive alliances to file
@@ -424,7 +426,7 @@ The following is an example of a generic evolutionary algorithm:
             File foundDefensiveAlliancesFile = new File(GeneticLogger.getOutputDirectory() + "connected_DefensiveAlliances.txt");
             GeneticLogger.printDefensiveAlliances(foundDefensiveAlliancesFile, connected_defensiveAlliances);
         }
-        
+
         System.out.println("CSV_PATH:" + csvPath);  // Special marker for batch file
     }
 
