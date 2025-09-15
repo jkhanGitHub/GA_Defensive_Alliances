@@ -130,10 +130,9 @@ def visualize_ga_results(csv_file):
              label='Best vs 2nd Best')
     ax4.plot(df['generation'], df['best_worst_diff'], 'r-',
              label='Best vs worst')
+    ax4.plot(df['generation'], df['mean_fitness'], 'r--',
+             label='mean fitness')
 
-    # Highlight convergence threshold
-    ax4.axhline(y=0.05, color='r', linestyle=':', alpha=0.7,
-                label='Convergence Threshold')
 
     ax4.set_title('Convergence Metrics', fontsize=12, pad=10)
     ax4.set_xlabel('Generation')

@@ -36,9 +36,10 @@ public class Genome {
 
     int length; //number of nodes in whole Graph
 
-    public void setFitness(int fitness) {
+    public int setFitness(int fitness) {
         this.fitness = fitness;
         positiveFitness = OneGenome.worstFitnessPossible + fitness;
+        return fitness;
     }
 
     int fitness = 0;

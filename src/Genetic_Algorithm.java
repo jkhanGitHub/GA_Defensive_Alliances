@@ -1,6 +1,8 @@
 import java.io.IOException;
 import java.util.*;
 import java.io.*;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.stream.IntStream;
 
 public class Genetic_Algorithm {
 
@@ -47,75 +49,82 @@ The following is an example of a generic evolutionary algorithm:
         mutationIdentifiers.put("Mutation of vertices with high degree", 1);
     }
 
-    public static List<Genome> defensiveAlliances = new LinkedList<>();
-    public static List<Genome> connected_defensiveAlliances = new LinkedList<>();
-    public static final int MAXIMUM_AMOUNT_OF_STORED_DEFENSIVE_ALLIANCES = 1000; //maximum amount of stored defensive alliances, if this is reached, the worst defensive alliances will be removed
+    public static List<Genome> defensiveAlliances = Collections.synchronizedList(new LinkedList<>());
+    public static List<Genome> connected_defensiveAlliances = Collections.synchronizedList(new LinkedList<>());
+    //cfg.POPULATION_SIZE; //maximum amount of stored defensive alliances, if this is reached, the worst defensive alliances will be removed
 
     public static int[][] graph;
 
     public static Map<Integer, Genome> bestGenomes = new HashMap<>();
 
-    static Random random = new Random();
 
+    static final Object lock = new Object();
     static boolean addDefensiveAlliance(Population population, OneGenome parentGraph, int SIZE_OF_DEFENSIVE_ALLIANCE) {
-        boolean foundnewDefensiveAlliance = false;
-        List<Genome> connected_DA = new LinkedList<>();
-        for (int i = 0; (i < population.getPopulation().length && population.getPopulation()[i].getFitness() > 0); i++) {
-            Genome g = population.getPopulation()[i];
-            //if the genome is already in the defensive alliances, skip it
-            if (!Genome.checkIfListContainsGenome(defensiveAlliances, g)) {
-                foundnewDefensiveAlliance = true; //found a new defensive alliance
+        List<Genome> connected_DA = Collections.synchronizedList(new LinkedList<>()); // Thread-safe list for connected components
 
-                defensiveAlliances.add(new Genome(g)); //add a deep copy of the genome to the defensive alliances
-                // all conected components of a DA are also a DA by definition
-                List<Genome> connectedComponents = g.getConnectedSubgraphs(parentGraph);
-                connected_DA.addAll(connectedComponents);
-                //delete duplicates from connected_DA, // has to be done early to avoid OutOfMemoryError
-                Genome.deleteDuplicates(connected_DA);
+        // Process the population in parallel
+        IntStream.range(0, population.getPopulation().length)
+                .parallel()
+                .forEach(i -> {
+                    Genome g = population.getPopulation()[i];
+                    if (g.getFitness() > 0) {
+                        System.gc();
+                        defensiveAlliances.add(g); // Add a deep copy of the genome
+
+                        // Get connected components and add them to the thread-safe list
+                        List<Genome> connectedComponents = g.getConnectedSubgraphs(parentGraph);
+                        // Calculate fitness of each connected component in parallel
+                        //remove candidate from connected DA
+                        connectedComponents.removeIf(component -> (component.setFitness(FitnessFunctions.calculateFitnessForDA(component, parentGraph, SIZE_OF_DEFENSIVE_ALLIANCE)) < Population.population[Population.population.length - 1].getFitness()));
+
+                        synchronized (lock) {
+                            connected_DA.addAll(connectedComponents);
+                        }
+                    }
+                });
 
 
-                //add new defensive alliances to the list of connected defensive alliances
-                defensiveAlliances.addAll(connectedComponents);
-                connected_defensiveAlliances.addAll(connectedComponents); //add all connected components to the connected defensive alliances
+        boolean returnValue = connected_DA.isEmpty();
+        if (!returnValue) {
+            connected_DA.addAll(Arrays.asList(population.getPopulation()));
+            // Remove duplicates from connected_DA
+            Genome.deleteDuplicates(connected_DA);
+            connected_DA.sort(Comparator.comparingInt(Genome::getFitness).reversed());
+            //iterator for connected_DA
+            Iterator<Genome> iterator = connected_DA.iterator();
+            int i = 0;
+            while (iterator.hasNext() && i < Population.population.length) {
+                Population.population[i] = iterator.next();
+                i++;
             }
-        }
-        //calculate fitness of each connected component
-        for (Genome component : connected_DA) {
-            component.setFitness(FitnessFunctions.calculateFitnessForDA(component, parentGraph, SIZE_OF_DEFENSIVE_ALLIANCE));
+
+            Genome.deleteDuplicates(defensiveAlliances);
+            Genome.deleteDuplicates(connected_defensiveAlliances);
+            System.out.println("\u001B[31m" + "new Defensive Alliances found: " + "\u001B[0m");
         }
 
-        //important step to avoid java.lang.OutOfMemoryError: Java heap space
-        //remove as many defensive alliances as needed to not exceed the maximum amount of stored defensive alliances
-        if (defensiveAlliances.size() > MAXIMUM_AMOUNT_OF_STORED_DEFENSIVE_ALLIANCES) {
-            //sort defensive alliances by fitness
+        connected_defensiveAlliances.addAll(connected_DA);
+
+        defensiveAlliances.addAll(connected_DA);
+        // Remove excess defensive alliances to avoid OutOfMemoryError
+        if (defensiveAlliances.size() > cfg.POPULATION_SIZE) {
             defensiveAlliances.sort(Comparator.comparingInt(Genome::getFitness).reversed());
-            connected_defensiveAlliances.sort(Comparator.comparingInt(Genome::getFitness).reversed());
-            //remove the worst defensive alliances
-            for (int j = 0; j < defensiveAlliances.size() - MAXIMUM_AMOUNT_OF_STORED_DEFENSIVE_ALLIANCES; j++) {
+            while (defensiveAlliances.size() >  cfg.POPULATION_SIZE) {
                 defensiveAlliances.remove(defensiveAlliances.size() - 1);
             }
-            //remove the worst defensive alliances
-            for (int j = 0; j < connected_defensiveAlliances.size() - MAXIMUM_AMOUNT_OF_STORED_DEFENSIVE_ALLIANCES; j++) {
+        }
+        else
+
+        if (connected_defensiveAlliances.size() > cfg.POPULATION_SIZE) {
+            connected_defensiveAlliances.sort(Comparator.comparingInt(Genome::getFitness).reversed());
+            while (connected_defensiveAlliances.size() > cfg.POPULATION_SIZE) {
                 connected_defensiveAlliances.remove(connected_defensiveAlliances.size() - 1);
             }
         }
 
-        if (foundnewDefensiveAlliance){
-            //add population to connected_DA
-            connected_DA.addAll(Arrays.asList(population.getPopulation()));
-            //sort connectedComponents by fitness
-            connected_DA.sort(Comparator.comparingInt(Genome::getFitness).reversed());
-            // split connected_DA at population.size()
-            Population.population = connected_DA.subList(0, population.getPopulation().length).toArray(new Genome[0]);
 
-            Genome.deleteDuplicates(defensiveAlliances);
-            Genome.deleteDuplicates(connected_defensiveAlliances);
-            System.out.println("\u001B[31m" + "new Defensive Alliances found: "+ "\u001B[0m");
-            return false;
-        }
-        return true;
+        return returnValue;
     }
-
 
     //when using onepointcrossover the parentgraph should not be included in the population!
     // GeneticAlgorithm.java: updated method signature
@@ -293,14 +302,11 @@ The following is an example of a generic evolutionary algorithm:
     }
 
 
-
     public static void deleteDuplicates(List<Genome> genomes) {
         Set<Genome> uniqueGenomes = new HashSet<>(genomes);
         genomes.clear();
         genomes.addAll(uniqueGenomes);
     }
-
-
 
 
     /**
@@ -341,15 +347,13 @@ The following is an example of a generic evolutionary algorithm:
 
         //the first constructor ensures a connected graph
         OneGenome parentGraph;
-        if (cfg.FILTER_NODES_THAT_CANNOT_BE_IN_A_DEFENSIVE_ALLIANCE_OF_SIZE_K){
+        if (cfg.FILTER_NODES_THAT_CANNOT_BE_IN_A_DEFENSIVE_ALLIANCE_OF_SIZE_K) {
             //parentGraph = new OneGenome(pairWithLargestComponent.getKey(), pairWithLargestComponent.getValue(),g.adjMatrix, cfg.SIZE_OF_DEFENSIVE_ALLIANCE);
             parentGraph = new OneGenome(numberOfNodes, graph, cfg.SIZE_OF_DEFENSIVE_ALLIANCE);
-        }
-        else{
+        } else {
             //parentGraph = new OneGenome(pairWithLargestComponent.getKey(), pairWithLargestComponent.getValue(),g.adjMatrix);
             parentGraph = new OneGenome(numberOfNodes, graph);
         }
-
 
 
         // Map method strings to IDs
@@ -357,7 +361,7 @@ The following is an example of a generic evolutionary algorithm:
         int recombId = recombinationIdentifiers.get(cfg.RECOMBINATION_METHOD);
         int mutId = mutationIdentifiers.get(cfg.MUTATION_METHOD);
 
-        if(cfg.CAPPED_LEARNING){
+        if (cfg.CAPPED_LEARNING) {
             geneticAlgorithm(
                     cfg.NUMBER_OF_NODES,
                     cfg.NODE_EXISTENCE_PROBABILITY,
@@ -381,8 +385,7 @@ The following is an example of a generic evolutionary algorithm:
                     cfg.DEPLOY_LEARNING_ON_INITIALIZATION,
                     cfg.AMOUNT_OF_LEARNINGS_UPON_INITIALIZATION
             );
-        }
-        else {
+        } else {
             // Run GA without capped amount of learners
             // Invoke GA with full signature
             geneticAlgorithm(
@@ -409,9 +412,8 @@ The following is an example of a generic evolutionary algorithm:
         }
 
 
-
         // At end of execution
-        cfg.writeToFile(GeneticLogger.getOutputDirectory() +"runConfiguration.txt");
+        cfg.writeToFile(GeneticLogger.getOutputDirectory() + "runConfiguration.txt");
         String csvPath = GeneticLogger.getOutputDirectory() + "ga_stats.csv";
 
         //create document containing defensive alliances
