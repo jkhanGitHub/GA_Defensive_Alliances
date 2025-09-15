@@ -49,8 +49,8 @@ The following is an example of a generic evolutionary algorithm:
         mutationIdentifiers.put("Mutation of vertices with high degree", 1);
     }
 
-    public static List<Genome> defensiveAlliances = Collections.synchronizedList(new LinkedList<>());
-    public static List<Genome> connected_defensiveAlliances = Collections.synchronizedList(new LinkedList<>());
+    public static List<Genome> defensiveAlliances = new LinkedList<>();
+    public static List<Genome> connected_defensiveAlliances =new LinkedList<>();
     //cfg.POPULATION_SIZE; //maximum amount of stored defensive alliances, if this is reached, the worst defensive alliances will be removed
 
     public static int[][] graph;
@@ -67,9 +67,11 @@ The following is an example of a generic evolutionary algorithm:
                 .parallel()
                 .forEach(i -> {
                     Genome g = population.getPopulation()[i];
-                    if (g.getFitness() > 0) {
+                    if (g.getFitness() > 0 && !defensiveAlliances.contains(g)) {
                         System.gc();
-                        defensiveAlliances.add(g); // Add a deep copy of the genome
+                        synchronized (lock){
+                            defensiveAlliances.add(g); // Add a deep copy of the genome
+                        }
 
                         // Get connected components and add them to the thread-safe list
                         List<Genome> connectedComponents = g.getConnectedSubgraphs(parentGraph);
@@ -186,7 +188,18 @@ The following is an example of a generic evolutionary algorithm:
                     SIZE_OF_DEFENSIVE_ALLIANCE
             );
 
-            addDefensiveAlliance(population, parentGraph, SIZE_OF_DEFENSIVE_ALLIANCE);
+            try {
+                addDefensiveAlliance(population, parentGraph, SIZE_OF_DEFENSIVE_ALLIANCE);
+            }
+            catch (OutOfMemoryError e){
+                System.err.println("OutOfMemoryError: Defensive Alliances could not be added to the list of Defensive Alliances");
+                //adds the best genome to the list of best genomes
+                bestGenomes.put(counter, population.getPopulation()[0]);
+                //Print some stats and log to file
+                population.printStats();
+                GeneticLogger.logGeneration();
+                break;
+            }
 
             //adds the best genome to the list of best genomes
             bestGenomes.put(counter, population.getPopulation()[0]);
@@ -269,7 +282,18 @@ The following is an example of a generic evolutionary algorithm:
                     SIZE_OF_DEFENSIVE_ALLIANCE
             );
 
-            addDefensiveAlliance(population, parentGraph, SIZE_OF_DEFENSIVE_ALLIANCE);
+            try {
+                addDefensiveAlliance(population, parentGraph, SIZE_OF_DEFENSIVE_ALLIANCE);
+            }
+            catch (OutOfMemoryError e){
+                System.err.println("OutOfMemoryError: Defensive Alliances could not be added to the list of Defensive Alliances");
+                //adds the best genome to the list of best genomes
+                bestGenomes.put(counter, population.getPopulation()[0]);
+                //Print some stats and log to file
+                population.printStats();
+                GeneticLogger.logGeneration();
+                break;
+            }
 
             //adds the best genome to the list of best genomes
             bestGenomes.put(counter, population.getPopulation()[0]);
@@ -334,6 +358,7 @@ The following is an example of a generic evolutionary algorithm:
 
         String filePath = cfg.FILEPATH;
         int numberOfNodes = cfg.NUMBER_OF_NODES;
+
 
         try {
             graph = CsvReader.readCsvEdgesToSymmetricalMatrix(filePath, numberOfNodes);
@@ -412,10 +437,6 @@ The following is an example of a generic evolutionary algorithm:
         }
 
 
-        // At end of execution
-        cfg.writeToFile(GeneticLogger.getOutputDirectory() + "runConfiguration.txt");
-        String csvPath = GeneticLogger.getOutputDirectory() + "ga_stats.csv";
-
         //create document containing defensive alliances
         if (!defensiveAlliances.isEmpty()) {
             // Write defensive alliances to file
@@ -428,6 +449,10 @@ The following is an example of a generic evolutionary algorithm:
             File foundDefensiveAlliancesFile = new File(GeneticLogger.getOutputDirectory() + "connected_DefensiveAlliances.txt");
             GeneticLogger.printDefensiveAlliances(foundDefensiveAlliancesFile, connected_defensiveAlliances);
         }
+
+        // At end of execution
+        cfg.writeToFile(GeneticLogger.getOutputDirectory() + "runConfiguration.txt");
+        String csvPath = GeneticLogger.getOutputDirectory() + "ga_stats.csv";
 
         System.out.println("CSV_PATH:" + csvPath);  // Special marker for batch file
     }
